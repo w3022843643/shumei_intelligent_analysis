@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "shumei-intelligent-analysis"
+version = "0.1.0"
+description = "RAG assistant, authorized video person counting, and short-term entrance forecast"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+  "numpy>=2.0",
+  "pandas>=2.2",
+  "pydantic>=2.11",
+  "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+vision = [
+  "ultralytics>=8.4.57",
+  "openvino>=2025.3",
+  "opencv-python>=4.10",
+]
+forecast = [
+  "scikit-learn>=1.6",
+  "statsmodels>=0.14",
+]
+dev = [
+  "pytest>=8.0",
+  "ruff>=0.12",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["intelligent_analysis"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
