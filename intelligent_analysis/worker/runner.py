@@ -19,13 +19,28 @@ class WorkerConfig:
     worker_id: str = "e-analysis-worker"
     lease_seconds: int = 120
     poll_interval_seconds: float = 2.0
-    job_types: tuple[str, ...] = ("knowledge_index", "video_analysis", "short_forecast")
+    job_types: tuple[str, ...] = ("knowledge_index", "video_analysis")
+
+
+def _to_lease(lease_data: dict[str, Any]) -> Any:
+    """Convert C claim lease dict into a JobLease object.
+
+    C is the storage layer E writes through, so JobLease comes from C.
+    Fall back to the raw dict if C is not importable (unit-test fakes).
+    """
+    try:
+        from data_foundation import JobLease
+
+        return JobLease(**lease_data)
+    except ImportError:
+        return lease_data
 
 
 class AnalysisWorker:
-    """Claims E-type jobs from C store and runs the appropriate handler.
+    """Claims jobs from C store and runs the appropriate handler.
 
-    The C store is injected by D; this worker never imports C directly.
+    Handlers publish their business result and complete the job in the same
+    write transaction, as required by C's DE contract.
     """
 
     def __init__(
@@ -45,8 +60,8 @@ class AnalysisWorker:
 
         with self.store.write() as uow:
             claimed = uow.jobs.claim_job(
-                worker_id=self.config.worker_id,
-                now=now,
+                self.config.worker_id,
+                now,
                 lease_seconds=self.config.lease_seconds,
             )
 
@@ -54,23 +69,21 @@ class AnalysisWorker:
             return None
 
         job = claimed["job"]
-        lease = claimed["lease"]
+        lease = _to_lease(claimed["lease"])
         job_type = job["type"]
         payload = job.get("payload", {})
 
-        logger.info("Claimed job %s (type=%s, id=%s)", lease["job_id"], job_type, job["id"])
+        logger.info("Claimed job type=%s id=%s", job_type, job["id"])
 
         try:
             result = self._dispatch(job_type, payload, lease, now)
-            with self.store.write() as uow:
-                uow.jobs.complete_job(lease, result, now=datetime.now(UTC))
-            logger.info("Completed job %s", lease["job_id"])
+            logger.info("Completed job %s", job["id"])
             return result
         except Exception as exc:
-            logger.exception("Job %s failed", lease["job_id"])
+            logger.exception("Job %s failed", job["id"])
             error_summary = f"{type(exc).__name__}: {exc}"[:2000]
             with self.store.write() as uow:
-                uow.jobs.fail_job(lease, error_summary, now=datetime.now(UTC))
+                uow.jobs.fail_job(lease, error_summary, datetime.now(UTC))
             return {"status": "failed", "error": error_summary}
 
     def _dispatch(
@@ -83,15 +96,10 @@ class AnalysisWorker:
         if job_type == "knowledge_index":
             return process_knowledge_job(self.store, payload, lease, now)
         if job_type == "video_analysis":
-            return process_video_job(self.store, payload, lease, now, detector=self.detector)
-        if job_type == "short_forecast":
-            # Forecast is triggered from API layer, not background worker.
-            # If a forecast job is enqueued, return not ready.
-            return {
-                "status": "data_insufficient",
-                "reason": "Short forecast jobs should be processed synchronously via API.",
-            }
-        raise ValueError(f"Unknown job type: {job_type}")
+            return process_video_job(
+                self.store, payload, lease, now, detector=self.detector
+            )
+        raise ValueError(f"Unsupported job type for E worker: {job_type}")
 
     def start(self) -> None:
         """Blocking poll loop. Use Ctrl+C to stop."""

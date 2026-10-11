@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
 
+import pytest
+
 from intelligent_analysis.contracts import VideoAnalysisConfig
 from intelligent_analysis.worker import AnalysisWorker
 from intelligent_analysis.worker.knowledge_worker import process_knowledge_job
@@ -125,35 +127,33 @@ def test_knowledge_job_calls_begin_write_activate(tmp_path):
     assert len(uow.knowledge.activate_calls) == 1
 
 
-def test_video_job_without_detector_returns_not_ready():
+def test_video_job_without_detector_raises():
     uow = FakeUow()
     store = FakeStore(uow)
     lease = FakeLease(job_id="job-video-1")
     now = datetime.now(UTC)
 
-    result = process_video_job(
-        store=store,
-        job_payload={
-            "analysis_id": "analysis-1",
-            "video_id": "video-1",
-            "file_path": "/fake/video.mp4",
-            "recorded_start_at": "2026-10-11T08:00:00+08:00",
-            "config": {
-                "detector_model_version": "yolov8n",
-                "openvino_version": "2025.4",
-                "device": "CPU",
-                "count_line": {"x1": 0, "y1": 0.5, "x2": 1, "y2": 0.5},
-                "entry_side": "right",
-                "interval_minutes": 5,
+    with pytest.raises(RuntimeError, match="No YOLO detector"):
+        process_video_job(
+            store=store,
+            job_payload={
+                "analysis_id": "analysis-1",
+                "video_id": "video-1",
+                "file_path": "/fake/video.mp4",
+                "recorded_start_at": "2026-10-11T08:00:00+08:00",
+                "config": {
+                    "detector_model_version": "yolov8n",
+                    "openvino_version": "2025.4",
+                    "device": "CPU",
+                    "count_line": {"x1": 0, "y1": 0.5, "x2": 1, "y2": 0.5},
+                    "entry_side": "right",
+                    "interval_minutes": 5,
+                },
             },
-        },
-        lease=lease,
-        now=now,
-        detector=None,
-    )
-
-    assert result["status"] == "analysis_not_ready"
-    assert result["window_count"] == 0
+            lease=lease,
+            now=now,
+            detector=None,
+        )
 
 
 def test_build_count_input():

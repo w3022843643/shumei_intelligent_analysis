@@ -50,29 +50,25 @@ def process_video_job(
     - frame_width, frame_height: int
     - config: dict matching VideoAnalysisConfig
 
-    If detector is None, returns analysis_not_ready without writing counts.
+    Raises RuntimeError if no detector is configured so the runner fails this
+    job (rather than the whole worker exiting).
     """
     analysis_id = job_payload["analysis_id"]
+    video_id = job_payload["video_id"]
     config_data = job_payload["config"]
     config = VideoAnalysisConfig.model_validate(config_data)
 
     if detector is None:
-        with store.write() as uow:
-            uow.jobs.heartbeat(lease, now)
-        return {
-            "analysis_id": analysis_id,
-            "status": "analysis_not_ready",
-            "reason": "No YOLO detector configured; video processing skipped.",
-            "window_count": 0,
-        }
+        raise RuntimeError("No YOLO detector configured; video analysis cannot run.")
 
     recorded_start = datetime.fromisoformat(job_payload["recorded_start_at"])
     frame_width = int(job_payload["frame_width"])
     frame_height = int(job_payload["frame_height"])
     file_path = job_payload["file_path"]
 
+    # Inference outside the DB transaction
     frames = _read_video_frames(file_path)
-    windows = process_frame_sequence(
+    window_dicts = process_frame_sequence(
         frames=frames,
         detector=detector,
         config=config,
@@ -81,20 +77,19 @@ def process_video_job(
         recorded_start=recorded_start,
     )
 
+    points = [_to_count_input(w) for w in window_dicts]
+
     with store.write() as uow:
-        if windows:
-            uow.video.write_counts(analysis_id, windows, lease=lease)
-        uow.video.complete_analysis(
-            analysis_id,
-            expected_window_count=len(windows),
-            lease=lease,
-        )
+        uow.video.write_counts(analysis_id, points, lease)
+        uow.video.complete_analysis(analysis_id, len(points), lease)
+        uow.jobs.complete_job(lease, {"analysis_id": analysis_id}, now)
 
     return {
         "analysis_id": analysis_id,
+        "video_id": video_id,
         "status": "succeeded",
-        "window_count": len(windows),
-        "points": [_count_input_dict(w) for w in windows],
+        "window_count": len(points),
+        "points": window_dicts,
     }
 
 
@@ -105,12 +100,11 @@ def process_frame_sequence(
     frame_width: int,
     frame_height: int,
     recorded_start: datetime,
-) -> list[Any]:
+) -> list[dict[str, Any]]:
     """Run detection, tracking, and line counting over a frame sequence.
 
-    Returns list of count-window dicts for complete time windows.
-    Frames are in pixel coordinates; centroids are normalized to 0—1
-    before feeding the virtual line counter.
+    Returns count-window dicts for complete time windows. Centroids are
+    normalized to 0—1 before feeding the virtual line counter.
     """
     line = config.count_line
     tracker = CentroidTracker()
@@ -132,10 +126,10 @@ def process_frame_sequence(
         while timestamp >= current_window_start + interval:
             windows.append(
                 build_count_input(
-                    window_start=current_window_start,
-                    window_end=current_window_start + interval,
-                    entries=window_entries,
-                    exits=window_exits,
+                    current_window_start,
+                    current_window_start + interval,
+                    window_entries,
+                    window_exits,
                 )
             )
             current_window_start += interval
@@ -174,19 +168,25 @@ def build_count_input(
     }
 
 
+def _to_count_input(window: dict[str, Any]) -> Any:
+    """Convert window dict to C CountInput dataclass; pass dict through for fakes."""
+    try:
+        from data_foundation import CountInput
+
+        return CountInput(
+            window_start=window["window_start"],
+            window_end=window["window_end"],
+            entries=window["entries"],
+            exits=window["exits"],
+            quality_status=window["quality_status"],
+        )
+    except ImportError:
+        return window
+
+
 def _read_video_frames(file_path: str) -> Iterable[FrameData]:
     """Open recorded video and yield frames via OpenCV."""
     from ..vision.video_reader import RecordedVideoReader
 
     with RecordedVideoReader(file_path) as reader:
         yield from reader.frames()
-
-
-def _count_input_dict(count_input: dict[str, Any]) -> dict[str, Any]:
-    return {
-        "window_start": count_input["window_start"].isoformat(),
-        "window_end": count_input["window_end"].isoformat(),
-        "entries": count_input["entries"],
-        "exits": count_input["exits"],
-        "quality_status": count_input["quality_status"],
-    }
