@@ -149,6 +149,28 @@
 - `vision.line_counter.VirtualLineCounter`：虚拟线越线和进出方向判断
 - `vision.validation.validate_counts()`：自动计数与人工标注窗口的 MAE 校验
 
+## Worker 后台进程
+
+E Worker 由 D 的后台进程启动，注入 C store，负责领取和处理后台作业。
+
+```python
+from intelligent_analysis.worker import AnalysisWorker, WorkerConfig
+
+worker = AnalysisWorker(store=c_store, config=WorkerConfig(worker_id="e-1"))
+worker.run_once()  # 领取并处理一个作业
+# 或 worker.start()  # 阻塞轮询
+```
+
+支持的作业类型：
+
+| 作业 type | 处理函数 | 说明 |
+|---|---|---|
+| `knowledge_index` | `worker.knowledge_worker.process_knowledge_job` | 解析文档 → write_chunks → activate_index |
+| `video_analysis` | `worker.video_worker.process_video_job` | 检测跟踪 → 越线计数 → write_counts → complete_analysis |
+| `short_forecast` | 返回 `data_insufficient` | 预测由 API 层同步调用，不走后台队列 |
+
+Worker 不直接导入 C 包，store 由 D 注入。
+
 ## 变更规则
 
 函数名、参数或返回结构变更前，先通知 D 并更新本文档。
