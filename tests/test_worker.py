@@ -4,9 +4,15 @@ from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
 
+from intelligent_analysis.contracts import VideoAnalysisConfig
 from intelligent_analysis.worker import AnalysisWorker
 from intelligent_analysis.worker.knowledge_worker import process_knowledge_job
-from intelligent_analysis.worker.video_worker import build_count_input, process_video_job
+from intelligent_analysis.worker.video_worker import (
+    FrameData,
+    build_count_input,
+    process_frame_sequence,
+    process_video_job,
+)
 
 
 class FakeLease:
@@ -204,3 +210,116 @@ def test_runner_returns_none_when_no_jobs():
     result = worker.run_once()
 
     assert result is None
+
+
+def _make_video_config():
+    return VideoAnalysisConfig.model_validate(
+        {
+            "detector_model_version": "yolov8n-test",
+            "openvino_version": "2025.4",
+            "device": "CPU",
+            "count_line": {"x1": 0, "y1": 0.5, "x2": 1, "y2": 0.5},
+            "entry_side": "left",
+            "interval_minutes": 1,
+        }
+    )
+
+
+def test_process_frame_sequence_counts_entry():
+    recorded_start = datetime(2026, 10, 11, 8, 0, tzinfo=UTC)
+    config = _make_video_config()
+
+    fps = 1
+    frame_count = 61
+
+    def fake_detector(frame_index):
+        cy = 340 - (280 * frame_index // (frame_count - 1))
+        return [(100, cy - 20, 140, cy + 20)]
+
+    frames = [
+        FrameData(frame_index=i, timestamp_seconds=i / fps, frame=i)
+        for i in range(frame_count)
+    ]
+
+    windows = process_frame_sequence(
+        frames=frames,
+        detector=fake_detector,
+        config=config,
+        frame_width=640,
+        frame_height=400,
+        recorded_start=recorded_start,
+    )
+
+    total_entries = sum(w["entries"] for w in windows)
+    total_exits = sum(w["exits"] for w in windows)
+    assert total_entries == 1
+    assert total_exits == 0
+
+
+def test_process_video_job_with_detector_writes_counts():
+    recorded_start = datetime(2026, 10, 11, 8, 0, tzinfo=UTC)
+
+    # Build a complete fake store with video repo accepting writes
+    class FakeVideoWriteRepo:
+        def __init__(self):
+            self.write_counts_calls = []
+            self.complete_calls = []
+
+        def write_counts(self, analysis_id, points, lease):
+            self.write_counts_calls.append((analysis_id, points))
+            return {"inserted": len(points), "skipped": 0}
+
+        def complete_analysis(self, analysis_id, expected_window_count, lease, manual_validation=None):
+            self.complete_calls.append((analysis_id, expected_window_count))
+            return {"status": "succeeded"}
+
+    video_repo = FakeVideoWriteRepo()
+    uow = FakeUow(video=video_repo)
+    store = FakeStore(uow)
+
+    fps = 1
+    frame_count = 61
+
+    def fake_detector(frame_index):
+        cy = 340 - (280 * frame_index // (frame_count - 1))
+        return [(100, cy - 20, 140, cy + 20)]
+
+    # Override _read_video_frames by monkeypatching via payload file_path
+    import intelligent_analysis.worker.video_worker as vw
+
+    def fake_read(_path):
+        for i in range(frame_count):
+            yield FrameData(frame_index=i, timestamp_seconds=i / fps, frame=i)
+
+    original = vw._read_video_frames
+    vw._read_video_frames = fake_read
+    try:
+        result = process_video_job(
+            store=store,
+            job_payload={
+                "analysis_id": "analysis-1",
+                "video_id": "video-1",
+                "file_path": "fake.mp4",
+                "recorded_start_at": recorded_start.isoformat(),
+                "frame_width": 640,
+                "frame_height": 400,
+                "config": {
+                    "detector_model_version": "yolov8n-test",
+                    "openvino_version": "2025.4",
+                    "device": "CPU",
+                    "count_line": {"x1": 0, "y1": 0.5, "x2": 1, "y2": 0.5},
+                    "entry_side": "left",
+                    "interval_minutes": 1,
+                },
+            },
+            lease=FakeLease(),
+            now=datetime.now(UTC),
+            detector=fake_detector,
+        )
+    finally:
+        vw._read_video_frames = original
+
+    assert result["status"] == "succeeded"
+    assert result["window_count"] >= 1
+    assert len(video_repo.write_counts_calls) == 1
+    assert len(video_repo.complete_calls) == 1
