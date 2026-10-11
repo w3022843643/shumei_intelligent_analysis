@@ -1,6 +1,6 @@
 # E 服务函数契约
 
-> 版本：0.3.0。HTTP 路由由 D 提供，E 只导出服务函数。未实现完成的功能返回明确状态，不伪造结果。
+> 版本：0.4.0。HTTP 路由由 D 提供，E 只导出服务函数。未实现完成的功能返回明确状态，不伪造结果。
 
 ## 安装
 
@@ -31,7 +31,7 @@
 - `used_metric_queries`
 - `limitations`
 
-当前支持已授权 TXT/MD 文档的内存关键词检索；数值查询工具待 D 注入。
+当前支持已授权 PDF/TXT/MD 文档的关键词检索；数值查询工具待 D 注入。
 
 ### `index_document(file_path, metadata)`
 
@@ -57,15 +57,13 @@
 
 ### `process_document_index(file_path, metadata)`
 
-供 Worker 调用：解析并立即索引 TXT/MD 文档。
+供 Worker 调用：解析并立即索引 PDF/TXT/MD 文档。
 
 返回字段：
 
 - `document_id`
 - `index_status`: `ready`
 - `chunk_count`
-
-PDF 解析后续补充。
 
 ### `reindex_documents(document_ids, reason)`
 
@@ -75,6 +73,10 @@ PDF 解析后续补充。
 
 - `job_id`
 - `pending_count`
+
+### `save_knowledge_index(path)` / `load_knowledge_index(path)`
+
+将当前知识索引保存为 JSON，或从 JSON 恢复到进程内索引。
 
 ### `analyze_video(video_id, config)`
 
@@ -126,12 +128,26 @@ PDF 解析后续补充。
 - `step_minutes`: 5 或 15
 - `direction`: `entries | exits`
 
-缺少已验证计数历史时返回 `data_insufficient`，不输出预测点。正式预测点包含：
+缺少已验证计数历史时返回 `data_insufficient`，不输出预测点。
+
+### `forecast_from_count_history(history, cutoff_at, horizon_minutes, step_minutes)`
+
+供 D 在取得 C 提供的历史计数后调用。`history` 为 `[(timestamp, value), ...]`，至少 4 个点。
+
+正式预测点包含：
 
 - `target_time`
 - `value`
 - `lower`
 - `upper`
+
+## 内部视觉组件
+
+以下组件不直接暴露 HTTP，供视觉 Worker 组合：
+
+- `vision.tracker.CentroidTracker`：基于质心距离的临时跟踪
+- `vision.line_counter.VirtualLineCounter`：虚拟线越线和进出方向判断
+- `vision.validation.validate_counts()`：自动计数与人工标注窗口的 MAE 校验
 
 ## 变更规则
 

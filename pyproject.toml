@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "shumei-intelligent-analysis"
-version = "0.1.0"
+version = "0.4.0"
 description = "RAG assistant, authorized video person counting, and short-term entrance forecast"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -13,6 +13,7 @@ dependencies = [
   "pandas>=2.2",
   "pydantic>=2.11",
   "PyYAML>=6.0",
+  "pypdf>=5.0",
 ]
 
 [project.optional-dependencies]

@@ -1,9 +1,12 @@
-"""Minimal in-memory keyword knowledge index."""
+"""Keyword knowledge index with optional JSON persistence."""
 
 from __future__ import annotations
 
+import json
+import math
 import re
 from dataclasses import dataclass, field
+from pathlib import Path
 
 from ..contracts import DocumentMetadata, TextChunk
 
@@ -34,15 +37,63 @@ class InMemoryKnowledgeIndex:
 
     def search(self, query: str, top_k: int = 3) -> list[tuple[float, IndexedDocument, TextChunk]]:
         query_terms = tokenize(query)
+        if not query_terms:
+            return []
+
+        document_frequency = self._document_frequency()
+        total_documents = max(len(self.documents), 1)
         matches: list[tuple[float, IndexedDocument, TextChunk]] = []
+
         for document in self.documents.values():
-            for chunk in document.chunks:
+            for chunk in chunks_sorted(document):
                 chunk_terms = tokenize(chunk.text)
-                overlap = len(query_terms & chunk_terms)
-                if overlap:
-                    score = overlap / max(len(query_terms), 1)
-                    matches.append((score, document, chunk))
+                shared = query_terms & chunk_terms
+                if not shared:
+                    continue
+                score = sum(
+                    1.0 + math.log((1 + total_documents) / (1 + document_frequency.get(term, 0)))
+                    for term in shared
+                ) / len(query_terms)
+                matches.append((score, document, chunk))
         return sorted(matches, key=lambda item: (-item[0], item[2].order))[:top_k]
+
+    def save(self, path: str | Path):
+        target = Path(path)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        payload = {
+            "documents": {
+                document_id: {
+                    "metadata": document.metadata.model_dump(mode="json"),
+                    "chunks": [chunk.model_dump(mode="json") for chunk in document.chunks],
+                }
+                for document_id, document in self.documents.items()
+            }
+        }
+        target.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    @classmethod
+    def load(cls, path: str | Path) -> InMemoryKnowledgeIndex:
+        payload = json.loads(Path(path).read_text(encoding="utf-8"))
+        index = cls()
+        for document_id, item in payload.get("documents", {}).items():
+            metadata = DocumentMetadata.model_validate(item["metadata"])
+            chunks = [TextChunk.model_validate(chunk) for chunk in item.get("chunks", [])]
+            index.add_document(document_id, metadata, chunks)
+        return index
+
+    def _document_frequency(self) -> dict[str, int]:
+        frequency: dict[str, int] = {}
+        for document in self.documents.values():
+            terms: set[str] = set()
+            for chunk in document.chunks:
+                terms.update(tokenize(chunk.text))
+            for term in terms:
+                frequency[term] = frequency.get(term, 0) + 1
+        return frequency
 
     def __len__(self) -> int:
         return len(self.documents)
+
+
+def chunks_sorted(document: IndexedDocument) -> list[TextChunk]:
+    return sorted(document.chunks, key=lambda chunk: chunk.order)

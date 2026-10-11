@@ -18,10 +18,11 @@ from .contracts import (
 )
 from .knowledge.chunk import split_text
 from .knowledge.index import InMemoryKnowledgeIndex
-from .knowledge.parse import read_text_file
+from .knowledge.parse import read_document
+from .short_forecast.baseline import forecast_from_history
 
-MODULE_VERSION = "0.3.0"
-MODEL_VERSION = "short-forecast-naive-0.1.0"
+MODULE_VERSION = "0.4.0"
+MODEL_VERSION = "short-forecast-rolling-0.2.0"
 _global_index = InMemoryKnowledgeIndex()
 
 
@@ -39,7 +40,6 @@ def answer_message(
 
 
 def index_document(file_path: str, metadata: dict[str, Any]) -> dict[str, Any]:
-    # Upload and metadata validation happen first; parsing/indexing is a worker job.
     document_metadata = DocumentMetadata.model_validate(metadata)
     document_id = Path(file_path).stem
     accepted = IndexAccepted(document_id=document_id, job_id=uuid4())
@@ -50,10 +50,10 @@ def index_document(file_path: str, metadata: dict[str, Any]) -> dict[str, Any]:
 
 
 def process_document_index(file_path: str, metadata: dict[str, Any]) -> dict[str, Any]:
-    """Worker operation: immediately parse and index TXT/MD documents."""
+    """Worker operation: parse and index PDF/TXT/MD documents."""
     document_metadata = DocumentMetadata.model_validate(metadata)
     document_id = Path(file_path).stem
-    text = read_text_file(file_path)
+    text = read_document(file_path)
     chunks = split_text(text, document_id=document_id)
     _global_index.add_document(document_id, document_metadata, chunks)
     return {
@@ -72,6 +72,15 @@ def reindex_documents(document_ids: list[str], reason: str) -> dict[str, Any]:
     return accepted.model_dump(mode="json")
 
 
+def save_knowledge_index(path: str) -> None:
+    _global_index.save(path)
+
+
+def load_knowledge_index(path: str) -> None:
+    global _global_index
+    _global_index = InMemoryKnowledgeIndex.load(path)
+
+
 def analyze_video(video_id: UUID, config: dict[str, Any]) -> dict[str, Any]:
     validated_config = VideoAnalysisConfig.model_validate(config)
     accepted = JobAccepted(job_id=uuid4(), analysis_id=uuid4())
@@ -88,7 +97,6 @@ def get_camera_counts(
     end: str | None = None,
     interval_minutes: int | None = None,
 ) -> dict[str, Any]:
-    # Actual count persistence will be added when the vision worker is connected.
     return {
         "analysis_id": str(analysis_id),
         "status": "analysis_not_ready",
@@ -109,5 +117,27 @@ def forecast_short_term(
         status="data_insufficient",
         model_version=MODEL_VERSION,
         reason="No validated camera count history is available before the requested cutoff.",
+    )
+    return response.model_dump(mode="json")
+
+
+def forecast_from_count_history(
+    history: list[tuple[Any, float]],
+    cutoff_at: Any,
+    horizon_minutes: int,
+    step_minutes: int,
+) -> dict[str, Any]:
+    points, validation = forecast_from_history(
+        history=history,
+        cutoff=cutoff_at,
+        horizon_minutes=horizon_minutes,
+        step_minutes=step_minutes,
+    )
+    response = ForecastResponse(
+        status="ready",
+        forecast_points=points,
+        training_cutoff=cutoff_at,
+        model_version=MODEL_VERSION,
+        validation_error=validation["mae"],
     )
     return response.model_dump(mode="json")
