@@ -13,6 +13,7 @@ ForecastStatus = Literal["ready", "data_insufficient", "quality_insufficient"]
 Direction = Literal["entries", "exits"]
 Device = Literal["CPU", "GPU", "NPU", "AUTO"]
 EntrySide = Literal["left", "right"]
+IndexStatus = Literal["pending", "ready", "failed"]
 
 
 class Citation(BaseModel):
@@ -20,7 +21,7 @@ class Citation(BaseModel):
     id: str
     title: str
     url: str | None = None
-    published_at: datetime | None = None
+    date: datetime | None = None
     chunk_id: str | None = None
 
 
@@ -29,6 +30,7 @@ class ChatResponse(BaseModel):
     answer: str
     status: Literal["answered", "insufficient_evidence"]
     citations: list[Citation] = Field(default_factory=list)
+    used_metric_queries: list[str] = Field(default_factory=list)
     limitations: list[str] = Field(default_factory=list)
 
 
@@ -49,10 +51,15 @@ class TextChunk(BaseModel):
     text: str
 
 
-class IndexResponse(BaseModel):
+class IndexAccepted(BaseModel):
     document_id: str
-    index_status: Literal["ready", "failed"]
-    chunk_count: int
+    index_status: Literal["pending"] = "pending"
+    job_id: UUID = Field(default_factory=uuid4)
+
+
+class ReindexAccepted(BaseModel):
+    job_id: UUID = Field(default_factory=uuid4)
+    pending_count: int = Field(ge=1)
 
 
 class CountLine(BaseModel):
@@ -85,17 +92,28 @@ class CountPoint(BaseModel):
     entries: int = Field(ge=0)
     exits: int = Field(ge=0)
     quality_status: QualityStatus
+    detector_model_version: str
+    openvino_version: str
+    device: Device
+
+
+class ManualValidation(BaseModel):
+    sample_count: int = Field(ge=0)
+    mae: float = Field(ge=0)
 
 
 class CountsResponse(BaseModel):
+    analysis_id: UUID
     status: Literal["ready", "analysis_not_ready"]
     points: list[CountPoint] = Field(default_factory=list)
-    manual_validation: dict[str, float | int] | None = None
+    manual_validation: ManualValidation | None = None
 
 
 class ForecastPoint(BaseModel):
-    timestamp: datetime
+    target_time: datetime
     value: float = Field(ge=0)
+    lower: float = Field(ge=0)
+    upper: float = Field(ge=0)
 
 
 class ForecastResponse(BaseModel):
@@ -103,5 +121,5 @@ class ForecastResponse(BaseModel):
     forecast_points: list[ForecastPoint] = Field(default_factory=list)
     training_cutoff: datetime | None = None
     model_version: str
-    validation_error: dict[str, float] | None = None
+    validation_error: float | None = None
     reason: str | None = None

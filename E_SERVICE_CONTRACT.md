@@ -1,6 +1,6 @@
 # E 服务函数契约
 
-> 版本：0.2.0。HTTP 路由由 D 提供，E 只导出服务函数。未实现完成的功能返回明确状态，不伪造结果。
+> 版本：0.3.0。HTTP 路由由 D 提供，E 只导出服务函数。未实现完成的功能返回明确状态，不伪造结果。
 
 ## 安装
 
@@ -27,14 +27,23 @@
 - `conversation_id`
 - `answer`
 - `status`: `answered | insufficient_evidence`
-- `citations`
+- `citations`: 包含 `type、id、title、url、date、chunk_id`
+- `used_metric_queries`
 - `limitations`
 
-当前最小版本支持已授权 TXT/MD 文档的内存关键词检索；数值查询工具待 D 注入。
+当前支持已授权 TXT/MD 文档的内存关键词检索；数值查询工具待 D 注入。
 
 ### `index_document(file_path, metadata)`
 
-对应知识文档索引流程。
+对应 `POST /api/v1/knowledge/documents` 的入队响应。
+
+返回字段：
+
+- `document_id`
+- `index_status`: `pending`
+- `job_id`
+- `staged_file_path`
+- `metadata`
 
 `metadata` 字段：
 
@@ -46,7 +55,26 @@
 - `valid_until`
 - `permission_note`
 
-当前支持 `.txt`、`.md`、`.markdown`；PDF 解析后续补充。
+### `process_document_index(file_path, metadata)`
+
+供 Worker 调用：解析并立即索引 TXT/MD 文档。
+
+返回字段：
+
+- `document_id`
+- `index_status`: `ready`
+- `chunk_count`
+
+PDF 解析后续补充。
+
+### `reindex_documents(document_ids, reason)`
+
+对应 `POST /api/v1/knowledge/reindex`。
+
+返回字段：
+
+- `job_id`
+- `pending_count`
 
 ### `analyze_video(video_id, config)`
 
@@ -71,8 +99,24 @@
 视觉 Worker 未接入前返回：
 
 ```json
-{"status": "analysis_not_ready", "points": [], "manual_validation": null}
+{
+  "analysis_id": "...",
+  "status": "analysis_not_ready",
+  "points": [],
+  "manual_validation": null
+}
 ```
+
+正式计数点包含：
+
+- `window_start`
+- `window_end`
+- `entries`
+- `exits`
+- `quality_status`
+- `detector_model_version`
+- `openvino_version`
+- `device`
 
 ### `forecast_short_term(video_id, analysis_id, cutoff_at, horizon_minutes, step_minutes, direction)`
 
@@ -82,7 +126,12 @@
 - `step_minutes`: 5 或 15
 - `direction`: `entries | exits`
 
-缺少已验证计数历史时返回 `data_insufficient`，不输出预测点。
+缺少已验证计数历史时返回 `data_insufficient`，不输出预测点。正式预测点包含：
+
+- `target_time`
+- `value`
+- `lower`
+- `upper`
 
 ## 变更规则
 

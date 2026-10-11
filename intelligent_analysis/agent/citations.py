@@ -13,6 +13,6 @@ def document_citation(document: IndexedDocument, chunk: TextChunk) -> Citation:
         id=chunk.document_id,
         title=metadata.title,
         url=metadata.source_url,
-        published_at=metadata.published_at,
+        date=metadata.published_at,
         chunk_id=chunk.chunk_id,
     )

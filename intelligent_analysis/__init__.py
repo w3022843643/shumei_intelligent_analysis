@@ -7,6 +7,8 @@ from .service import (
     get_camera_counts,
     health,
     index_document,
+    process_document_index,
+    reindex_documents,
 )
 
 __all__ = [
@@ -16,4 +18,6 @@ __all__ = [
     "get_camera_counts",
     "health",
     "index_document",
+    "process_document_index",
+    "reindex_documents",
 ]
