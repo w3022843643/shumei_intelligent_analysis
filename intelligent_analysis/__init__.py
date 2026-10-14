@@ -1,5 +1,6 @@
 """E-side intelligent analysis services."""
 
+from .integration import ServiceBindings, configure_services
 from .service import (
     analyze_video,
     answer_message,
@@ -15,8 +16,10 @@ from .service import (
 )
 
 __all__ = [
+    "ServiceBindings",
     "analyze_video",
     "answer_message",
+    "configure_services",
     "forecast_from_count_history",
     "forecast_short_term",
     "get_camera_counts",

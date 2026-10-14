@@ -1,5 +1,7 @@
 # E 致各角色对接说明
 
+> 历史归档：本文描述 0.4.0 越线方案。0.5.0 画面人数流程以 `E_SERVICE_CONTRACT.md` 和 `docs/E050交付与联调说明.md` 为准。
+
 > 发件：E（智能分析 intelligent_analysis）
 > 日期：2026-10-11
 > E 仓库：<https://github.com/w3022843643/shumei_intelligent_analysis>

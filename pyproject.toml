@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "shumei-intelligent-analysis"
-version = "0.4.0"
-description = "RAG assistant, authorized video person counting, and short-term entrance forecast"
+version = "0.5.0"
+description = "Sourced RAG, fixed-ROI visible people counting, and damped Holt forecasts"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
@@ -18,10 +18,10 @@ dependencies = [
 
 [project.optional-dependencies]
 vision = [
-  "ultralytics>=8.4.57",
-  "openvino>=2025.3",
+  "torch>=2.6",
   "opencv-python>=4.10",
 ]
+legacy-vision = ["ultralytics>=8.4.57", "openvino>=2025.3"]
 forecast = [
   "scikit-learn>=1.6",
   "statsmodels>=0.14",

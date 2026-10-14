@@ -1,5 +1,7 @@
 # E 部分接口与数据需求确认清单
 
+> 历史归档：本清单为旧进出计数需求。0.5.0 已改为 `camera_visible_people`，最新接收与缺口见 `docs/E050交付与联调说明.md`。
+
 > 负责人：E（RAG 智能体、授权录像计数、入口短时预测）
 > E 仓库：<https://github.com/w3022843643/shumei_intelligent_analysis>
 > 服务契约：仓库内 `E_SERVICE_CONTRACT.md`

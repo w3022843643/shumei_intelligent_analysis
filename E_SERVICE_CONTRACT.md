@@ -1,176 +1,90 @@
-# E 服务函数契约
+# E 服务契约 0.5.0（2026-10-14）
 
-> 版本：0.4.0。HTTP 路由由 D 提供，E 只导出服务函数。未实现完成的功能返回明确状态，不伪造结果。
+统一入口保持 `intelligent_analysis.service`。本版包含破坏性视频契约变更，D 必须同时注入队列与读回能力；仅修改模型字段不能自动完成联调。
 
-## 安装
+## 1. 职责与绑定
 
-在 `api_platform/` 的虚拟环境中执行：
-
-```powershell
-.\.venv\Scripts\python.exe -m pip install -e ..\intelligent_analysis
-```
-
-## 统一入口
-
-模块：`intelligent_analysis.service`
-
-### `health()`
-
-返回模块版本和就绪状态。
-
-### `answer_message(message, conversation_id=None, context=None)`
-
-对应 `POST /api/v1/assistant/chat`。
-
-返回字段：
-
-- `conversation_id`
-- `answer`
-- `status`: `answered | insufficient_evidence`
-- `citations`: 包含 `type、id、title、url、date、chunk_id`
-- `used_metric_queries`
-- `limitations`
-
-当前支持已授权 PDF/TXT/MD 文档的关键词检索；数值查询工具待 D 注入。
-
-### `index_document(file_path, metadata)`
-
-对应 `POST /api/v1/knowledge/documents` 的入队响应。
-
-返回字段：
-
-- `document_id`
-- `index_status`: `pending`
-- `job_id`
-- `staged_file_path`
-- `metadata`
-
-`metadata` 字段：
-
-- `title`
-- `publisher`
-- `source_url`
-- `published_at`
-- `valid_from`
-- `valid_until`
-- `permission_note`
-
-### `process_document_index(file_path, metadata)`
-
-供 Worker 调用：解析并立即索引 PDF/TXT/MD 文档。
-
-返回字段：
-
-- `document_id`
-- `index_status`: `ready`
-- `chunk_count`
-
-### `reindex_documents(document_ids, reason)`
-
-对应 `POST /api/v1/knowledge/reindex`。
-
-返回字段：
-
-- `job_id`
-- `pending_count`
-
-### `save_knowledge_index(path)` / `load_knowledge_index(path)`
-
-将当前知识索引保存为 JSON，或从 JSON 恢复到进程内索引。
-
-### `analyze_video(video_id, config)`
-
-对应 `POST /api/v1/videos/{video_id}/analyses`。
-
-`config` 字段：
-
-- `detector_model_version`
-- `openvino_version`
-- `device`: `CPU | GPU | NPU | AUTO`
-- `count_line`: `{x1, y1, x2, y2}`，坐标均为 0—1
-- `entry_side`: `left | right`
-- `interval_minutes`: `1 | 5 | 15`
-- `tracker_config_id`
-
-当前返回 `queued` 作业信息；实际视觉 Worker 后续接入。
-
-### `get_camera_counts(video_id, analysis_id, start=None, end=None, interval_minutes=None)`
-
-对应 `GET /api/v1/videos/{video_id}/counts`。
-
-视觉 Worker 未接入前返回：
-
-```json
-{
-  "analysis_id": "...",
-  "status": "analysis_not_ready",
-  "points": [],
-  "manual_validation": null
-}
-```
-
-正式计数点包含：
-
-- `window_start`
-- `window_end`
-- `entries`
-- `exits`
-- `quality_status`
-- `detector_model_version`
-- `openvino_version`
-- `device`
-
-### `forecast_short_term(video_id, analysis_id, cutoff_at, horizon_minutes, step_minutes, direction)`
-
-对应 `POST /api/v1/videos/{video_id}/short-forecast`。
-
-- `horizon_minutes`: 15、30 或 60
-- `step_minutes`: 5 或 15
-- `direction`: `entries | exits`
-
-缺少已验证计数历史时返回 `data_insufficient`，不输出预测点。
-
-### `forecast_from_count_history(history, cutoff_at, horizon_minutes, step_minutes)`
-
-供 D 在取得 C 提供的历史计数后调用。`history` 为 `[(timestamp, value), ...]`，至少 4 个点。
-
-正式预测点包含：
-
-- `target_time`
-- `value`
-- `lower`
-- `upper`
-
-## 内部视觉组件
-
-以下组件不直接暴露 HTTP，供视觉 Worker 组合：
-
-- `vision.tracker.CentroidTracker`：基于质心距离的临时跟踪
-- `vision.line_counter.VirtualLineCounter`：虚拟线越线和进出方向判断
-- `vision.validation.validate_counts()`：自动计数与人工标注窗口的 MAE 校验
-
-## Worker 后台进程
-
-E Worker 由 D 的后台进程启动，注入 C store，负责领取和处理后台作业。
+D 唯一 Worker 领取、续租、恢复和分发；D 通过 C 持久化计算结果、失败、进度及作业状态；E 只计算。D 负责授权、上传、回放 Range、权限、CSRF、HTTP 与序列化。E 不运行独立的队列消费者。
 
 ```python
-from intelligent_analysis.worker import AnalysisWorker, WorkerConfig
+from intelligent_analysis import ServiceBindings, configure_services
 
-worker = AnalysisWorker(store=c_store, config=WorkerConfig(worker_id="e-1"))
-worker.run_once()  # 领取并处理一个作业
-# 或 worker.start()  # 阻塞轮询
+configure_services(ServiceBindings(
+    submit_job=d_submit_job,
+    load_counts=d_load_visible_counts,
+    validate_analysis=dm_counter.validate_config,
+    knowledge_index_path=published_active_index_path,
+))
 ```
 
-支持的作业类型：
+绑定必须在每个 API 进程启动时完成；只注入服务端受信任函数，不能从用户请求接受 Python 调用对象。
 
-| 作业 type | 处理函数 | 说明 |
-|---|---|---|
-| `knowledge_index` | `worker.knowledge_worker.process_knowledge_job` | 解析文档 → write_chunks → activate_index |
-| `video_analysis` | `worker.video_worker.process_video_job` | 检测跟踪 → 越线计数 → write_counts → complete_analysis |
-| `short_forecast` | 返回 `data_insufficient` | 预测由 API 层同步调用，不走后台队列 |
+| 绑定 | 签名和责任 |
+|---|---|
+| `submit_job` | `(kind: str, payload: dict) -> dict`；D 登记/去重并提交事务之后返回 `status=queued, job_id`，视频另有 `analysis_id`。这些 ID 必须指向真实 C 记录。 |
+| `load_counts` | `(video_id: str, analysis_id: str) -> dict`；校验视频、分析和访问归属，读取双方确认的新口径存储；返回 `CountsResponse`，含两种粒度，E 负责过滤。未知对象由 D 报 404/403；旧 `entries/exits` 禁止作为新响应。 |
+| `validate_analysis` | `(config: dict) -> None`；真实检查权重文件摘要、可加载性、模型版本和运行设备，不可用时抛 `UnsupportedAnalysis`。 |
+| `knowledge_index_path` | D 提交成功后发布的完整活动索引 JSON。问答每次读取完整文件，原子替换确保不同 API 进程读到同一已发布快照。 |
 
-Worker 不直接导入 C 包，store 由 D 注入。
+异常映射：`DependencyUnavailable` → 503；`UnsupportedAnalysis` → 422 unsupported；配置校验异常由 D 映射其现有 400/422 约定。E 返回的 `analysis_not_ready` → 409；`data_insufficient`、`quality_insufficient`、`insufficient_evidence` → 200；`metric_tool_unavailable` → 503。日志错误摘要由 D 脱敏。
 
-## 变更规则
+## 2. 视频三函数
 
-函数名、参数或返回结构变更前，先通知 D 并更新本文档。
+```python
+analyze_video(video_id: UUID, config: dict) -> dict
+get_camera_counts(video_id: UUID, analysis_id: UUID,
+                  start: str | None = None, end: str | None = None,
+                  grain: str = "5min") -> dict
+forecast_short_term(video_id: UUID, analysis_id: UUID, cutoff_at: str,
+                    horizon_minutes: int, step_minutes: int = 5) -> dict
+```
+
+分析 config：`count_model="dm_count"`、`weights_version`、`roi={points:[{x,y},...]}`、`sample_interval_seconds`（默认10，整数1—600）、`aggregation_minutes=5`、`inference_engine=pytorch|openvino`、大写 `device`，仅 OpenVINO 请求携带非空 `openvino_version`。多余字段拒绝；ROI 为不自交、非零面积、顶点不重复的归一化多边形。
+
+首个运行配置为 `weights_version=dm-count-qnrf-cc5f2132`、PyTorch CPU。权重 SHA-256 `16ef954a2cef40c66ee664f69273559553b735d5e2c9f90e2444f3c25dd45e05`。权重由 `demo/prepare_dm_count.py` 下载并验证，D 使用 `DMCountCounter(WeightSpec(path, sha256, version))` 注入。其他配置均拒绝；不得自动回退。
+
+分析返回 `{job_id,analysis_id,status:"queued",video_id,count_metric:"camera_visible_people",inference_engine}`。
+
+计数返回 `video_id,analysis_id,metric,status,roi,analysis,points,manual_validation`。`analysis` 是实际完整 config；`manual_validation` 未人工评估时为 null。每点包含 `metric,value,unit="人",grain,quality_status,source_ids,published_at,ingested_at`。`frame` 点使用 `recorded_at`；`5min` 点使用 `period_start,period_end,sample_count,aggregation_rule="median"`。时间必须带时区，聚合窗恰好 5 分钟；查询仅返回完全落在 start/end 内的点。
+
+E 计算产物的 published/ingested 时间为空，由 D/C 在提交时填写真实值。`good` 表示抽样完整且计算数值有效，不表示人工验收准确。缺样为 `degraded`；零有效样本为 `unavailable,value=null,sample_count=0`，不能补零。最后不足 5 分钟的窗不输出聚合值。估计小数保留，逐帧人数不累加成人次。
+
+预测返回 `metric,status,forecast_points,training_cutoff,input_window_minutes,model_version,validation_error,reason`；点含 `target_time,value,is_forecast=true,lower=null,upper=null`。方向参数和旧 `interval_minutes` 不再接受。只使用窗结束时间不晚于 cutoff 的 `good` 点；重复时刻拒绝，缺失/中断/过旧返回质量不足。
+
+15/30 分钟最低训练点数分别为12/24；还需要至少3个完整滚动起点回测折，因此常数连续样本至少分别17/32个点才能满足完整验证。每折在自己的训练前缀用固定 alpha/beta/phi 网格选择一阶 SSE 最低的阻尼 Holt 参数；分跨度 MAE 不优于最近值基线时不输出曲线。60分钟一律保持不足状态，直到另行验收。没有可靠区间时保持 null。
+
+## 3. D 的计算与发布流程
+
+```python
+from intelligent_analysis.worker import dispatch_analysis_job, publish_knowledge_snapshot
+
+# D 已在短事务内领取并取得租约；长计算期间由 D 续租。
+prepared = dispatch_analysis_job(job_type, payload, counter=dm_counter)
+# D 在新 write 事务校验当前租约、写业务数据、完成任务；同事务提交。
+# 知识提交之后，由 D 在单一发布锁下重建完整活动快照：
+publish_knowledge_snapshot(full_committed_snapshot, published_active_index_path)
+```
+
+视频 payload：`video_id,analysis_id,file_path,recorded_start_at,recorded_end_at,source_ids,config`。帧输入为 RGB uint8；E 读取 OpenCV 录像时执行 BGR→RGB，帧率无效时拒绝推导时间。返回完整 `CountsResponse`，不调用 C 的旧 `write_counts()`。
+
+知识 payload：`document_id,version,file_path,metadata`。metadata 至少有标题、发布方、使用说明，可含 URL、发布时间、适用起止与 applicability_note。E 返回 `chunks`（C chunk_no/text/locator）、`artifact_bytes`、SHA256、标准索引 `snapshot`；均为未发布计算结果，含 bytes 的结果不能直接作为公共 HTTP JSON。
+
+D 将 artifact_bytes 真实落盘后，使用 C `begin_index/write_chunks/activate_index/complete_job` 同事务提交。解析、推理、文件持久化在长事务之外。失败与重试由 D 根据 C 真实接口处理，过期租约禁止发布。`publish_knowledge_snapshot` 接收完整活动版本集合而非单文档增量；D 提交后若进程退出，应在重启时从 C 活动版本重建再发布，不把旧重试快照覆盖新版本。
+
+## 4. 知识服务与数值查询
+
+`index_document(file_path, metadata)` 要求 metadata 的 `document_id`、`document_version` 由 C 登记确定；返回 D 真实任务 ID。`reindex_documents(ids, reason)` 向 D 提交 `knowledge_reindex` 操作；D 需展开为每个文档的 `knowledge_index` 任务并返回其管理作业 ID，不能把批量 payload 直接交给单文档处理器。
+
+`process_document_index(file_path,metadata,document_id=None)` 是同步本地索引 helper，不登记任务或写 C；D 的正式异步流程使用上述 worker 产物及提交后发布。`load_knowledge_index/save_knowledge_index` 保持导出。
+
+`answer_message(message,conversation_id=None,context=None)` 的 D 侧数值路由传入：
+
+```python
+context = {"metric_query": constrained_query_dict, "metric_tool": trusted_d_query_callable}
+```
+
+查询白名单、实体/指标/时间粒度校验由 D 实施；E 不生成 SQL。工具结果必须带 `metric,value,source_ids,period_start,period_end,queried_at`，完整保存在 metric_result；缺来源时拒绝给出数值结论。未注入工具返回 metric_tool_unavailable。无 metric_query 时走文档检索，历史/未生效材料在回答正文与 limitations 中提示，绝不将旧公告当作当前运营规定。该入口不隐式执行任意自然语言数据库查询，D 需确定数值意图并注入受约束 query。
+
+## 5. 实验与验收
+
+P2PNet 仅在 `vision.benchmark` 中用于对照。`P2PNetAdapter` 接收调用方加载并记录来源的官方兼容 PyTorch 模型，使用 CPU 和新版 Pillow API，输出归一化人头点/置信度。`compare_counters` 用同一组独立标注 RGB 帧与 ROI，按场景计算 MAE，并保留耗时与两模型 provenance。正式接口不接受 p2pnet；未取得权重、标签或场景样本时不能发布实测比较结论。

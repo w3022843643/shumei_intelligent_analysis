@@ -1,0 +1,766 @@
+{
+  "synthetic": true,
+  "notice": "合成接口联调样例，不代表真实录像或模型准确率",
+  "counts": {
+    "video_id": "40000000-0000-4000-8000-000000000001",
+    "analysis_id": "60000000-0000-4000-8000-000000000001",
+    "recorded_start_at": "2026-10-14T08:00:00Z",
+    "recorded_end_at": "2026-10-14T11:00:00Z",
+    "metric": "camera_visible_people",
+    "status": "ready",
+    "points": [
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "frame",
+        "recorded_at": "2026-10-14T08:00:00Z",
+        "period_start": null,
+        "period_end": null,
+        "sample_count": 1,
+        "aggregation_rule": null,
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "frame",
+        "recorded_at": "2026-10-14T08:00:10Z",
+        "period_start": null,
+        "period_end": null,
+        "sample_count": 1,
+        "aggregation_rule": null,
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "frame",
+        "recorded_at": "2026-10-14T08:00:20Z",
+        "period_start": null,
+        "period_end": null,
+        "sample_count": 1,
+        "aggregation_rule": null,
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T08:00:00Z",
+        "period_end": "2026-10-14T08:05:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T08:05:00Z",
+        "period_end": "2026-10-14T08:10:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T08:10:00Z",
+        "period_end": "2026-10-14T08:15:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T08:15:00Z",
+        "period_end": "2026-10-14T08:20:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T08:20:00Z",
+        "period_end": "2026-10-14T08:25:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T08:25:00Z",
+        "period_end": "2026-10-14T08:30:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T08:30:00Z",
+        "period_end": "2026-10-14T08:35:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T08:35:00Z",
+        "period_end": "2026-10-14T08:40:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T08:40:00Z",
+        "period_end": "2026-10-14T08:45:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T08:45:00Z",
+        "period_end": "2026-10-14T08:50:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T08:50:00Z",
+        "period_end": "2026-10-14T08:55:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T08:55:00Z",
+        "period_end": "2026-10-14T09:00:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T09:00:00Z",
+        "period_end": "2026-10-14T09:05:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T09:05:00Z",
+        "period_end": "2026-10-14T09:10:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T09:10:00Z",
+        "period_end": "2026-10-14T09:15:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T09:15:00Z",
+        "period_end": "2026-10-14T09:20:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T09:20:00Z",
+        "period_end": "2026-10-14T09:25:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T09:25:00Z",
+        "period_end": "2026-10-14T09:30:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T09:30:00Z",
+        "period_end": "2026-10-14T09:35:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T09:35:00Z",
+        "period_end": "2026-10-14T09:40:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T09:40:00Z",
+        "period_end": "2026-10-14T09:45:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T09:45:00Z",
+        "period_end": "2026-10-14T09:50:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T09:50:00Z",
+        "period_end": "2026-10-14T09:55:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T09:55:00Z",
+        "period_end": "2026-10-14T10:00:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T10:00:00Z",
+        "period_end": "2026-10-14T10:05:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T10:05:00Z",
+        "period_end": "2026-10-14T10:10:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T10:10:00Z",
+        "period_end": "2026-10-14T10:15:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T10:15:00Z",
+        "period_end": "2026-10-14T10:20:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T10:20:00Z",
+        "period_end": "2026-10-14T10:25:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T10:25:00Z",
+        "period_end": "2026-10-14T10:30:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T10:30:00Z",
+        "period_end": "2026-10-14T10:35:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T10:35:00Z",
+        "period_end": "2026-10-14T10:40:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T10:40:00Z",
+        "period_end": "2026-10-14T10:45:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T10:45:00Z",
+        "period_end": "2026-10-14T10:50:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T10:50:00Z",
+        "period_end": "2026-10-14T10:55:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      },
+      {
+        "metric": "camera_visible_people",
+        "value": 20.0,
+        "unit": "人",
+        "grain": "5min",
+        "recorded_at": null,
+        "period_start": "2026-10-14T10:55:00Z",
+        "period_end": "2026-10-14T11:00:00Z",
+        "sample_count": 30,
+        "aggregation_rule": "median",
+        "quality_status": "good",
+        "source_ids": [
+          "synthetic-fixture"
+        ],
+        "published_at": null,
+        "ingested_at": null
+      }
+    ],
+    "manual_validation": null,
+    "roi": {
+      "points": [
+        {
+          "x": 0.0,
+          "y": 0.0
+        },
+        {
+          "x": 1.0,
+          "y": 0.0
+        },
+        {
+          "x": 1.0,
+          "y": 1.0
+        },
+        {
+          "x": 0.0,
+          "y": 1.0
+        }
+      ]
+    },
+    "analysis": {
+      "count_model": "dm_count",
+      "weights_version": "synthetic-density-only",
+      "roi": {
+        "points": [
+          {
+            "x": 0.0,
+            "y": 0.0
+          },
+          {
+            "x": 1.0,
+            "y": 0.0
+          },
+          {
+            "x": 1.0,
+            "y": 1.0
+          },
+          {
+            "x": 0.0,
+            "y": 1.0
+          }
+        ]
+      },
+      "sample_interval_seconds": 10,
+      "aggregation_minutes": 5,
+      "inference_engine": "pytorch",
+      "device": "CPU",
+      "openvino_version": null
+    }
+  },
+  "forecast": {
+    "metric": "camera_visible_people",
+    "status": "ready",
+    "forecast_points": [
+      {
+        "target_time": "2026-10-14T11:05:00+00:00",
+        "value": 20.0,
+        "is_forecast": true,
+        "lower": null,
+        "upper": null
+      },
+      {
+        "target_time": "2026-10-14T11:10:00+00:00",
+        "value": 20.0,
+        "is_forecast": true,
+        "lower": null,
+        "upper": null
+      },
+      {
+        "target_time": "2026-10-14T11:15:00+00:00",
+        "value": 20.0,
+        "is_forecast": true,
+        "lower": null,
+        "upper": null
+      }
+    ],
+    "training_cutoff": "2026-10-14T11:00:00+00:00",
+    "input_window_minutes": 180,
+    "model_version": "visible-damped-holt-0.5.0",
+    "validation_error": {
+      "15": {
+        "mae": 0.0,
+        "persistence_mae": 0.0,
+        "fold_count": 22,
+        "sample_count": 66
+      }
+    },
+    "reason": null
+  }
+}

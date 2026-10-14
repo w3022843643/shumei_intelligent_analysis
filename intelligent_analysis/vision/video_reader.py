@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 from typing import Self
 
@@ -36,11 +37,13 @@ class RecordedVideoReader:
 
         if self._capture is None:
             raise RuntimeError("Reader must be used as a context manager")
-        fps = self._capture.get(cv2.CAP_PROP_FPS) or 1.0
+        fps = self._capture.get(cv2.CAP_PROP_FPS)
+        if not math.isfinite(fps) or fps <= 0:
+            raise ValueError("Video has no valid frame rate; timestamps cannot be inferred")
         frame_index = 0
         while True:
             success, frame = self._capture.read()
             if not success:
                 break
-            yield VideoFrame(frame_index, frame_index / fps, frame)
+            yield VideoFrame(frame_index, frame_index / fps, cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
             frame_index += 1

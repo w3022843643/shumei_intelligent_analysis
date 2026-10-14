@@ -1,5 +1,8 @@
-"""E worker: claims jobs from C store and runs knowledge/video/forecast tasks."""
+"""D-dispatched calculation and explicit post-commit publication."""
 
-from .runner import AnalysisWorker, WorkerConfig
+from .knowledge_worker import process_knowledge_job, publish_knowledge_snapshot
+from .runner import dispatch_analysis_job
+from .video_worker import process_video_job
 
-__all__ = ["AnalysisWorker", "WorkerConfig"]
+__all__ = ["dispatch_analysis_job", "process_knowledge_job", "process_video_job",
+           "publish_knowledge_snapshot"]

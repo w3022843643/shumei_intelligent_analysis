@@ -4,9 +4,11 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
+from uuid import uuid4
 
 from ..contracts import DocumentMetadata, TextChunk
 
@@ -69,7 +71,12 @@ class InMemoryKnowledgeIndex:
                 for document_id, document in self.documents.items()
             }
         }
-        target.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+        staging = target.with_name(target.name + "." + uuid4().hex + ".tmp")
+        try:
+            staging.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+            os.replace(staging, target)
+        finally:
+            staging.unlink(missing_ok=True)
 
     @classmethod
     def load(cls, path: str | Path) -> InMemoryKnowledgeIndex:
