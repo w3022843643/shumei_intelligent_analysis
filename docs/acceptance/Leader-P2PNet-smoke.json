@@ -1,0 +1,96 @@
+{
+  "source": "user_supplied_team_P2PNet_bundle",
+  "archive_sha256": "2981dc75e337a53fddf66307550dd86cceb738839f861133b8f52b31876790cc",
+  "weights_sha256": "506047732b128ff09efef18e94bfacbe35fcfef300e5e9eeeece259b0488c63f",
+  "video_sha256": "a0e8a2b4bd0a0b5e7b56c1cffe552415d0ace6e2550238d81b30ace1f4ecbf3a",
+  "source_hashes": {
+    "util/misc.py": "0ef59aa8d0a4a77fe7fd8f84f278b6975bcc8bbebea3c4f23121632ccbfe0c52",
+    "util/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "testGPU.py": "63ffe8e1d5d4f52b706fa70505720e04c1f4fcce54efd9a8a8eb7a7beee49d17",
+    "models/backbone.py": "92b5fc36f79359aa04a80db6dd222e81e77cd44ae7e5a9de55494c49901ff5f0",
+    "models/matcher.py": "4426df389f763510d9879b858ddc15f8d6aae935d0812e5b957b281bcf549bc2",
+    "models/p2pnet.py": "a3705b70b9253f37babe437fc79f1be8a7a05563ac2f2430a4dfbda3f21546a0",
+    "models/vgg_.py": "2e4d08e1b04d549b414fd4fc3034399224f8140cf0d6f628a1a68c92507175e7",
+    "models/__init__.py": "dad01c6bd92f1251ed430ad2e7e305da4581da0c05fbae78a3e0bfa66642b4ab"
+  },
+  "crossing_script_sha256": "50fd9d0a4b5f1b153e501bc63b49be364b6d4363249409207767ea18865ef8b2",
+  "python": "3.13.13",
+  "torch": "2.14.1+cpu",
+  "torchvision": "0.29.1+cpu",
+  "opencv": "5.0.0",
+  "numpy": "2.5.3",
+  "scipy": "1.16.1",
+  "Pillow": "12.3.0",
+  "device": "CPU",
+  "cuda_available": false,
+  "GPU_verified": false,
+  "upstream_commit_verified": false,
+  "real_video_accuracy_verified": false,
+  "manual_labels_supplied": false,
+  "MAE": null,
+  "forecast_verified": false,
+  "source_code_modified": false,
+  "frames": [
+    {
+      "requested_frame_index": 0,
+      "decoded_frame_index": 0.0,
+      "nominal_offset_seconds": 0.0,
+      "estimated_visible_people": 31.0,
+      "elapsed_seconds": 1.6284624999998414,
+      "manual_count": null,
+      "accuracy_verified": false
+    },
+    {
+      "requested_frame_index": 281,
+      "decoded_frame_index": 281.0,
+      "nominal_offset_seconds": 9.366666666666667,
+      "estimated_visible_people": 41.0,
+      "elapsed_seconds": 1.6271169000001464,
+      "manual_count": null,
+      "accuracy_verified": false
+    },
+    {
+      "requested_frame_index": 561,
+      "decoded_frame_index": 561.0,
+      "nominal_offset_seconds": 18.7,
+      "estimated_visible_people": 31.0,
+      "elapsed_seconds": 1.6406742000008308,
+      "manual_count": null,
+      "accuracy_verified": false
+    }
+  ],
+  "video": {
+    "width": 1254,
+    "height": 704,
+    "fps": 30.0,
+    "frame_count": 562,
+    "nominal_duration_seconds": 18.733333333333334,
+    "recorded_at": null
+  },
+  "status": "inference_smoke_passed",
+  "confidence_threshold": 0.5,
+  "roi": {
+    "points": [
+      {
+        "x": 0.0,
+        "y": 0.0
+      },
+      {
+        "x": 1.0,
+        "y": 0.0
+      },
+      {
+        "x": 1.0,
+        "y": 1.0
+      },
+      {
+        "x": 0.0,
+        "y": 1.0
+      }
+    ]
+  },
+  "preprocessing": "E P2PNetAdapter PIL LANCZOS, not team cv2 INTER_LINEAR",
+  "line_crossing_used": false,
+  "package_pin_environment_reproduced": false,
+  "five_minute_windows_available": false
+}

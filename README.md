@@ -58,3 +58,4 @@ C 官方 0.2.0a2 接收使用 `python demo/receive_c020.py --download`、`python
 - [真实问答题集与联合验收](docs/真实问答题集与联合验收.md)：`python -X utf8 demo/check_rag_questions.py`；自动检查与人工语义、D意图路由/HTTP分别记录。
 - [统一计数评测入口](docs/统一计数评测入口.md)：`python demo/benchmark_frames.py`；空模板返回待授权素材，填入复核标签后可运行DM-Count及可选P2PNet对照。
 - [录像素材与人工标注清单](docs/录像素材与人工标注清单.md)：授权、资产、时间、固定ROI、四类场景、独立复核与预测连续时序要求。
+- [队长P2PNet测试包接收](docs/队长P2PNet测试包接收说明.md)：提供权重已跑通本机CPU三帧；原视频/权重留在本地artifacts，人工精度及GPU仍待验收。
