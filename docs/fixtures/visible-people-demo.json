@@ -695,8 +695,7 @@
       ]
     },
     "analysis": {
-      "count_model": "dm_count",
-      "weights_version": "synthetic-density-only",
+      "weights_version": "synthetic-points-only",
       "roi": {
         "points": [
           {
@@ -721,7 +720,9 @@
       "aggregation_minutes": 5,
       "inference_engine": "pytorch",
       "device": "CPU",
-      "openvino_version": null
+      "openvino_version": null,
+      "count_model": "p2pnet",
+      "confidence_threshold": 0.5
     }
   },
   "forecast": {

@@ -8,6 +8,6 @@ def dispatch_analysis_job(job_type: str, payload: dict, *, counter=None, frames=
         return process_knowledge_job(payload)
     if job_type == "video_analysis":
         if counter is None:
-            raise RuntimeError("DM-Count counter is not configured")
+            raise RuntimeError("P2PNet counter is not configured")
         return process_video_job(payload, counter=counter, frames=frames)
     raise ValueError(f"Unsupported E job type: {job_type}")

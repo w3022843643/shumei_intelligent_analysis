@@ -14,7 +14,7 @@ from .knowledge.index import InMemoryKnowledgeIndex
 from .knowledge.parse import read_document
 from .short_forecast.baseline import forecast_visible_history
 
-MODULE_VERSION = "0.5.1"
+MODULE_VERSION = "0.6.0"
 MODEL_VERSION = "visible-damped-holt-0.5.0"
 _global_index = InMemoryKnowledgeIndex()
 
@@ -105,7 +105,7 @@ def analyze_video(video_id: UUID, config: dict[str, Any]) -> dict[str, Any]:
     validated = VideoAnalysisConfig.model_validate(config)
     checker = get_bindings().validate_analysis
     if checker is None:
-        raise UnsupportedAnalysis("No validated DM-Count weights/runtime configured")
+        raise UnsupportedAnalysis("No validated P2PNet weights/runtime configured")
     checker(validated.model_dump(mode="json", exclude_none=True))
     result = submit("video_analysis", {"video_id": str(video_id),
                                       "config": validated.model_dump(mode="json", exclude_none=True)})
@@ -129,6 +129,8 @@ def get_camera_counts(video_id: UUID, analysis_id: UUID, start: str | None = Non
     raw = reader(str(video_id), str(analysis_id))
     if any("entries" in p or "exits" in p for p in raw.get("points", [])):
         raise UnsupportedAnalysis("Legacy entries/exits are not visible people")
+    if raw.get("analysis") and raw["analysis"].get("count_model") != "p2pnet":
+        raise UnsupportedAnalysis("Stored analysis uses a retired count model; rebuild as P2PNet")
     response = CountsResponse.model_validate(raw)
     if response.video_id != video_id or response.analysis_id != analysis_id:
         raise ValueError("Count result does not belong to requested video/analysis")

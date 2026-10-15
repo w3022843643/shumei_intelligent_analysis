@@ -1,6 +1,6 @@
-# E 服务契约 0.5.1（2026-10-15）
+# E 服务契约 0.6.0（2026-10-15）
 
-0.5.1 新增 C 已验证产物加载、原文/索引版本及片段绑定；保留 0.5.0 视频接口。C 官方 0.2.0a2 的本机 Windows 原生存储及 wheel 回归通过，正式 C/MySQL 与 D Worker 联调仍待完成。详见 [正式交付与回执](docs/E051正式交付与CD回执.md)。
+正式视频算法改为P2PNet，停止模型对照。count_model=p2pnet、confidence_threshold=0.5；D/B必须同步适配。知识产物格式、解析器及关键词算法版本继承0.5.1，C/MySQL正式任务联调仍按原执行单推进。见 [0.6.0交付与D/B执行单](docs/E060-P2PNet正式交付与DB执行单.md)。
 
 统一入口保持 `intelligent_analysis.service`。本版包含破坏性视频契约变更，D 必须同时注入队列与读回能力；仅修改模型字段不能自动完成联调。
 
@@ -14,7 +14,7 @@ from intelligent_analysis import ServiceBindings, configure_services
 configure_services(ServiceBindings(
     submit_job=d_submit_job,
     load_counts=d_load_visible_counts,
-    validate_analysis=dm_counter.validate_config,
+    validate_analysis=p2p_counter.validate_config,
     knowledge_index_path=published_active_index_path,
 ))
 ```
@@ -42,15 +42,15 @@ forecast_short_term(video_id: UUID, analysis_id: UUID, cutoff_at: str,
                     horizon_minutes: int, step_minutes: int = 5) -> dict
 ```
 
-分析 config：`count_model="dm_count"`、`weights_version`、`roi={points:[{x,y},...]}`、`sample_interval_seconds`（默认10，整数1—600）、`aggregation_minutes=5`、`inference_engine=pytorch|openvino`、大写 `device`，仅 OpenVINO 请求携带非空 `openvino_version`。多余字段拒绝；ROI 为不自交、非零面积、顶点不重复的归一化多边形。
+分析config：count_model="p2pnet"、weights_version、confidence_threshold=0.5（可省略，序列化包含默认值）、roi={points:[{x,y},...]}、sample_interval_seconds（默认10，整数1—600）、aggregation_minutes=5、inference_engine、device。当前仅pytorch/CPU通过运行验证，其他运行时由计数器拒绝。PyTorch必须省略openvino_version，多余字段拒绝；ROI为不自交、非零面积、顶点不重复的归一化多边形。
 
-首个运行配置为 `weights_version=dm-count-qnrf-cc5f2132`、PyTorch CPU。权重 SHA-256 `16ef954a2cef40c66ee664f69273559553b735d5e2c9f90e2444f3c25dd45e05`。权重由 `demo/prepare_dm_count.py` 下载并验证，D 使用 `DMCountCounter(WeightSpec(path, sha256, version))` 注入。其他配置均拒绝；不得自动回退。
+首个配置weights_version=leader-SHTechA-50604773、PyTorch CPU；权重SHA256 `506047732b128ff09efef18e94bfacbe35fcfef300e5e9eeeece259b0488c63f`。D使用`P2PNetCounter.from_team_bundle(trusted_bundle_dir)`，或显式提供WeightSpec、受信任model_factory和source_revision。前者校验收到源码文件摘要并严格加载权重；未改动源码在CUDA可用主机选CUDA锚点，所以该CPU构建器明确拒绝这种未验证环境。不得自动回退DM或把P2P标成DM。模型源码/权重单独接收，不随E wheel分发。
 
 分析返回 `{job_id,analysis_id,status:"queued",video_id,count_metric:"camera_visible_people",inference_engine}`。
 
 计数返回 `video_id,analysis_id,metric,status,roi,analysis,points,manual_validation`。`analysis` 是实际完整 config；`manual_validation` 未人工评估时为 null。每点包含 `metric,value,unit="人",grain,quality_status,source_ids,published_at,ingested_at`。`frame` 点使用 `recorded_at`；`5min` 点使用 `period_start,period_end,sample_count,aggregation_rule="median"`。时间必须带时区，聚合窗恰好 5 分钟；查询仅返回完全落在 start/end 内的点。
 
-E 计算产物的 published/ingested 时间为空，由 D/C 在提交时填写真实值。`good` 表示抽样完整且计算数值有效，不表示人工验收准确。缺样为 `degraded`；零有效样本为 `unavailable,value=null,sample_count=0`，不能补零。最后不足 5 分钟的窗不输出聚合值。估计小数保留，逐帧人数不累加成人次。
+E计算产物的published/ingested为空，由D/C提交时填写。P2P逐帧值为ROI内置信度严格大于0.5的点数，数据类型仍float；偶数样本的中位数可为小数，保留原值。good只表示抽样完整且数值有效，不表示人工准确率通过。缺样degraded，零有效样本unavailable/value=null/sample_count=0；不足5分钟不输出聚合值。逐帧人数不累加成人次。
 
 预测返回 `metric,status,forecast_points,training_cutoff,input_window_minutes,model_version,validation_error,reason`；点含 `target_time,value,is_forecast=true,lower=null,upper=null`。方向参数和旧 `interval_minutes` 不再接受。只使用窗结束时间不晚于 cutoff 的 `good` 点；重复时刻拒绝，缺失/中断/过旧返回质量不足。
 
@@ -62,7 +62,7 @@ E 计算产物的 published/ingested 时间为空，由 D/C 在提交时填写�
 from intelligent_analysis.worker import dispatch_analysis_job, publish_knowledge_snapshot
 
 # D 已在短事务内领取并取得租约；长计算期间由 D 续租。
-prepared = dispatch_analysis_job(job_type, payload, counter=dm_counter)
+prepared = dispatch_analysis_job(job_type, payload, counter=p2p_counter)
 # D 在新 write 事务校验当前租约、写业务数据、完成任务；同事务提交。
 # 知识提交之后，由 D 在单一发布锁下重建完整活动快照：
 publish_knowledge_snapshot(full_committed_snapshot, published_active_index_path)
@@ -92,4 +92,6 @@ context = {"metric_query": constrained_query_dict, "metric_tool": trusted_d_quer
 
 ## 5. 实验与验收
 
-P2PNet 仅在 `vision.benchmark` 中用于对照。`P2PNetAdapter` 接收调用方加载并记录来源的官方兼容 PyTorch 模型，使用 CPU 和新版 Pillow API，输出归一化人头点/置信度。`compare_counters` 用同一组独立标注 RGB 帧与 ROI，按场景计算 MAE，并保留耗时与两模型 provenance。正式接口不接受 p2pnet；未取得权重、标签或场景样本时不能发布实测比较结论。
+正式计数器位于vision.p2p_counter.P2PNetCounter；复用P2PNetAdapter输出归一化人头点/置信度，worker以point_count执行ROI计数。provenance提供模型名、权重版本/摘要、收到源码标识、CPU及阈值，D应留存审计。人头点、权重路径及原始字节不直接作为HTTP响应。停止DM/P2P比较，旧compare_counters、DM工具及既有对照材料只作为历史，不参与正式模型选择。
+
+人工MAE仍需真实独立复核标签；GPU、正式D/B视频HTTP、C新口径持久化和真实预测均待验收。已有DM分析应作为历史单独保留，新接口不将其改名成P2P；需要新任务/analysis_id后重新计算。

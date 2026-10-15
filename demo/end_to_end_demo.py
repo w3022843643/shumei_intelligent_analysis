@@ -20,7 +20,7 @@ def main():
     end = start + timedelta(hours=3)
     video_id = UUID("40000000-0000-4000-8000-000000000001")
     analysis_id = UUID("60000000-0000-4000-8000-000000000001")
-    config = {"count_model": "dm_count", "weights_version": "synthetic-density-only",
+    config = {"count_model": "p2pnet", "weights_version": "synthetic-points-only",
         "roi": {"points": [{"x": 0, "y": 0}, {"x": 1, "y": 0},
                            {"x": 1, "y": 1}, {"x": 0, "y": 1}]},
         "sample_interval_seconds": 10, "aggregation_minutes": 5,
@@ -28,13 +28,14 @@ def main():
 
     class SyntheticCounter:
         def validate_config(self, config):
-            if config["weights_version"] != "synthetic-density-only":
+            if config["weights_version"] != "synthetic-points-only":
                 raise ValueError("Only synthetic inputs")
 
         def __call__(self, frame):
             return frame
 
-    frames = [SimpleNamespace(timestamp_seconds=s, frame=np.full((2, 2), 5.0))
+    predictions = np.array([[(x + 0.5) / 5, (y + 0.5) / 4, 0.9] for y in range(4) for x in range(5)])
+    frames = [SimpleNamespace(timestamp_seconds=s, frame=predictions)
               for s in range(0, 3 * 3600, 10)]
     result = dispatch_analysis_job("video_analysis", {
         "video_id": str(video_id), "analysis_id": str(analysis_id), "config": config,

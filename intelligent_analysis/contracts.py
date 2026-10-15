@@ -122,9 +122,8 @@ class ROI(BaseModel):
         return self
 
 
-class VideoAnalysisConfig(BaseModel):
+class BaseVideoAnalysisConfig(BaseModel):
     model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
-    count_model: Literal["dm_count"]
     weights_version: str = Field(min_length=1)
     roi: ROI
     sample_interval_seconds: int = Field(default=10, ge=1, le=600, strict=True)
@@ -140,6 +139,16 @@ class VideoAnalysisConfig(BaseModel):
         if self.inference_engine == "pytorch" and "openvino_version" in self.model_fields_set:
             raise ValueError("PyTorch must omit openvino_version")
         return self
+
+
+class VideoAnalysisConfig(BaseVideoAnalysisConfig):
+    count_model: Literal["p2pnet"]
+    confidence_threshold: Literal[0.5] = 0.5
+
+
+class LegacyDMCountConfig(BaseVideoAnalysisConfig):
+    """Historical offline utilities only; never accepted by the formal service."""
+    count_model: Literal["dm_count"]
 
 
 class JobAccepted(BaseModel):

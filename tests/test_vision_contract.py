@@ -10,7 +10,7 @@ from intelligent_analysis.service import forecast_short_term, get_camera_counts
 
 
 @pytest.mark.parametrize("extra", [{"direction": "entries"}, {"interval_minutes": 5},
-                                  {"count_line": {}}, {"count_model": "p2pnet"},
+                                  {"count_line": {}}, {"count_model": "dm_count"},
                                   {"openvino_version": None}, {"sample_interval_seconds": True}])
 def test_reject_old_or_invalid_config(config, extra):
     with pytest.raises(ValidationError):
@@ -80,8 +80,10 @@ def test_filter_excludes_window_crossing_cutoff(config):
 
 
 def test_unverified_runtimes_and_weights_are_rejected(config, tmp_path):
-    from intelligent_analysis.vision.density_counter import DMCountCounter, WeightSpec
-    counter = DMCountCounter(WeightSpec(str(tmp_path / "missing.pth"), "0" * 64, "test-density"))
+    from intelligent_analysis.vision.density_counter import WeightSpec
+    from intelligent_analysis.vision.p2p_counter import P2PNetCounter
+    counter = P2PNetCounter(WeightSpec(str(tmp_path / "missing.pth"), "0" * 64, "test-p2pnet"),
+        lambda: None, source_revision="synthetic-test-only")
     with pytest.raises(UnsupportedAnalysis, match="weights"):
         counter.validate_config(config)
     with pytest.raises(UnsupportedAnalysis, match="CPU"):

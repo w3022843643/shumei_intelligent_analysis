@@ -1,5 +1,5 @@
 {
-  "status": "awaiting_reviewed_labels",
+  "status": "historical_comparison_stopped",
   "both_models_inferred": true,
   "sample_count": 6,
   "frame_indices": [
@@ -67,5 +67,8 @@
     "file_count": 9,
     "model_predictions_included": false
   },
-  "fixed_camera_verified": false
+  "fixed_camera_verified": false,
+  "comparison_task": "stopped_by_user",
+  "selected_algorithm": "p2pnet",
+  "decision_date": "2026-10-15"
 }

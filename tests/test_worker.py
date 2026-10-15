@@ -13,9 +13,10 @@ from intelligent_analysis.worker import dispatch_analysis_job, publish_knowledge
 def test_full_windows_roi_median_and_missing(config):
     parsed = VideoAnalysisConfig.model_validate(config)
     start = datetime(2026, 10, 14, tzinfo=UTC)
-    frames = [SimpleNamespace(timestamp_seconds=s, frame=np.ones((4, 4)))
+    frames = [SimpleNamespace(timestamp_seconds=s, frame=None)
               for s in range(0, 300, 10)]
-    points = process_visible_frames(frames, parsed, lambda f: f, start,
+    predictions = np.array([[(x + 0.5) / 4, (y + 0.5) / 4, 0.9] for y in range(4) for x in range(4)])
+    points = process_visible_frames(frames, parsed, lambda f: predictions, start,
                                     start + timedelta(minutes=10, seconds=10), ["source"])
     windows = [p for p in points if p["grain"] == "5min"]
     assert len(windows) == 2  # partial third window excluded
@@ -30,7 +31,8 @@ def test_full_windows_roi_median_and_missing(config):
 def test_partial_sampling_is_degraded_not_zero(config):
     start = datetime(2026, 10, 14, tzinfo=UTC)
     points = process_visible_frames([SimpleNamespace(timestamp_seconds=0, frame=1)],
-        VideoAnalysisConfig.model_validate(config), lambda f: np.ones((2, 2)),
+        VideoAnalysisConfig.model_validate(config),
+        lambda f: np.array([[0.2, 0.2, 0.9], [0.2, 0.8, 0.9], [0.8, 0.2, 0.9], [0.8, 0.8, 0.9]]),
         start, start + timedelta(minutes=5), ["source"])
     assert points[-1]["value"] == 4
     assert points[-1]["quality_status"] == "degraded"

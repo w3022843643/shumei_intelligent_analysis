@@ -32,7 +32,7 @@ def main():
     from data_foundation.ingestion.real_dataset import import_real_dataset, validate_real_dataset
     from sqlalchemy import inspect, text
 
-    from intelligent_analysis import ServiceBindings, answer_message, configure_services
+    from intelligent_analysis import ServiceBindings, answer_message, configure_services, health
     from intelligent_analysis.knowledge.artifacts import load_verified_knowledge_snapshot
     from intelligent_analysis.worker import process_knowledge_job, publish_knowledge_snapshot
     from intelligent_analysis.worker.knowledge_worker import EMBEDDING_MODEL_VERSION, PARSER_VERSION
@@ -48,7 +48,7 @@ def main():
     store = create_store(database_url, data_root=run_root / "assets", allow_sqlite_for_tests=True)
     c_version = tomllib.loads((C_ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
     use_verified = c_version in {"0.2.0a1", "0.2.0a2"}
-    report = {"c_version": c_version, "migration_head": "0006", "target": "isolated_sqlite",
+    report = {"e_version": health()["version"], "c_version": c_version, "migration_head": "0006", "target": "isolated_sqlite",
               "business_database_verified": False, "dataset_validation": validation,
               "documents": [], "checks": {}}
     report.update(windows=platform.platform(), python=platform.python_version(),

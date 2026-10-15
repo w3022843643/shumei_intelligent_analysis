@@ -11,7 +11,7 @@ from statistics import median
 
 import numpy as np
 
-from ..contracts import ROI, CountPoint, VideoAnalysisConfig
+from ..contracts import ROI, CountPoint, LegacyDMCountConfig, VideoAnalysisConfig
 from ..integration import UnsupportedAnalysis
 
 
@@ -54,7 +54,7 @@ class DMCountCounter:
         self._model = None
 
     def validate_config(self, config: dict) -> None:
-        parsed = VideoAnalysisConfig.model_validate(config)
+        parsed = LegacyDMCountConfig.model_validate(config)
         if parsed.inference_engine != "pytorch" or parsed.device != "CPU":
             raise UnsupportedAnalysis("Only PyTorch CPU is enabled; other runtimes are unverified")
         if parsed.weights_version != self.weights.version:
@@ -121,7 +121,7 @@ class DMCountCounter:
             return self._model(((tensor - mean) / std).unsqueeze(0))[0, 0].numpy()
 
 
-def process_visible_frames(frames: Iterable, config: VideoAnalysisConfig,
+def process_visible_frames(frames: Iterable, config: VideoAnalysisConfig | LegacyDMCountConfig,
                            counter: Callable, recorded_start: datetime,
                            recorded_end: datetime, source_ids: list[str]) -> list[dict]:
     if recorded_start.utcoffset() is None or recorded_end.utcoffset() is None:
@@ -144,7 +144,11 @@ def process_visible_frames(frames: Iterable, config: VideoAnalysisConfig,
         if slot in by_slot or seconds - slot * interval > min(1.0, interval / 2):
             continue
         timestamp = recorded_start + timedelta(seconds=seconds)
-        value = density_count(counter(frame.frame), config.roi)
+        if config.count_model == "p2pnet":
+            from .benchmark import point_count
+            value = point_count(counter(frame.frame), config.roi, config.confidence_threshold)
+        else:
+            value = density_count(counter(frame.frame), config.roi)
         by_slot[slot] = CountPoint(grain="frame", value=value, recorded_at=timestamp,
                                    quality_status="good", source_ids=source_ids)
     points = list(by_slot.values())

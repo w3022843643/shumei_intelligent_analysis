@@ -1,4 +1,4 @@
-"""Matched-frame DM-Count / experimental P2PNet evaluation."""
+"""P2PNet point adapter and historical matched-model evaluation helpers."""
 from __future__ import annotations
 
 import math
@@ -31,10 +31,10 @@ def point_count(points: np.ndarray, roi: ROI, threshold: float = 0.5) -> float:
 
 
 class P2PNetAdapter:
-    """Experimental CPU adapter for a caller-loaded official-compatible model.
+    """CPU point adapter for a caller-loaded P2PNet-compatible model.
 
-    D/E experiments supply an eval model whose weights provenance is recorded.
-    This is never registered under count_model=dm_count. Old official CLI CUDA
+    D/E supply an eval model whose weights provenance is recorded.
+    This is registered as p2pnet, never dm_count. Old official CLI CUDA
     assumptions are deliberately not inherited by this adapter.
     """
     def __init__(self, model):
@@ -56,6 +56,9 @@ class P2PNetAdapter:
             output = self.model(((tensor - mean) / std).unsqueeze(0))
             scores = output["pred_logits"].softmax(-1)[0, :, 1].cpu().numpy()
             points = output["pred_points"][0].cpu().numpy()
+        if (points.ndim != 2 or points.shape[1] != 2 or scores.ndim != 1 or len(points) != len(scores)
+                or not np.isfinite(points).all() or not np.isfinite(scores).all()):
+            raise ValueError("P2PNet returned invalid or nonfinite points/confidences")
         normalized = points / np.array([width, height])
         valid = ((normalized >= 0) & (normalized <= 1)).all(axis=1)
         return np.column_stack((normalized[valid], scores[valid]))

@@ -1,6 +1,8 @@
-# E 智能分析包 0.5.1
+# E 智能分析包 0.6.0
 
-0.5.1 完成 C 官方 0.2.0a2 的 Windows 接收，新增原文版本与索引版本的独立绑定、已校验索引加载及失败时拒绝旧内存回退。16 份真实资料索引、重启读取和故障检查通过。详见 [正式交付与 C/D 回执](docs/E051正式交付与CD回执.md) 和 [D 升级清单](docs/D升级E051对接清单-2026-10-15.md)。0.5.0 发布文件保留。
+正式算法按用户确认改为队长推荐的 **P2PNet**，停止DM-Count/P2PNet比较。新版视频接口只接受count_model=p2pnet，首个已验证运行配置为提供的SHTechA权重、PyTorch CPU。D/B需同步模型字段、阈值和计数器绑定后再联合发布，见 [0.6.0交付与D/B执行单](docs/E060-P2PNet正式交付与DB执行单.md)。
+
+知识能力继承0.5.1：C官方0.2.0a2、原文/索引版本独立绑定、已校验加载及损坏时拒绝旧内存回退；解析/关键词算法版本保持原值。历史发布文件和证据保留，当前视频契约以0.6.0为准。
 
 本版把录像指标升级为 `camera_visible_people`：指定固定画面 ROI 的估计可见人数。它不表示累计通行人次，也不表示全景区在园人数。原跟踪和越线文件仅保留用于旧方案回归，新流程不调用。
 
@@ -19,8 +21,7 @@ python -m ruff check intelligent_analysis tests demo
 ```powershell
 python demo/receive_c.py
 python -X utf8 demo/accept_c_knowledge.py
-python demo/prepare_dm_count.py
-python -X utf8 demo/check_dm_count.py
+python -X utf8 demo/check_p2pnet.py
 ```
 
 C 官方 0.2.0a2 接收使用 `python demo/receive_c020.py --download`、`python demo/check_c020_windows.py` 和 `python -X utf8 demo/verify_c020_regression.py`。接收旧 0.1.9 后，设置 RUN_C_ACCEPTANCE=1 和 RUN_C020_ACCEPTANCE=1 可执行两套真实接收回归；后者只使用已安装的官方 a2 wheel，不使用候选补丁。历史 a1 问题与候选证据保留，当前状态以 a2 回执为准。
@@ -31,12 +32,12 @@ C 官方 0.2.0a2 接收使用 `python demo/receive_c020.py --download`、`python
 
 - 显式 D 队列/读取/运行能力注入；未登记真实任务不返回 `queued`，未接读取能力不冒充分析未完成。
 - 知识解析、引用、适用时间提示、原 C 文档 ID、原子索引发布及跨进程加载；受约束数值工具保留来源和查询时间。
-- DM-Count 官方结构与权重的 PyTorch CPU 实现，固定多边形 ROI、抽帧、5 分钟中位数、缺帧与完整性质量状态。
+- P2PNet正式CPU点计数器，校验提供源码和权重摘要，固定多边形ROI内置信度>0.5的人头点计数、抽帧、5分钟中位数及缺帧质量状态。
 - D 分发的纯计算入口，E 不领取混合队列、不续租、不写 C 的计数表；D 控制任务生命周期和发布。
 - 阻尼 Holt 5 分钟预测，训练前缀参数选择、滚动起点回测及最近值基线对照；60 分钟暂不开放，区间为空。
-- 实验性 P2PNet CPU 模型适配器和相同标注帧/ROI 的分场景 MAE 对照器。正式 `count_model` 仍只接受 `dm_count`。
+- P2PNet配置、权重、设备不可用时明确报错；正式接口拒绝dm_count，不自动更换模型。原对照工具仅作为历史保留。
 
-真实录像计数 MAE、P2PNet 实测比较及真实 15/30 分钟预测仍待获准录像和标注；合成测试不构成这些验收。GPU、NPU、AUTO 和 OpenVINO 尚未开放。
+P2PNet人工MAE、真实15/30分钟预测及D/B正式视频联调仍待验收；队长短片已跑通CPU推理，但没有人工真值和完整5分钟窗口。GPU、NPU、AUTO、OpenVINO尚未开放。
 
 ## 对接资料
 
@@ -53,10 +54,10 @@ C 官方 0.2.0a2 接收使用 `python demo/receive_c020.py --download`、`python
 
 ## 下一阶段准备工具
 
-既有0.5.1 wheel/ZIP保留原发布内容，以下新增工具从仓库运行：
+0.6.0工具见以下入口，既有0.5.1 wheel/ZIP保留原发布内容：
 
 - [真实问答题集与联合验收](docs/真实问答题集与联合验收.md)：`python -X utf8 demo/check_rag_questions.py`；自动检查与人工语义、D意图路由/HTTP分别记录。
-- [统一计数评测入口](docs/统一计数评测入口.md)：`python demo/benchmark_frames.py`；空模板返回待授权素材，填入复核标签后可运行DM-Count及可选P2PNet对照。
+- [正式P2PNet配置与D/B适配](docs/E060-P2PNet正式交付与DB执行单.md)：`python -X utf8 demo/check_p2pnet.py`，依赖已接收的本地队长模型目录。
 - [录像素材与人工标注清单](docs/录像素材与人工标注清单.md)：授权、资产、时间、固定ROI、四类场景、独立复核与预测连续时序要求。
 - [队长P2PNet测试包接收](docs/队长P2PNet测试包接收说明.md)：提供权重已跑通本机CPU三帧；原视频/权重留在本地artifacts，人工精度及GPU仍待验收。
-- [六帧人工标注与对照执行单](docs/六帧人工标注与对照执行单.md)：两模型同帧预测已冻结，盲标注包留在本地；人工复核回传后可计算探索MAE。
+- [六帧人工素材](docs/六帧人工标注与对照执行单.md)：图片可继续用于P2PNet单模型人工误差核验；比较任务已停止，旧对照报告保持历史状态。

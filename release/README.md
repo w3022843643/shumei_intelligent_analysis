@@ -1,5 +1,19 @@
 # E 发布文件
 
+## 0.6.0：正式使用 P2PNet
+
+日期2026-10-15。视频接口只接受p2pnet，固定阈值0.5，提供的SHTechA权重通过本机PyTorch CPU推理；停止DM/P2P对照。D/B同步适配后再联合发布，详见 [0.6.0执行单](../docs/E060-P2PNet正式交付与DB执行单.md)。人工MAE、GPU及正式视频HTTP仍待验收。
+
+- [0.6.0 wheel](shumei_intelligent_analysis-0.6.0-py3-none-any.whl)
+- [0.6.0 ZIP](E-visible-people-0.6.0-2026-10-15.zip)
+- [摘要回执](E-visible-people-0.6.0-2026-10-15.receipt.json)
+
+核心服务仍可独立安装；实际推理需vision可选依赖及单独接收的队长源码/权重。E不把收到的第三方源码、权重和视频上传到发布包。
+
+```powershell
+python -m pip install ./release/shumei_intelligent_analysis-0.6.0-py3-none-any.whl
+```
+
 ## 0.5.1：C 已验证索引加载
 
 日期：2026-10-15。新增 C 官方 0.2.0a2 引用加载、原文/索引版本独立绑定、片段核对及损坏时拒绝旧内存回退；保留 0.5.0 视频契约。

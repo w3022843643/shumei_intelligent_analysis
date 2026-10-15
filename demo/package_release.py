@@ -42,13 +42,15 @@ def main():
     with zipfile.ZipFile(archive) as bundle:
         assert bundle.testzip() is None
     c_windows = json.loads((ROOT / "docs/acceptance/C020a2-Windows-regression.json").read_text(encoding="utf-8"))
-    c_knowledge = json.loads((ROOT / "docs/acceptance/C020a2-knowledge.json").read_text(encoding="utf-8"))
-    d_bridge = json.loads((ROOT / "docs/acceptance/D-E051-bridge.json").read_text(encoding="utf-8"))
-    installed = json.loads((ROOT / "docs/acceptance/E051-wheel-installed.json").read_text(encoding="utf-8"))
-    if c_windows["status"] != "passed" or c_knowledge["status"] != "passed":
+    c_knowledge = json.loads((ROOT / f"docs/acceptance/E{version.replace('.', '')}-C020a2-knowledge.json").read_text(encoding="utf-8"))
+    installed = json.loads((ROOT / f"docs/acceptance/E{version.replace('.', '')}-wheel-installed.json").read_text(encoding="utf-8"))
+    p2p = json.loads((ROOT / "docs/acceptance/P2PNet-CPU-060.json").read_text(encoding="utf-8"))
+    if c_windows["status"] != "passed" or c_knowledge["status"] != "passed" or c_knowledge["e_version"] != version:
         raise ValueError("Official C a2 receiving evidence must pass")
     if installed["status"] != "passed" or installed["wheel_sha256"] != hashlib.sha256(wheel.read_bytes()).hexdigest():
         raise ValueError("Built E wheel must match the successfully installed wheel")
+    if not installed.get("installed_P2PNet_inference_verified") or p2p["e_version"] != version:
+        raise ValueError("Current E P2PNet wheel inference must pass")
     receipt = {"version": version, "wheel": wheel.name,
         "wheel_sha256": hashlib.sha256(wheel.read_bytes()).hexdigest(),
         "archive": archive.name, "archive_sha256": hashlib.sha256(archive.read_bytes()).hexdigest(),
@@ -59,7 +61,10 @@ def main():
         "c_version": "0.2.0a2", "c020_official_windows_status": c_windows["status"],
         "c020_official_windows_test_counts": c_windows["counts"],
         "c020_knowledge_status": c_knowledge["status"],
-        "d_sqlite_bridge_http_status": d_bridge["status"], "formal_DE_mysql_verified": False,
+        "count_model": "p2pnet", "weights_version": p2p["model_provenance"]["weights_version"],
+        "weights_sha256": p2p["model_provenance"]["weights_sha256"],
+        "installed_P2PNet_inference_verified": True, "comparison_task": "stopped_by_user",
+        "D_B_video_integration": "pending_peer_upgrade", "formal_DE_mysql_verified": False,
         "real_video_accuracy_verified": False, "production_http_verified": False}
     output = release / f"E-visible-people-{version}-2026-10-15.receipt.json"
     output.write_text(json.dumps(receipt, indent=2), encoding="utf-8")
