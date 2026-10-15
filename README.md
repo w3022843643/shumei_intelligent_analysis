@@ -44,6 +44,7 @@ P2PNet人工MAE、真实15/30分钟预测及D/B正式视频联调仍待验收；
 正式交接文件在 [release/](release/)：保留各版本 wheel、完整交接 ZIP 和 SHA-256 回执。原始资料与模型权重不随 Git 仓库上传，按上述脚本获取。
 
 - [服务契约](E_SERVICE_CONTRACT.md)：D 的绑定、任务处理、读回和异常映射。
+- [答复 D 的整合回执与故障复现](docs/致D-整合回执答复与故障复现-2026-10-15.md)：阈值、审计、原文/索引版本、重建职责确认及隔离故障注入入口；附 2026-10-15 新复跑证据，D/MySQL 仍待独立复验。
 - [交付与缺口](docs/E050交付与联调说明.md)：C 新口径存储需求、D/B 联调步骤及验收状态。
 - [C 真实知识接收证据](docs/acceptance/C019-knowledge.json)。
 - [C 官方 a2 Windows 回归](docs/acceptance/C020a2-Windows-regression.json)、[真实资料与故障检查](docs/acceptance/C020a2-knowledge.json)、[实际 JSON 与 manifest](docs/fixtures/C020a2-historical-notice/)。
