@@ -18,7 +18,7 @@ python -m pip install ./release/shumei_intelligent_analysis-0.6.0-py3-none-any.w
 
 日期：2026-10-15。新增 C 官方 0.2.0a2 引用加载、原文/索引版本独立绑定、片段核对及损坏时拒绝旧内存回退；保留 0.5.0 视频契约。
 
-官方 C wheel Windows 全量回归 310 通过、1 项平台 FIFO 跳过；16 份真实资料及重启问答通过。D/E 独立 SQLite 桥 HTTP 检查通过，正式 C/MySQL 联调仍待 D 切换。请看 [正式回执](../docs/E051正式交付与CD回执.md) 和 [D 最新执行单](../docs/D升级E051对接清单-2026-10-15.md)。
+官方 C wheel Windows 全量回归 310 通过、1 项平台 FIFO 跳过；16 份真实资料及重启问答通过。D/E 独立 SQLite 桥 HTTP 检查通过，正式 C/MySQL 联调仍待 D 切换。请看 [正式回执](../docs/E051正式交付与CD回执.md) 和 [D 最新执行单](../docs/archive/D升级E051对接清单-2026-10-15.md)。
 
 - [可安装 wheel](shumei_intelligent_analysis-0.5.1-py3-none-any.whl)
 - [完整交接 ZIP](E-visible-people-0.5.1-2026-10-15.zip)
@@ -46,4 +46,4 @@ python -m pip install ./release/shumei_intelligent_analysis-0.5.0-py3-none-any.w
 
 49 项测试通过，包括独立 SQLite 的 C 0.1.9 真实资料接收；16 份文档、655 片段及重启问答验证通过。DM-Count CPU 与官方实现输出一致。
 
-授权录像/标注、新画面人数存储、P2PNet 真实对照、真实预测和 D/B 正式联调仍待验收。原件、环境配置、录像和权重不包含在本发布目录中。详见 [交付与联调说明](../docs/E050交付与联调说明.md)。
+授权录像/标注、新画面人数存储、P2PNet 真实对照、真实预测和 D/B 正式联调仍待验收。原件、环境配置、录像和权重不包含在本发布目录中。详见 [交付与联调说明](../docs/archive/E050交付与联调说明.md)。
