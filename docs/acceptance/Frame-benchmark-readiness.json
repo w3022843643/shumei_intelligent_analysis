@@ -1,0 +1,41 @@
+{
+  "status": "blocked",
+  "real_video_accuracy_verified": false,
+  "P2PNet_project_compatibility_verified": false,
+  "forecast_verified": false,
+  "dataset_id": "pending-authorized-camera-holdout",
+  "camera_id": "pending-camera-id",
+  "data_kind": "real",
+  "manifest_sha256": "357020887d1dd8b53155f0b0d62c9830b4a0651b63faf0320854826065e9102a",
+  "sample_count": 0,
+  "sample_metadata": [],
+  "roi": {
+    "points": [
+      {
+        "x": 0.0,
+        "y": 0.0
+      },
+      {
+        "x": 1.0,
+        "y": 0.0
+      },
+      {
+        "x": 1.0,
+        "y": 1.0
+      },
+      {
+        "x": 0.0,
+        "y": 1.0
+      }
+    ]
+  },
+  "label_revision": "pending-first-independent-review",
+  "authorization_ref": "pending-written-authorization",
+  "authorization_status": "pending",
+  "permission_note": "待取得录像授权；当前无真实评测样本。",
+  "split": "holdout",
+  "holdout_independence_verified": false,
+  "reason": "awaiting_authorized_reviewed_frames",
+  "frames": [],
+  "scenarios": {}
+}

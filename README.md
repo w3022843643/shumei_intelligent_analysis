@@ -50,3 +50,11 @@ C 官方 0.2.0a2 接收使用 `python demo/receive_c020.py --download`、`python
 - [DM-Count 官方实现](https://github.com/cvlab-stonybrook/DM-Count)，[P2PNet 官方实现](https://github.com/TencentYoutuResearch/CrowdCounting-P2PNet)。
 
 历史 `E致各角色对接说明.md`、旧需求确认清单和 `docs/D回复E_契约确认.md` 描述 0.4.0 越线方案，不能用作本版已完成状态或调用契约。
+
+## 下一阶段准备工具
+
+既有0.5.1 wheel/ZIP保留原发布内容，以下新增工具从仓库运行：
+
+- [真实问答题集与联合验收](docs/真实问答题集与联合验收.md)：`python -X utf8 demo/check_rag_questions.py`；自动检查与人工语义、D意图路由/HTTP分别记录。
+- [统一计数评测入口](docs/统一计数评测入口.md)：`python demo/benchmark_frames.py`；空模板返回待授权素材，填入复核标签后可运行DM-Count及可选P2PNet对照。
+- [录像素材与人工标注清单](docs/录像素材与人工标注清单.md)：授权、资产、时间、固定ROI、四类场景、独立复核与预测连续时序要求。

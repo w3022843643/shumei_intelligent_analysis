@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-10-15T12:00:00+08:00",
+  "scope": "E offline checks; D intent routing, HTTP and human answer review remain separate",
+  "cases": [
+    {"id":"H01","category":"historical","question":"2025年春节黄山1月30日至2月3日开放时间是什么？","expected_status":"answered","document_id":"0c8e2020-2e0a-5842-bce9-d9193cf81095","required_text":["6:30—17:30","历史资料"],"human_review":"确认回答明确限定2025年春节，不把该时间用于今天。"},
+    {"id":"H02","category":"historical","question":"2025年春节黄山换乘车辆1月28日上行运营时间是什么？","expected_status":"answered","document_id":"0c8e2020-2e0a-5842-bce9-d9193cf81095","required_text":["6:40—16:00","历史资料"],"human_review":"区分换乘车辆上行、下行与索道时间。"},
+    {"id":"H03","category":"historical","question":"2025年春节黄山徒步登山检票口15点后还能入园吗？","expected_status":"answered","document_id":"0c8e2020-2e0a-5842-bce9-d9193cf81095","required_text":["只出不进","历史资料"],"human_review":"明确是历史公告，不能据此断言当前检票安排。"},
+    {"id":"C01","category":"current","question":"黄山风景区今天的开放时间可以沿用2025年春节公告吗？","expected_status":"answered","document_id":"0c8e2020-2e0a-5842-bce9-d9193cf81095","required_text":["不能作为当前运营事实"],"human_review":"必须明确无法用旧公告证明今天安排；仅附时效提示不等于语义已合格。"},
+    {"id":"F01","category":"not_yet_effective","question":"2025年春节黄山开放时间公告","as_of":"2025-01-01T12:00:00+08:00","expected_status":"answered","document_id":"0c8e2020-2e0a-5842-bce9-d9193cf81095","required_text":["尚未生效"],"human_review":"不能将尚未发布、生效的内容表述为当时已知事实。"},
+    {"id":"N01","category":"no_evidence","question":"黄山春节开放时间","corpus":"empty","expected_status":"insufficient_evidence","required_text":[],"human_review":"知识库为空时不编造开放时间，不给虚假引用。"},
+    {"id":"M01","category":"metric_missing","question":"黄山今天实时可见人数是多少？","expected_status":"metric_tool_unavailable","required_text":["无法核实数值"],"human_review":"D须识别数值意图并注入受约束查询；本用例显式传入query，未证明自然语言自动路由。"},
+    {"id":"M02","category":"metric_missing_provenance","question":"这个时段机场旅客人数是多少？","expected_error":"ValueError","required_text":[],"human_review":"工具返回数值但缺来源时必须拒绝。测试工具为合成输入。"},
+    {"id":"M03","category":"metric_fixture","question":"测试指标查询返回多少人？","expected_status":"answered","required_text":["123.5"],"human_review":"合成工具契约检查，123.5不是任何真实客流数据。正式验收须换D真实工具。"}
+  ]
+}

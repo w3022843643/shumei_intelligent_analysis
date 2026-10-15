@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "counts": {
+    "tests": 82,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 82
+  },
+  "RUN_C_ACCEPTANCE": true,
+  "RUN_C020_ACCEPTANCE": true,
+  "RUN_DM_BENCHMARK": true,
+  "rag_automated_cases_passed": 9,
+  "human_semantic_review": "pending",
+  "official_DM_weights_on_synthetic_frame_smoke": true,
+  "P2P_model_in_cli_smoke": "synthetic_fixture_not_official_P2PNet",
+  "real_video_accuracy_verified": false,
+  "formal_DE_mysql_verified": false,
+  "existing_E051_release_files_unchanged": true
+}
