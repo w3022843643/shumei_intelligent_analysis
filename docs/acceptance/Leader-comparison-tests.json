@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "counts": {
+    "tests": 97,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 97
+  },
+  "RUN_C_ACCEPTANCE": true,
+  "RUN_C020_ACCEPTANCE": true,
+  "RUN_DM_BENCHMARK": true,
+  "real_received_frames_inferred_by_both_models": 6,
+  "manual_labels": "user_will_provide_later",
+  "real_video_accuracy_verified": false,
+  "formal_DE_mysql_verified": false
+}

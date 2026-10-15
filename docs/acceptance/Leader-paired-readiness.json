@@ -1,0 +1,71 @@
+{
+  "status": "awaiting_reviewed_labels",
+  "both_models_inferred": true,
+  "sample_count": 6,
+  "frame_indices": [
+    0,
+    112,
+    224,
+    336,
+    448,
+    561
+  ],
+  "sampling": "uniform frame indices including first and last",
+  "roi": {
+    "points": [
+      {
+        "x": 0.0,
+        "y": 0.0
+      },
+      {
+        "x": 1.0,
+        "y": 0.0
+      },
+      {
+        "x": 1.0,
+        "y": 1.0
+      },
+      {
+        "x": 0.0,
+        "y": 1.0
+      }
+    ]
+  },
+  "nominal_duration_seconds": 18.733333333333334,
+  "recorded_at": null,
+  "split": "exploratory",
+  "formal_holdout_verified": false,
+  "real_video_accuracy_verified": false,
+  "GPU_verified": false,
+  "forecast_verified": false,
+  "human_label_response": "user_will_provide_later",
+  "dm_mae": null,
+  "p2p_mae": null,
+  "prediction_sha256": "83047e7bd228e377fd8e6388dbb1dd406471067cfce495cd464cf4d27b12603d",
+  "dm_provenance": {
+    "weights_version": "dm-count-qnrf-cc5f2132",
+    "weights_sha256": "16ef954a2cef40c66ee664f69273559553b735d5e2c9f90e2444f3c25dd45e05"
+  },
+  "p2p_provenance": {
+    "weights_version": "leader-SHTechA-50604773",
+    "weights_sha256": "506047732b128ff09efef18e94bfacbe35fcfef300e5e9eeeece259b0488c63f",
+    "source_archive_sha256": "2981dc75e337a53fddf66307550dd86cceb738839f861133b8f52b31876790cc",
+    "upstream_commit_verified": false,
+    "confidence_threshold": 0.5
+  },
+  "runtime": {
+    "device": "CPU",
+    "threads": 4,
+    "python": "3.13.13",
+    "torch": "2.14.1+cpu",
+    "opencv": "5.0.0",
+    "numpy": "2.5.3"
+  },
+  "annotation_packet": {
+    "relative_to_E": "artifacts/leader-comparison/leader-6frames-annotation.zip",
+    "sha256": "938066a4810a19c2fc2595eb2c8b509867e31528078f1cdb7b9bcba1a3a5f35b",
+    "file_count": 9,
+    "model_predictions_included": false
+  },
+  "fixed_camera_verified": false
+}
