@@ -1,0 +1,8 @@
+{
+  "candidate_only": true,
+  "c_repository_modified": false,
+  "original_module_sha256": "86bb31e902d75838d02ac0f282749e9ed7697a724eb58c96f2825b050c1c64e9",
+  "candidate_module_sha256": "f768339ac3bae23ba4158f26911b06ec364378f64ddeaa3c8c99845a79d85d24",
+  "change": "Use fstat for both baseline and post-read comparison; preserve all fingerprint fields",
+  "upstream_confirmation": "pending"
+}

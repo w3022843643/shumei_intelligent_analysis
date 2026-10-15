@@ -7,14 +7,14 @@ from uuid import UUID, uuid4
 
 from .agent.metric_tools import run_metric_query
 from .agent.orchestrator import answer_with_index
-from .contracts import CountsResponse, DocumentMetadata, JobAccepted, VideoAnalysisConfig
+from .contracts import Citation, CountsResponse, DocumentMetadata, JobAccepted, VideoAnalysisConfig
 from .integration import DependencyUnavailable, UnsupportedAnalysis, get_bindings, submit
 from .knowledge.chunk import split_text
 from .knowledge.index import InMemoryKnowledgeIndex
 from .knowledge.parse import read_document
 from .short_forecast.baseline import forecast_visible_history
 
-MODULE_VERSION = "0.5.0"
+MODULE_VERSION = "0.5.1"
 MODEL_VERSION = "visible-damped-holt-0.5.0"
 _global_index = InMemoryKnowledgeIndex()
 
@@ -38,16 +38,21 @@ def answer_message(message: str, conversation_id: UUID | None = None,
             raise ValueError("Metric tool result must include time, metric and source provenance")
         return {"conversation_id": str(conversation_id or uuid4()), "status": "answered",
                 "answer": f"{result['metric']}：{result['value']}（{result['period_start']}—{result['period_end']}）。",
-                "citations": [{"type": "metric", "id": str(s), "title": result["metric"]}
+                "citations": [Citation(type="metric", id=str(s), title=result["metric"]).model_dump(mode="json")
                               for s in result["source_ids"]],
                 "used_metric_queries": [str(context["metric_query"])],
                 "metric_result": result, "limitations": []}
-    path = get_bindings().knowledge_index_path
+    bindings = get_bindings()
+    if bindings.knowledge_snapshot_loader is not None:
+        verified_index = InMemoryKnowledgeIndex.from_payload(bindings.knowledge_snapshot_loader())
+        return answer_with_index(message, verified_index, conversation_id,
+            as_of=context.get("as_of", datetime.now(UTC))).model_dump(mode="json")
+    path = bindings.knowledge_index_path
     if path:
         try:
             load_knowledge_index(path)
-        except FileNotFoundError as exc:
-            raise DependencyUnavailable("Published knowledge index is unavailable") from exc
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            raise DependencyUnavailable("Published knowledge index is unavailable or invalid") from exc
     return answer_with_index(message, _global_index, conversation_id,
                              as_of=context.get("as_of", datetime.now(UTC))).model_dump(mode="json")
 
@@ -60,6 +65,7 @@ def index_document(file_path: str, metadata: dict[str, Any]) -> dict[str, Any]:
         raise ValueError("C document_version is required")
     payload = {"document_id": metadata["document_id"], "file_path": file_path,
                "version": metadata["document_version"],
+               "document_version": metadata["document_version"],
                "metadata": validated.model_dump(mode="json")}
     result = submit("knowledge_index", payload)
     return {"document_id": metadata["document_id"], "index_status": "pending",

@@ -1,0 +1,33 @@
+{
+  "platform": "win32",
+  "python": "3.13.13",
+  "c_version": "0.2.0a1",
+  "fingerprint": {
+    "st_dev": {
+      "fstat": 8548482654360842138,
+      "stat": 8548482654360842138
+    },
+    "st_ino": {
+      "fstat": 844424931084905,
+      "stat": 844424931084905
+    },
+    "st_size": {
+      "fstat": 36,
+      "stat": 36
+    },
+    "st_mtime_ns": {
+      "fstat": 1791975393787474100,
+      "stat": 1791975393787474100
+    },
+    "st_ctime_ns": {
+      "fstat": 1791975393793909300,
+      "stat": 1791975393745714200
+    }
+  },
+  "synthetic_probe": true,
+  "stream_read_delay_seconds": 0.02,
+  "c_source_modified": false,
+  "native_persist_file_verified": false,
+  "native_error": "索引产物在校验后发生变化",
+  "status": "blocked_native_storage"
+}

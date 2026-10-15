@@ -18,6 +18,7 @@ class ServiceBindings:
     load_counts: Callable[[str, str], dict[str, Any]] | None = None
     validate_analysis: Callable[[dict[str, Any]], None] | None = None
     knowledge_index_path: str | None = None
+    knowledge_snapshot_loader: Callable[[], dict[str, Any]] | None = None
 
 
 _bindings = ServiceBindings()
@@ -25,6 +26,8 @@ _bindings = ServiceBindings()
 
 def configure_services(bindings: ServiceBindings) -> None:
     global _bindings
+    if bindings.knowledge_index_path and bindings.knowledge_snapshot_loader:
+        raise ValueError("Configure either a local index path or a verified snapshot loader")
     _bindings = bindings
 
 

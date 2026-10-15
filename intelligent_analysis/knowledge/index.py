@@ -81,10 +81,16 @@ class InMemoryKnowledgeIndex:
     @classmethod
     def load(cls, path: str | Path) -> InMemoryKnowledgeIndex:
         payload = json.loads(Path(path).read_text(encoding="utf-8"))
+        return cls.from_payload(payload)
+
+    @classmethod
+    def from_payload(cls, payload: dict) -> InMemoryKnowledgeIndex:
         index = cls()
-        for document_id, item in payload.get("documents", {}).items():
+        for document_id, item in payload["documents"].items():
             metadata = DocumentMetadata.model_validate(item["metadata"])
             chunks = [TextChunk.model_validate(chunk) for chunk in item.get("chunks", [])]
+            if any(c.document_id != document_id for c in chunks):
+                raise ValueError("Chunk document identity mismatch")
             index.add_document(document_id, metadata, chunks)
         return index
 

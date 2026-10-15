@@ -50,7 +50,7 @@ def test_dispatched_knowledge_and_restart_load(tmp_path):
     source.write_text("黄山春节开放公告。", encoding="utf-8")
     prepared = dispatch_analysis_job("knowledge_index", {
         "document_id": "c-stable-id", "version": "v1", "file_path": str(source),
-        "metadata": {"title": "公告", "publisher": "官方", "permission_note": "测试"}})
+        "metadata": {"document_version": "source-v1", "title": "公告", "publisher": "官方", "permission_note": "测试"}})
     assert prepared["chunks"]
     target = tmp_path / "published.json"
     publish_knowledge_snapshot(prepared["snapshot"], str(target))

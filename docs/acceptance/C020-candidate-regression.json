@@ -1,0 +1,18 @@
+{
+  "tests": 54,
+  "failures": 2,
+  "errors": 0,
+  "skipped": 0,
+  "passed": 52,
+  "runtime": "isolated_candidate_patch",
+  "failed_cases": [
+    {
+      "name": "test_file_failure_does_not_publish[directory]",
+      "message": "data_foundation.errors.Conflict: 索引产物无法读取"
+    },
+    {
+      "name": "test_file_failure_does_not_publish[fifo]",
+      "message": "AttributeError: module 'os' has no attribute 'mkfifo'"
+    }
+  ]
+}

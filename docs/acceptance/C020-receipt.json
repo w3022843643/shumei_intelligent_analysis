@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "c_version": "0.2.0a1",
+  "c_checkout_commit": "ed0400e323b7d48089a6f9b8003807ceca556e01",
+  "migration_head": "0006",
+  "zip_sha256": "b2311a1a188131590562869b0328067d24ebf19019c41bcd6ea7c3fb3950d517",
+  "wheel_sha256": "986a7969fe15a34bb9da6dbe00b39755ff4cc9ef6ab1145c44351721fed419f9",
+  "verified_python_modules": 14,
+  "contents_manifest_verified_from_git_blob": true,
+  "isolated_wheel_runtime": true,
+  "production_database_verified": false
+}
