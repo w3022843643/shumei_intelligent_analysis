@@ -1,4 +1,6 @@
-# E 服务契约 0.6.0（2026-10-15）
+# E 服务契约 0.6.1（2026-10-17）
+
+0.6.1 修正知识原文/索引版本耦合，视频入口新增 D 指定 analysis_id，数值工具不完整返回映射为 DependencyUnavailable。已接收 C 0.2.1a1 / 0007；新视频结果由 C uow.visible 统一存储。完整变更与接收边界见 [0.6.1 回执](docs/E061-接收C021与答复D-2026-10-17.md)。
 
 正式视频算法改为P2PNet，停止模型对照。count_model=p2pnet、confidence_threshold=0.5；D/B必须同步适配。知识产物格式、解析器及关键词算法版本继承0.5.1，C/MySQL正式任务联调仍按原执行单推进。见 [0.6.0交付与D/B执行单](docs/E060-P2PNet正式交付与DB执行单.md)。
 
@@ -15,11 +17,14 @@ configure_services(ServiceBindings(
     submit_job=d_submit_job,
     load_counts=d_load_visible_counts,
     validate_analysis=p2p_counter.validate_config,
-    knowledge_index_path=published_active_index_path,
+    knowledge_snapshot_loader=lambda: load_verified_knowledge_snapshot(
+        cstore, authorized_ready_document_ids(), data_root),
 ))
 ```
 
 绑定必须在每个 API 进程启动时完成；只注入服务端受信任函数，不能从用户请求接受 Python 调用对象。
+
+上例需先从 `intelligent_analysis.knowledge.artifacts` 导入 `load_verified_knowledge_snapshot`。签名为 `(store, document_ids: list[str], data_root: str | Path) -> dict`；D 负责构造真实 C store、过滤有权访问且 ready 的文档、在 API/Worker 启动绑定。E 的 answer_message 每次调用该绑定后构建检索索引；from_payload 不是数据库校验器，不能用宽松快照替代严格 loader，也不在 E 内部另建数据库连接。D 现有严格绑定符合约定。
 
 | 绑定 | 签名和责任 |
 |---|---|
@@ -34,7 +39,7 @@ configure_services(ServiceBindings(
 ## 2. 视频三函数
 
 ```python
-analyze_video(video_id: UUID, config: dict) -> dict
+analyze_video(video_id: UUID, config: dict, *, analysis_id: UUID | None = None) -> dict
 get_camera_counts(video_id: UUID, analysis_id: UUID,
                   start: str | None = None, end: str | None = None,
                   grain: str = "5min") -> dict
@@ -47,6 +52,8 @@ forecast_short_term(video_id: UUID, analysis_id: UUID, cutoff_at: str,
 首个配置weights_version=leader-SHTechA-50604773、PyTorch CPU；权重SHA256 `506047732b128ff09efef18e94bfacbe35fcfef300e5e9eeeece259b0488c63f`。D使用`P2PNetCounter.from_team_bundle(trusted_bundle_dir)`，或显式提供WeightSpec、受信任model_factory和source_revision。前者校验收到源码文件摘要并严格加载权重；未改动源码在CUDA可用主机选CUDA锚点，所以该CPU构建器明确拒绝这种未验证环境。不得自动回退DM或把P2P标成DM。模型源码/权重单独接收，不随E wheel分发。
 
 分析返回 `{job_id,analysis_id,status:"queued",video_id,count_metric:"camera_visible_people",inference_engine}`。
+
+可选 analysis_id 由 D 服务端分配并传给 submit_job；D 返回的身份必须一致。省略时由 D 分配，兼容旧调用。E 始终先执行配置/运行能力校验再 submit。API 不收 file_path，E analyze_video 也不从客户端取得路径：D 的 submit_job 在同一 C 事务登记 job 与 visible analysis；Worker 领取后使用 `store.get_visible_input(analysis_id, lease)` 取得受检文件、录制时间及 source_ids 再调用 E。现有 D 先 validate_analysis 再 submit_job 的编排有效，切回 E 入口时无需取消 D 的授权/归属检查。
 
 计数返回 `video_id,analysis_id,metric,status,roi,analysis,points,manual_validation`。`analysis` 是实际完整 config；`manual_validation` 未人工评估时为 null。每点包含 `metric,value,unit="人",grain,quality_status,source_ids,published_at,ingested_at`。`frame` 点使用 `recorded_at`；`5min` 点使用 `period_start,period_end,sample_count,aggregation_rule="median"`。时间必须带时区，聚合窗恰好 5 分钟；查询仅返回完全落在 start/end 内的点。
 
@@ -78,7 +85,9 @@ D 在事务外用 C 原生 persist_file 落盘 artifact_bytes 后，先用短事
 
 ## 4. 知识服务与数值查询
 
-`index_document(file_path, metadata)` 要求 metadata 的 `document_id`、`document_version` 由 C 登记确定；返回 D 真实任务 ID。`reindex_documents(ids, reason)` 向 D 提交 `knowledge_reindex` 操作；D 需展开为每个文档的 `knowledge_index` 任务并返回其管理作业 ID，不能把批量 payload 直接交给单文档处理器。
+0.6.1 数值成功缺任一必填键、value为空、来源为空或结果不是对象时抛 DependencyUnavailable；不足结果不得带 value/source_ids，同样违约则拒绝。D 映射为 503，不再把上游半个成功漏为 ValueError/500。正常不足返回空引用及空 used_metric_queries，不退回知识文档补数字。
+
+`index_document(file_path, metadata, *, index_version=None)` 要求 metadata 的 `document_id`、`document_version` 由 C 登记确定；index_version 是独立索引版本，由 D 显式提供或 E 生成唯一 `e-index-<UUID>`，payload.version 使用它，不再复制原文版本。返回 D 真实任务 ID。原文版本格式按 C 原样读取，不强制完整64位摘要；C 本批有 sha256:32位前缀标识，文件完整性另用完整 SHA256。`reindex_documents(ids, reason)` 向 D 提交 `knowledge_reindex` 操作；D 需展开为每个文档的 `knowledge_index` 任务并返回其管理作业 ID，不能把批量 payload 直接交给单文档处理器。
 
 `process_document_index(file_path,metadata,document_id=None)` 是同步本地索引 helper，不登记任务或写 C；D 的正式异步流程使用上述 worker 产物及提交后发布。`load_knowledge_index/save_knowledge_index` 保持导出。
 
@@ -94,4 +103,4 @@ context = {"metric_query": constrained_query_dict, "metric_tool": trusted_d_quer
 
 正式计数器位于vision.p2p_counter.P2PNetCounter；复用P2PNetAdapter输出归一化人头点/置信度，worker以point_count执行ROI计数。provenance提供模型名、权重版本/摘要、收到源码标识、CPU及阈值，D应留存审计。人头点、权重路径及原始字节不直接作为HTTP响应。停止DM/P2P比较，旧compare_counters、DM工具及既有对照材料只作为历史，不参与正式模型选择。
 
-人工MAE仍需真实独立复核标签；GPU、正式D/B视频HTTP、C新口径持久化和真实预测均待验收。已有DM分析应作为历史单独保留，新接口不将其改名成P2P；需要新任务/analysis_id后重新计算。
+人工MAE仍需真实独立复核标签；GPU、正式D/B视频HTTP和真实预测均待验收。C021新口径持久化已完成E隔离合成接收，不等于D已安装和接通。已有DM分析应作为历史单独保留，新接口不将其改名成P2P；需要新任务/analysis_id后重新计算。

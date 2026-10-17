@@ -22,7 +22,8 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--bundle", type=Path, default=ROOT / "artifacts/leader-p2pnet-original")
-    parser.add_argument("--output", type=Path, default=ROOT / "docs/acceptance/P2PNet-CPU-060.json")
+    label = health()["version"].replace(".", "")
+    parser.add_argument("--output", type=Path, default=ROOT / f"docs/acceptance/P2PNet-CPU-{label}.json")
     args = parser.parse_args()
     torch.set_num_threads(4)
     counter = P2PNetCounter.from_team_bundle(args.bundle)

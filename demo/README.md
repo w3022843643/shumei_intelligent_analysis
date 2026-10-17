@@ -11,6 +11,7 @@
 | `receive_c020.py` | C 官方 a2 接收，网络/包前置条件见脚本 |
 | `check_c020_windows.py` / `verify_c020_regression.py` | C 官方包兼容性及回归 |
 | `accept_c_knowledge.py` / `accept_c020_failures.py` | 真资料、C 隔离库和语义/事务/租约检查，先设置 a2 路径 |
+| `accept_c021_integration.py` | 官方 C021 wheel 接收后，新存储合成闭环、真实历史数值及 D 当前不足分支复验；需 C/D 本地仓库 |
 | `check_rag_questions.py` | 问答题集检查，人工语义和正式 HTTP 另验 |
 | `verify_release_wheel.py` / `package_release.py` | 当前包安装验收及发布打包；需要对应版本证据，不用于重写既有发布 |
 

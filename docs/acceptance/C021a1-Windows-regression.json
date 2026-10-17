@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "c_version": "0.2.1a1",
+  "windows": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.13",
+  "installed_official_wheel": true,
+  "source_package_excluded": true,
+  "module_origin_relative_to_e": "artifacts/c-0.2.1a1/runtime/data_foundation/__init__.py",
+  "counts": {
+    "tests": 425,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1,
+    "passed": 424
+  },
+  "skip_reasons": [
+    "平台不提供 os.mkfifo；Windows 另测目录拒绝及原生重命名落盘"
+  ],
+  "mysql_verified": false,
+  "wheel_sha256": "a848414b554b054e2ea9c7125626724bc6cf34457db844363b83cb052ab236ed",
+  "run_relative_to_e": "artifacts/c021a1-wheel-regression-ae8fd334"
+}

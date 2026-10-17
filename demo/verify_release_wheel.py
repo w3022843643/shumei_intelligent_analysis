@@ -17,12 +17,14 @@ def main():
     runtime = ROOT / "artifacts" / ("e-wheel-runtime-" + uuid4().hex[:8])
     subprocess.run([sys.executable, "-m", "pip", "install", "--no-deps", "--no-compile",
         "--target", str(runtime), str(wheel)], check=True)
-    receipt = json.loads((ROOT / f"docs/acceptance/E{version.replace('.', '')}-C020a2-knowledge.json").read_text(encoding="utf-8"))
+    c_version = os.environ.get("C_VERSION", "0.2.1a1")
+    c_label = "C" + c_version.replace(".", "")
+    receipt = json.loads((ROOT / f"docs/acceptance/E{version.replace('.', '')}-{c_label}-knowledge.json").read_text(encoding="utf-8"))
     run = (ROOT / receipt["acceptance_run_relative_to_e"]).resolve()
     if not run.is_relative_to((ROOT / "artifacts").resolve()):
         raise ValueError("Invalid acceptance database path")
     ids = [doc["document_id"] for doc in receipt["documents"]]
-    c_runtime = ROOT / "artifacts/c-0.2.0a2/runtime"
+    c_runtime = ROOT / f"artifacts/c-{c_version}/runtime"
     code = f'''
 import json
 from pathlib import Path
@@ -59,7 +61,8 @@ store = create_store({('sqlite:///' + (run / 'acceptance.db').as_posix())!r},
     data_root={str(run / 'assets')!r}, allow_sqlite_for_tests=True)
 try:
     snapshot = load_verified_knowledge_snapshot(store, {ids!r}, {str(run / 'assets')!r})
-    configure_services(ServiceBindings(knowledge_snapshot_loader=lambda:snapshot))
+    configure_services(ServiceBindings(knowledge_snapshot_loader=lambda:
+        load_verified_knowledge_snapshot(store, {ids!r}, {str(run / 'assets')!r})))
     answer = answer_message("2025年春节黄山运营时间")
     assert answer["citations"] and "历史资料" in answer["answer"]
     print(json.dumps({{"status":"passed","documents":len(snapshot["documents"]),
@@ -74,7 +77,7 @@ finally:
     report = json.loads(result)
     for key in ("e_module_origin", "c_module_origin"):
         report[key] = Path(report[key]).relative_to(ROOT).as_posix()
-    report.update(installed_official_E_wheel=True, installed_official_C_wheel=True,
+    report.update(installed_official_E_wheel=True, installed_official_C_wheel=True, c_version=c_version,
         source_package_excluded=True, new_process_reads_committed_C_store=True,
         wheel_sha256=hashlib.sha256(wheel.read_bytes()).hexdigest(), formal_DE_mysql_verified=False)
     (ROOT / f"docs/acceptance/E{version.replace('.', '')}-wheel-installed.json").write_text(

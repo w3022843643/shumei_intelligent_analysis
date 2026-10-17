@@ -1,5 +1,17 @@
 # E 发布文件
 
+## 当前交付：E 0.6.1（2026-10-17）
+
+修正原文/索引版本耦合，支持 D 指定 analysis_id，强化数值工具不完整结果的依赖异常；接收 C 官方 0.2.1a1 / 0007。P2PNet CPU 口径不变，真实录像/人工MAE/预测和 D C021 HTTP 仍待验收。
+
+- [wheel](shumei_intelligent_analysis-0.6.1-py3-none-any.whl)
+- [完整 ZIP](E-visible-people-0.6.1-2026-10-17.zip)
+- [SHA256 回执](E-visible-people-0.6.1-2026-10-17.receipt.json)
+- [接收及对接说明](../docs/E061-接收C021与答复D-2026-10-17.md)
+
+以下为历史发布记录，原件及摘要未修改。
+
+
 ## 0.6.0：正式使用 P2PNet
 
 日期2026-10-15。视频接口只接受p2pnet，固定阈值0.5，提供的SHTechA权重通过本机PyTorch CPU推理；停止DM/P2P对照。D/B同步适配后再联合发布，详见 [0.6.0执行单](../docs/E060-P2PNet正式交付与DB执行单.md)。人工MAE、GPU及正式视频HTTP仍待验收。

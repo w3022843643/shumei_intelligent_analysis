@@ -1,4 +1,4 @@
-"""Stable E 0.5 services; D owns jobs, authorization and persistence."""
+"""E services; D owns jobs, authorization, input resolution and persistence."""
 from __future__ import annotations
 
 from datetime import UTC, datetime
@@ -14,7 +14,7 @@ from .knowledge.index import InMemoryKnowledgeIndex
 from .knowledge.parse import read_document
 from .short_forecast.baseline import forecast_visible_history
 
-MODULE_VERSION = "0.6.0"
+MODULE_VERSION = "0.6.1"
 MODEL_VERSION = "visible-damped-holt-0.5.0"
 _global_index = InMemoryKnowledgeIndex()
 
@@ -28,14 +28,18 @@ def answer_message(message: str, conversation_id: UUID | None = None,
     context = context or {}
     if "metric_query" in context:
         result = run_metric_query(context["metric_query"], context.get("metric_tool"))
+        if not isinstance(result, dict):
+            raise DependencyUnavailable("Metric tool must return a result object")
         if result.get("status") == "metric_tool_unavailable":
+            if "value" in result or "source_ids" in result:
+                raise DependencyUnavailable("Unavailable metric result must omit success fields")
             return {"conversation_id": str(conversation_id or uuid4()),
                     "answer": "指标查询服务尚未接入，无法核实数值。",
                     "status": "metric_tool_unavailable", "citations": [],
                     "used_metric_queries": [], "limitations": []}
         required = {"metric", "value", "source_ids", "period_start", "period_end", "queried_at"}
-        if not required.issubset(result) or not result["source_ids"]:
-            raise ValueError("Metric tool result must include time, metric and source provenance")
+        if not required.issubset(result) or result["value"] is None or not result["source_ids"]:
+            raise DependencyUnavailable("Metric tool result must include time, metric and source provenance")
         return {"conversation_id": str(conversation_id or uuid4()), "status": "answered",
                 "answer": f"{result['metric']}：{result['value']}（{result['period_start']}—{result['period_end']}）。",
                 "citations": [Citation(type="metric", id=str(s), title=result["metric"]).model_dump(mode="json")
@@ -57,14 +61,19 @@ def answer_message(message: str, conversation_id: UUID | None = None,
                              as_of=context.get("as_of", datetime.now(UTC))).model_dump(mode="json")
 
 
-def index_document(file_path: str, metadata: dict[str, Any]) -> dict[str, Any]:
+def index_document(file_path: str, metadata: dict[str, Any], *,
+                   index_version: str | None = None) -> dict[str, Any]:
     validated = DocumentMetadata.model_validate(metadata)
     if not metadata.get("document_id"):
         raise ValueError("C document_id is required")
     if not metadata.get("document_version"):
         raise ValueError("C document_version is required")
+    if index_version is None:
+        index_version = "e-index-" + uuid4().hex
+    if not isinstance(index_version, str) or not index_version.strip():
+        raise ValueError("Index version must be a nonempty string")
     payload = {"document_id": metadata["document_id"], "file_path": file_path,
-               "version": metadata["document_version"],
+               "version": index_version,
                "document_version": metadata["document_version"],
                "metadata": validated.model_dump(mode="json")}
     result = submit("knowledge_index", payload)
@@ -101,14 +110,26 @@ def load_knowledge_index(path: str) -> None:
     _global_index = InMemoryKnowledgeIndex.load(path)
 
 
-def analyze_video(video_id: UUID, config: dict[str, Any]) -> dict[str, Any]:
+def analyze_video(video_id: UUID, config: dict[str, Any], *,
+                  analysis_id: UUID | None = None) -> dict[str, Any]:
+    """Validate before D queues; D resolves file paths after claiming a lease.
+
+    analysis_id is D's optional stable identity. HTTP clients must not supply
+    internal file paths through config; C get_visible_input supplies worker input.
+    """
+    requested_id = UUID(str(analysis_id)) if analysis_id is not None else None
     validated = VideoAnalysisConfig.model_validate(config)
     checker = get_bindings().validate_analysis
     if checker is None:
         raise UnsupportedAnalysis("No validated P2PNet weights/runtime configured")
     checker(validated.model_dump(mode="json", exclude_none=True))
-    result = submit("video_analysis", {"video_id": str(video_id),
-                                      "config": validated.model_dump(mode="json", exclude_none=True)})
+    payload = {"video_id": str(video_id),
+               "config": validated.model_dump(mode="json", exclude_none=True)}
+    if requested_id is not None:
+        payload["analysis_id"] = str(requested_id)
+    result = submit("video_analysis", payload)
+    if requested_id is not None and UUID(str(result["analysis_id"])) != requested_id:
+        raise RuntimeError("D submit_job changed the requested analysis identity")
     accepted = JobAccepted(job_id=result["job_id"], analysis_id=result["analysis_id"],
                            inference_engine=validated.inference_engine)
     return {**accepted.model_dump(mode="json"), "video_id": str(video_id),
