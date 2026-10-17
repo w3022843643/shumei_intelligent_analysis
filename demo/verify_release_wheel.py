@@ -80,7 +80,9 @@ finally:
     report.update(installed_official_E_wheel=True, installed_official_C_wheel=True, c_version=c_version,
         source_package_excluded=True, new_process_reads_committed_C_store=True,
         wheel_sha256=hashlib.sha256(wheel.read_bytes()).hexdigest(), formal_DE_mysql_verified=False)
-    (ROOT / f"docs/acceptance/E{version.replace('.', '')}-wheel-installed.json").write_text(
+    report_path = Path(os.environ.get("E_WHEEL_REPORT",
+        ROOT / f"docs/acceptance/E{version.replace('.', '')}-wheel-installed.json"))
+    report_path.write_text(
         json.dumps(report, indent=2), encoding="utf-8")
     print(json.dumps(report))
 

@@ -1,0 +1,15 @@
+{
+  "status": "manifest_and_crc_verified",
+  "c_version": "0.2.1a2",
+  "source_commit_claimed_by_C": "b3d81467c8705cba13af4de72e400b726f9ff38f",
+  "archive_sha256": "3eb8c5a7e388cfe222e2a0c8b7aecfa52c4ab3ceabf1c2ba8f0b3d847910a2e7",
+  "archive_byte_size": 13611934,
+  "archive_members": 536,
+  "manifest_files_verified": 535,
+  "embedded_manifest_verified": true,
+  "independent_external_archive_receipt_provided": false,
+  "wheel_sha256": "17c2c60045d4153507e66282a3f35d1583ed81332fb29654c8e0b86882c91c5b",
+  "handoff_relative_to_e": "artifacts/c-0.2.1a2/handoff",
+  "installed": false,
+  "MySQL_verified": false
+}

@@ -47,7 +47,7 @@ def main():
                    cwd=C_ROOT, env=env, check=True, capture_output=True)
     store = create_store(database_url, data_root=run_root / "assets", allow_sqlite_for_tests=True)
     c_version = tomllib.loads((C_ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
-    use_verified = c_version in {"0.2.0a1", "0.2.0a2", "0.2.1a1"}
+    use_verified = c_version in {"0.2.0a1", "0.2.0a2", "0.2.1a1", "0.2.1a2"}
     report = {"e_version": health()["version"], "c_version": c_version, "migration_head": "0006", "target": "isolated_sqlite",
               "business_database_verified": False, "dataset_validation": validation,
               "documents": [], "checks": {}}
@@ -59,7 +59,7 @@ def main():
         report["business_tables"] = len(inspect(connection).get_table_names()) - 1
     report["artifact_staging_mode"] = "C.persist_file"
     candidate = (runtime / "E-candidate-patch.json").is_file()
-    if c_version in {"0.2.0a2", "0.2.1a1"} and candidate:
+    if c_version in {"0.2.0a2", "0.2.1a1", "0.2.1a2"} and candidate:
         raise ValueError("Official a2 acceptance must use the unmodified wheel")
     report["c_runtime_mode"] = "isolated_candidate_patch" if candidate else "unmodified"
     snapshot = {"documents": {}}
@@ -118,7 +118,8 @@ def main():
                 "artifact_sha256": prepared["artifact_sha256"], "duplicate_chunks_skipped": replay["skipped"],
                 "inserted": result["inserted"]})
             if doc["id"] == "0c8e2020-2e0a-5842-bce9-d9193cf81095" and use_verified:
-                fixture_name = {"0.2.0a2": "C020a2", "0.2.1a1": "C021a1"}.get(c_version, "C020")
+                fixture_name = {"0.2.0a2": "C020a2", "0.2.1a1": "C021a1",
+                                "0.2.1a2": "C021a2"}.get(c_version, "C020")
                 output_dir = ROOT / f"docs/fixtures/{fixture_name}-historical-notice"
                 output_dir.mkdir(parents=True, exist_ok=True)
                 (output_dir / "index.json").write_bytes(prepared["artifact_bytes"])
@@ -194,7 +195,8 @@ def main():
         report["status"] = "passed_on_isolated_c_candidate" if candidate else "passed"
     finally:
         store.dispose()
-    default_report = ("C021a1-knowledge.json" if c_version == "0.2.1a1" else
+    default_report = ("C021a2-knowledge.json" if c_version == "0.2.1a2" else
+                      "C021a1-knowledge.json" if c_version == "0.2.1a1" else
                       "C020a2-knowledge.json" if c_version == "0.2.0a2" else
                       "C020-knowledge.json" if use_verified else "C019-knowledge.json")
     output = Path(os.environ.get("E_ACCEPTANCE_REPORT", ROOT / "docs/acceptance" / default_report))

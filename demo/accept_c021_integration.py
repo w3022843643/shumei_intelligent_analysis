@@ -11,7 +11,9 @@ from pathlib import Path
 from uuid import uuid4
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "artifacts/c-0.2.1a1/runtime"))
+C_VERSION = os.environ.get("C_VERSION", "0.2.1a1")
+C_LABEL = "C" + C_VERSION.replace(".", "")
+sys.path.insert(0, str(ROOT / f"artifacts/c-{C_VERSION}/runtime"))
 sys.path.insert(0, str(ROOT))
 
 
@@ -30,8 +32,8 @@ def main():
     from intelligent_analysis.service import get_camera_counts
     from intelligent_analysis.worker.video_worker import FrameData, process_video_job
 
-    c_source = ROOT.parent / "data_foundation/data_foundation"
-    receiving = json.loads((ROOT / "docs/acceptance/C021a1-Windows-regression.json").read_text())
+    c_source = Path(os.environ.get("C_HANDOFF_DIR", ROOT.parent / "data_foundation/data_foundation"))
+    receiving = json.loads((ROOT / f"docs/acceptance/{C_LABEL}-Windows-regression.json").read_text())
     tests = ROOT / receiving["run_relative_to_e"] / "tests"
     sys.path.insert(0, str(tests))
     import conftest
@@ -81,7 +83,7 @@ def main():
             pass
         configure_services(ServiceBindings())
 
-    receipt = json.loads((ROOT / "docs/acceptance/E061-C021a1-knowledge.json").read_text(encoding="utf-8"))
+    receipt = json.loads((ROOT / f"docs/acceptance/E061-{C_LABEL}-knowledge.json").read_text(encoding="utf-8"))
     knowledge_run = ROOT / receipt["acceptance_run_relative_to_e"]
     store = create_store("sqlite:///" + (knowledge_run / "acceptance.db").as_posix(),
         data_root=knowledge_run / "assets", allow_sqlite_for_tests=True)
@@ -118,13 +120,13 @@ def main():
     d_unavailable = d_module.metric_tool(query)
     assert d_unavailable["status"] == "metric_tool_unavailable"
     assert "value" not in d_unavailable and "source_ids" not in d_unavailable
-    report = {"status": "passed", "e_version": health()["version"], "c_version": "0.2.1a1",
+    report = {"status": "passed", "e_version": health()["version"], "c_version": C_VERSION,
               "target": "isolated_sqlite", "synthetic_visible_checks": checks,
               "real_historical_metric_via_C_reference": metric,
               "D_current_tool_unavailable": d_unavailable, "D_resolver_success_verified": False,
               "D_HTTP_verified": False, "MySQL_verified": False, "real_video_verified": False,
               "manual_MAE_verified": False, "run_relative_to_e": run.relative_to(ROOT).as_posix()}
-    (ROOT / "docs/acceptance/E061-C021a1-integration.json").write_text(
+    (ROOT / f"docs/acceptance/E061-{C_LABEL}-integration.json").write_text(
         json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps({"status": report["status"], "visible": checks, "metric_value": 1111644,
                       "D_success_verified": False}))

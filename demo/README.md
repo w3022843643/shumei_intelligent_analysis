@@ -9,6 +9,7 @@
 | `check_p2pnet.py` | 已接收队长包后的正式 CPU 推理验证 |
 | `end_to_end_demo.py` | 明确标记 synthetic 的计算/预测流程 |
 | `receive_c020.py` | C 官方 a2 接收，网络/包前置条件见脚本 |
+| `receive_c021_zip.py` | 用户提供 C0.2.1a2 ZIP 的逐文件 manifest/CRC 校验及隔离解压，已有目标不覆盖 |
 | `check_c020_windows.py` / `verify_c020_regression.py` | C 官方包兼容性及回归 |
 | `accept_c_knowledge.py` / `accept_c020_failures.py` | 真资料、C 隔离库和语义/事务/租约检查，先设置 a2 路径 |
 | `accept_c021_integration.py` | 官方 C021 wheel 接收后，新存储合成闭环、真实历史数值及 D 当前不足分支复验；需 C/D 本地仓库 |

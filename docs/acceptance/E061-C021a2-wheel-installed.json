@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "documents": 16,
+  "e_version": "0.6.1",
+  "e_module_origin": "artifacts/e-wheel-runtime-636ae866/intelligent_analysis/__init__.py",
+  "c_module_origin": "artifacts/c-0.2.1a2/runtime/data_foundation/__init__.py",
+  "installed_P2PNet_inference_verified": true,
+  "count_model": "p2pnet",
+  "first_frame_estimate": 31.0,
+  "installed_official_E_wheel": true,
+  "installed_official_C_wheel": true,
+  "c_version": "0.2.1a2",
+  "source_package_excluded": true,
+  "new_process_reads_committed_C_store": true,
+  "wheel_sha256": "afd79097a7199ef5b8d03ebdc39bf42e79b18b16cf5e59333f274f6a1ea3a201",
+  "formal_DE_mysql_verified": false
+}

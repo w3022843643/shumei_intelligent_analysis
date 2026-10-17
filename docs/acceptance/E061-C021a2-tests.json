@@ -1,0 +1,13 @@
+{
+  "e_version": "0.6.1",
+  "c_runtime": "0.2.1a2",
+  "status": "passed",
+  "counts": {
+    "tests": 121,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1,
+    "passed": 120
+  },
+  "MySQL_verified": false
+}

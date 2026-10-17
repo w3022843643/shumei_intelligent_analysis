@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--version", choices=["0.2.0a2", "0.2.1a1"], default="0.2.0a2")
+    parser.add_argument("--version", choices=["0.2.0a2", "0.2.1a1", "0.2.1a2"], default="0.2.0a2")
     parser.add_argument("--source", type=Path)
     args = parser.parse_args()
     version = args.version

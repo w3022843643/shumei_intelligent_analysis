@@ -1,0 +1,86 @@
+{
+  "status": "passed",
+  "e_version": "0.6.1",
+  "c_version": "0.2.1a2",
+  "target": "isolated_sqlite",
+  "synthetic_visible_checks": {
+    "c_input_to_e_processor": true,
+    "atomic_complete_and_readback": true,
+    "identical_points_deduplicated": true,
+    "full_window_median": 3.0
+  },
+  "real_historical_metric_via_C_reference": {
+    "adapter": "C reference, not D resolver",
+    "answer": {
+      "conversation_id": "5fa7ae6f-860a-4e57-9f87-0313a4f92443",
+      "status": "answered",
+      "answer": "airport_throughput：1111644.0000（2025-01-01T00:00:00+08:00—2025-02-01T00:00:00+08:00）。",
+      "citations": [
+        {
+          "type": "metric",
+          "id": "fe47bf03-2cd2-5c89-a944-4cbcf5d38cd7",
+          "title": "airport_throughput",
+          "url": null,
+          "date": null,
+          "chunk_id": null
+        }
+      ],
+      "used_metric_queries": [
+        "{'metric': 'airport_throughput', 'entity_type': 'airport', 'entity_ids': ['28380b0b-e209-5ced-8d09-58854248f26e'], 'grain': 'month', 'period_start': '2025-01-01T00:00:00+08:00', 'period_end': '2025-02-01T00:00:00+08:00'}"
+      ],
+      "metric_result": {
+        "status": "answered",
+        "metric": "airport_throughput",
+        "value": "1111644.0000",
+        "unit": "人次",
+        "entity_type": "airport",
+        "entity_ids": [
+          "28380b0b-e209-5ced-8d09-58854248f26e"
+        ],
+        "grain": "month",
+        "period_start": "2025-01-01T00:00:00+08:00",
+        "period_end": "2025-02-01T00:00:00+08:00",
+        "queried_at": "2026-10-17T04:53:13.143378+00:00",
+        "source_ids": [
+          "fe47bf03-2cd2-5c89-a944-4cbcf5d38cd7"
+        ],
+        "aggregation_rule": "sum_complete_non_overlapping_native_periods_single_entity",
+        "sample_count": 1
+      },
+      "limitations": []
+    },
+    "unavailable": {
+      "status": "metric_tool_unavailable",
+      "reason": "unsupported_grain",
+      "queried_at": "2026-10-17T04:53:13.143435+00:00"
+    },
+    "missing_period": {
+      "status": "metric_tool_unavailable",
+      "reason": "data_insufficient",
+      "queried_at": "2026-10-17T04:53:13.144658+00:00"
+    },
+    "unauthorized": {
+      "status": "metric_tool_unavailable",
+      "reason": "invalid_entity",
+      "queried_at": "2026-10-17T04:53:13.144677+00:00"
+    }
+  },
+  "D_current_tool_unavailable": {
+    "status": "metric_tool_unavailable",
+    "reason": "data_source_unavailable",
+    "metric": "airport_throughput",
+    "detail": "指标「机场旅客吞吐量」的数据源（交通客流观测数据（09 号接口））尚未接通，无法核实当前数值",
+    "queried_at": "2026-10-17T04:53:13.145324+00:00",
+    "unit": "人次",
+    "entity_type": "station",
+    "period_start": "2025-01-01T00:00:00+08:00",
+    "period_end": "2025-02-01T00:00:00+08:00",
+    "grain": "month"
+  },
+  "D_resolver_success_verified": false,
+  "D_HTTP_verified": false,
+  "MySQL_verified": false,
+  "real_video_verified": false,
+  "manual_MAE_verified": false,
+  "run_relative_to_e": "artifacts/c021-e-integration-b6399e84"
+}
