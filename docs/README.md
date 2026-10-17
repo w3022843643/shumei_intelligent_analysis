@@ -30,13 +30,16 @@
 
 ## 当前主要证据
 
+完整范围及原始 JSON 见 [验收证据导航](acceptance/README.md)。
+
 | 内容 | 入口 | 边界 |
 |---|---|---|
-| E 自动化测试 | [E060-tests](acceptance/E060-tests.json) | 104 通过，1 项旧对照测试跳过 |
-| P2PNet CPU | [CPU-060](acceptance/P2PNet-CPU-060.json) | 三帧推理，无人工真值 |
-| wheel 实装 | [wheel-installed](acceptance/E060-wheel-installed.json) | 安装、CPU 和知识恢复 |
-| C 官方 a2 知识接收 | [knowledge](acceptance/E060-C020a2-knowledge.json) | E 隔离 SQLite，16 份真实公开资料 |
-| 最新故障复跑 | [failure-recheck](acceptance/E060-D-reply-failure-recheck-2026-10-15.json) | 语义失败、租约、重试和事务；未代替 D/MySQL |
-| C 官方 a2 Windows 回归 | [Windows-regression](acceptance/C020a2-Windows-regression.json) | C 包兼容性，非视频精度 |
+| E 当前源码回归 | [readiness-tests](acceptance/E061-readiness-tests.json) | 123 通过、1 项历史对照跳过 |
+| C 0.2.1a2 接收 | [receipt](acceptance/C021a2-receipt.json)、[Windows-regression](acceptance/C021a2-Windows-regression.json) | 包完整性；C Windows 478 通过、1 跳过 |
+| D/E/C 知识 HTTP | [HTTP](acceptance/E061-D-C021a2-HTTP.json) | 隔离 SQLite / ASGI；D resolver、混合队列仍有阻塞 |
+| 知识故障保护 | [failure-matrix](acceptance/E061-C021a2-failure-matrix-extended.json) | 五类语义篡改、租约和事务检查 |
+| B/D/E 结果契约 | [B-D-contract](acceptance/E061-B-D-contract.json) | 8 项纯契约检查；非浏览器验收 |
+| 短时预测存储 | [forecast-storage](acceptance/E061-C021a2-forecast-storage.json) | 合成连续窗，非真实误差报告 |
+| P2PNet CPU / 人工评估 | [CPU](acceptance/P2PNet-CPU-061.json)、[evaluation](acceptance/P2PNet-evaluation-readiness.json) | CPU 推理已验证；真值未到位，MAE=null |
 
-`acceptance/` 的历史 JSON 和 `fixtures/` 的原始样例保留原路径，便于旧回执追溯；并非每份都代表当前版本已通过。早期方案文档统一在 [archive/](archive/README.md)。
+历史 JSON、样例和已发布包保留原路径，方便旧回执追溯；历史记录不能代替当前验收。早期方案在 [archive/](archive/README.md)，本次目录整理见 [整理记录](文件整理记录-2026-10-17.md)。
