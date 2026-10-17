@@ -1,0 +1,126 @@
+{
+  "data_kind": "synthetic",
+  "real_forecast_verified": false,
+  "MySQL_verified": false,
+  "D_HTTP_verified": false,
+  "horizons": {
+    "15": {
+      "metric": "camera_visible_people",
+      "status": "ready",
+      "forecast_points": [
+        {
+          "target_time": "2025-01-01T03:05:00.123456+08:00",
+          "value": 3.0,
+          "is_forecast": true,
+          "lower": null,
+          "upper": null
+        },
+        {
+          "target_time": "2025-01-01T03:10:00.123456+08:00",
+          "value": 3.0,
+          "is_forecast": true,
+          "lower": null,
+          "upper": null
+        },
+        {
+          "target_time": "2025-01-01T03:15:00.123456+08:00",
+          "value": 3.0,
+          "is_forecast": true,
+          "lower": null,
+          "upper": null
+        }
+      ],
+      "training_cutoff": "2025-01-01T03:00:00.123456+08:00",
+      "input_window_minutes": 180,
+      "model_version": "visible-damped-holt-0.5.0",
+      "validation_error": {
+        "15": {
+          "mae": 0.0,
+          "persistence_mae": 0.0,
+          "fold_count": 22,
+          "sample_count": 66
+        }
+      },
+      "reason": null
+    },
+    "30": {
+      "metric": "camera_visible_people",
+      "status": "ready",
+      "forecast_points": [
+        {
+          "target_time": "2025-01-01T03:05:00.123456+08:00",
+          "value": 3.0,
+          "is_forecast": true,
+          "lower": null,
+          "upper": null
+        },
+        {
+          "target_time": "2025-01-01T03:10:00.123456+08:00",
+          "value": 3.0,
+          "is_forecast": true,
+          "lower": null,
+          "upper": null
+        },
+        {
+          "target_time": "2025-01-01T03:15:00.123456+08:00",
+          "value": 3.0,
+          "is_forecast": true,
+          "lower": null,
+          "upper": null
+        },
+        {
+          "target_time": "2025-01-01T03:20:00.123456+08:00",
+          "value": 3.0,
+          "is_forecast": true,
+          "lower": null,
+          "upper": null
+        },
+        {
+          "target_time": "2025-01-01T03:25:00.123456+08:00",
+          "value": 3.0,
+          "is_forecast": true,
+          "lower": null,
+          "upper": null
+        },
+        {
+          "target_time": "2025-01-01T03:30:00.123456+08:00",
+          "value": 3.0,
+          "is_forecast": true,
+          "lower": null,
+          "upper": null
+        }
+      ],
+      "training_cutoff": "2025-01-01T03:00:00.123456+08:00",
+      "input_window_minutes": 180,
+      "model_version": "visible-damped-holt-0.5.0",
+      "validation_error": {
+        "30": {
+          "mae": 0.0,
+          "persistence_mae": 0.0,
+          "fold_count": 7,
+          "sample_count": 42
+        }
+      },
+      "reason": null
+    },
+    "60": {
+      "metric": "camera_visible_people",
+      "status": "data_insufficient",
+      "forecast_points": [],
+      "training_cutoff": "2025-01-01T03:00:00.123456+08:00",
+      "input_window_minutes": 0,
+      "model_version": "visible-damped-holt-0.5.0",
+      "validation_error": null,
+      "reason": "60-minute forecasting is disabled pending multi-day validation"
+    }
+  },
+  "checks": {
+    "window_crossing_cutoff_excluded": true,
+    "future_values_do_not_change_fit": true,
+    "invalid_history_has_no_predictions": true,
+    "minimum_without_backtest_rejected": true,
+    "C_jobs_complete_atomically": true
+  },
+  "run_relative_to_e": "artifacts/forecast-storage-9c6014a6",
+  "status": "synthetic_acceptance_passed"
+}

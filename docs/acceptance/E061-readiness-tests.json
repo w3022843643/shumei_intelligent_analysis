@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "e_version": "0.6.1",
+  "counts": {
+    "tests": 124,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1,
+    "passed": 123
+  },
+  "runtime_package_unchanged": true
+}

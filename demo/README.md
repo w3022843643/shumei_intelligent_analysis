@@ -4,6 +4,8 @@
 
 ## 当前常用
 
+新增独立验收：`accept_d_c021_http.py`（真实D知识ASGI/Worker+C隔离库）、`accept_forecast_storage.py`（合成预测保存）、`check_b_contract.py`（Node执行B纯TS契约）、`verify_d_regression.py`（D原套件，失败结果保留）、`evaluate_p2pnet.py`（正式P2P单模型人工评测，空模板等待不推理）。范围及复现命令见 [当前说明](../docs/E当前完成情况与剩余依赖-2026-10-17.md)。
+
 | 脚本 | 用途 |
 |---|---|
 | `check_p2pnet.py` | 已接收队长包后的正式 CPU 推理验证 |

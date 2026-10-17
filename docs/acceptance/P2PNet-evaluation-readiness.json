@@ -1,0 +1,40 @@
+{
+  "count_model": "p2pnet",
+  "metric": "camera_visible_people",
+  "confidence_threshold": 0.5,
+  "dataset_id": "pending-authorized-camera-holdout",
+  "data_kind": "real",
+  "label_revision": "pending-first-independent-review",
+  "manifest_sha256": "357020887d1dd8b53155f0b0d62c9830b4a0651b63faf0320854826065e9102a",
+  "roi": {
+    "points": [
+      {
+        "x": 0.0,
+        "y": 0.0
+      },
+      {
+        "x": 1.0,
+        "y": 0.0
+      },
+      {
+        "x": 1.0,
+        "y": 1.0
+      },
+      {
+        "x": 0.0,
+        "y": 1.0
+      }
+    ]
+  },
+  "sample_metadata": [],
+  "real_video_accuracy_verified": false,
+  "holdout_independence_verified": false,
+  "D_HTTP_verified": false,
+  "forecast_verified": false,
+  "mae": null,
+  "status": "blocked",
+  "reason": "awaiting_authorized_reviewed_frames",
+  "sample_count": 0,
+  "frames": [],
+  "scenarios": {}
+}

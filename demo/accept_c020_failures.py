@@ -125,7 +125,7 @@ def verify_failures(store, manifest, run_root, ids, manifest_root):
     checks["new_attempt_reuses_chunks_and_publishes"] = True
 
     # C verifies bytes, not semantic content. Prove E rejects a valid-hash mismatch.
-    for mutation in ("chunks", "locator", "document_version", "index_version"):
+    for mutation in ("chunks", "locator", "document_version", "index_version", "metadata"):
         wrong, wrong_lease, _, _ = prepare("e020-semantic-mismatch-" + mutation)
         payload = copy.deepcopy(wrong["snapshot"])
         document = payload["documents"][doc_id]
@@ -133,6 +133,8 @@ def verify_failures(store, manifest, run_root, ids, manifest_root):
             document["chunks"][0]["text"] += " altered content"
         elif mutation == "locator":
             document["chunks"][0]["chunk_id"] = "wrong-chunk-id"
+        elif mutation == "metadata":
+            document["metadata"]["title"] += " SYNTHETIC WRONG METADATA"
         else:
             document[mutation] = "wrong-version"
         content = json.dumps(payload, ensure_ascii=False, sort_keys=True).encode("utf-8")

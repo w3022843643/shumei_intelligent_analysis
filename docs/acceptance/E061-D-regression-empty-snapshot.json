@@ -1,0 +1,23 @@
+{
+  "status": "needs_D_review",
+  "D_commit": "ee8b9f202a3a0f8e702c735cc1e28c5224c9f68e",
+  "counts": {
+    "tests": 319,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 318
+  },
+  "failures_or_skips": [
+    {
+      "case": "test_upload_accepted_202_and_job_enqueued",
+      "detail": "AssertionError: assert 'sha256:2d130...28a64987f4711' == 'e-index-17c7...ff28615fd2507'\n  \n  - e-index-17c7a09ff7994ee98e9ff28615fd2507\n  + sha256:2d13040994878bbd65528a64987f4711"
+    }
+  ],
+  "scope": "D_shipped_tests_copied_source",
+  "D_source_modified": false,
+  "MySQL_verified": false,
+  "real_video_verified": false,
+  "initialized_empty_published_snapshot": true,
+  "run_relative_to_e": "artifacts/d-regression-cd5b4648"
+}

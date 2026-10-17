@@ -1,0 +1,119 @@
+{
+  "scope": "real_D_HTTP_worker_E_C_on_disposable_SQLite",
+  "D_source_modified": false,
+  "MySQL_verified": false,
+  "real_video_verified": false,
+  "human_semantics_verified": false,
+  "D_commit": "ee8b9f202a3a0f8e702c735cc1e28c5224c9f68e",
+  "checks": {
+    "authenticated_real_queue_worker_and_answer": true,
+    "separate_source_and_index_versions": true,
+    "D_real_metric_unavailable_does_not_use_documents": true,
+    "C_reference_metric_D_E_HTTP_shape": true,
+    "client_tool_injection_rejected": true,
+    "missing_csrf_rejected": true,
+    "reindex_parent_child_and_answer": true,
+    "D_activate_complete_roll_back_after_completion_write": true,
+    "D_old_lease_cannot_publish_after_retry": true,
+    "D_retry_new_attempt_publishes_and_answers": true,
+    "damaged_artifact_503_no_stale_answer": true,
+    "valid_hash_wrong_text_HTTP_503": true,
+    "unauthenticated_chat_401": true,
+    "response_hides_internal_data": true,
+    "logout_revokes_session": true
+  },
+  "responses": {
+    "knowledge_answer": {
+      "conversation_id": "bd3101c8-9b1b-407f-b49b-84efb2e05c0d",
+      "answer": "资料时效与适用范围提示：历史资料：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告，适用期已结束，不能作为当前运营事实。；历史资料：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告，适用期已结束，不能作为当前运营事实。；历史资料：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告，适用期已结束，不能作为当前运营事实。\n根据带日期的来源资料，可参考以下信息：\n- 标题：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告\n来源：黄山风景区管理委员会\n网址：https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html\n发布时间：2025-01-24T10:21:00+08:00\n采录范围：公告正文全文\n- 尊敬的游客朋友：\n非遗贺新春——就在黄山过大年！为提高旅游舒适度与体验感，方便您合理安排行程，现将黄山风景区春节黄金周期间（1月28日—2月4日）开放运营时间公告如下：\n一、黄山风景区开放时间\n1.1月28日、29日，2月4日：7:00—16:30；\n2.1月30日—2月3日：6:30—17:30。 春节期间，徒步登山入园处门票检票口关闭时间为15：00。15：00后，各登山步道门票检票口实行“只出不进”措施，不再安排徒步登山游客检票入园，敬请广大游客合理安排行程。 二、交通股份公司换乘车辆运营时间\n1.1月28日、29日，2月4日：6:40—16:00（上行），7:10—17:10（下行）；\n2.1月30日—2月3日：6:10—17:00（上行），6:40—18:00（下行）。 三、云谷索道、玉屏索道、太平索道运营时间\n1.1月28日、29日，2月4日：7:00—16:30；\n2.1月30日—2月3日：6:30—17:30。\n- 黄山风景区继续执行“限量、预约、错峰”要求，实行强实名分时分方向预约、核验入园制度。先预约、再出行，建议您至少提前一天在黄山旅游官方平台预约景区门票，保持预约门票的身份信息与入园人身份信息一致，并按照预约时段和进山方向入园。未预约成功的游客，请择期预约进山或前往周边景点游览。为保障您的合法权益，请勿在非官方渠道预约景区票务，以免无法检票、影响出行而造成损失。 山岳景区天气多变，请您密切关注黄山风景区天气等情况，配合景区管理，文明出行、错峰游览，共同营造安全和谐美好的旅游环境。欢迎使用景区提供的免费智慧导览系统（微信搜索“智游黄山”小程序），祝您旅途轻松愉快！ 咨询服务热线：0559-2590999。 黄山风景区管理委员会\n2025年1月22日",
+      "status": "answered",
+      "citations": [
+        {
+          "type": "document",
+          "id": "db6388be-730b-49ce-a178-a6e043ea0c7e",
+          "title": "关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告",
+          "url": "https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html",
+          "date": "2025-01-24T10:21:00+08:00",
+          "chunk_id": "db6388be-730b-49ce-a178-a6e043ea0c7e-0"
+        },
+        {
+          "type": "document",
+          "id": "db6388be-730b-49ce-a178-a6e043ea0c7e",
+          "title": "关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告",
+          "url": "https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html",
+          "date": "2025-01-24T10:21:00+08:00",
+          "chunk_id": "db6388be-730b-49ce-a178-a6e043ea0c7e-1"
+        },
+        {
+          "type": "document",
+          "id": "db6388be-730b-49ce-a178-a6e043ea0c7e",
+          "title": "关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告",
+          "url": "https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html",
+          "date": "2025-01-24T10:21:00+08:00",
+          "chunk_id": "db6388be-730b-49ce-a178-a6e043ea0c7e-2"
+        }
+      ],
+      "used_metric_queries": [],
+      "limitations": [
+        "This answer is based only on retrieved authorized documents.",
+        "历史资料：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告，适用期已结束，不能作为当前运营事实。",
+        "历史资料：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告，适用期已结束，不能作为当前运营事实。",
+        "历史资料：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告，适用期已结束，不能作为当前运营事实。"
+      ],
+      "metric_result": null
+    },
+    "D_metric_unavailable_HTTP": {
+      "conversation_id": "e9684007-a065-47f9-9906-8bc4463f2a2e",
+      "answer": "指标查询服务尚未接入，无法核实数值。",
+      "status": "metric_tool_unavailable",
+      "citations": [],
+      "used_metric_queries": [],
+      "limitations": [
+        "已请求数值核实，但当前指标数据源未接通，回答未使用任何历史资料替代当前数值"
+      ],
+      "metric_result": null
+    },
+    "C_reference_tool_via_D_HTTP_not_D_resolver": {
+      "conversation_id": "1b00bc5f-a238-46c6-920d-d7414fb2e599",
+      "answer": "airport_throughput：1111644.0000（2025-01-01T00:00:00+08:00—2025-02-01T00:00:00+08:00）。",
+      "status": "answered",
+      "citations": [
+        {
+          "type": "metric",
+          "id": "fe47bf03-2cd2-5c89-a944-4cbcf5d38cd7",
+          "title": "airport_throughput",
+          "url": null,
+          "date": null,
+          "chunk_id": null
+        }
+      ],
+      "used_metric_queries": [
+        "{'metric': 'airport_throughput', 'entity_type': 'station', 'entity_ids': ['28380b0b-e209-5ced-8d09-58854248f26e'], 'grain': 'month', 'period_start': '2025-01-01T00:00:00+08:00', 'period_end': '2025-02-01T00:00:00+08:00'}"
+      ],
+      "limitations": [],
+      "metric_result": {
+        "metric": "airport_throughput",
+        "value": 1111644.0,
+        "period_start": "2025-01-01T00:00:00+08:00",
+        "period_end": "2025-02-01T00:00:00+08:00",
+        "queried_at": "2026-10-17T05:24:20.726301+00:00",
+        "source_ids": [
+          "fe47bf03-2cd2-5c89-a944-4cbcf5d38cd7"
+        ]
+      }
+    }
+  },
+  "D_blockers": [
+    {
+      "code": "D_claims_C_ingestion",
+      "job_status": "failed",
+      "worker_result": {
+        "status": "failed",
+        "error": "不支持的作业类型：ingestion"
+      }
+    }
+  ],
+  "run_relative_to_e": "artifacts/d-c021-http-827b7ca7",
+  "D_resolver_success_verified": false,
+  "status": "passed_scoped_checks_with_D_blockers"
+}
