@@ -168,3 +168,28 @@ def test_partial_metric_success_is_dependency_failure(field):
     del result[field]
     with pytest.raises(DependencyUnavailable):
         answer_message("人数", context={"metric_query": {}, "metric_tool": lambda q: result})
+
+
+@pytest.mark.parametrize("change", [
+    {"value": float("nan")}, {"value": float("inf")}, {"value": float("-inf")},
+    {"value": True}, {"value": -1}, {"value": "not-a-number"},
+    {"source_ids": "official"}, {"source_ids": [""]}, {"source_ids": [None]},
+    {"metric": " "}, {"period_start": None}, {"period_end": "unknown"},
+    {"queried_at": " "},
+])
+def test_malformed_metric_success_never_becomes_an_answer(change):
+    result = {"metric": "airport_throughput", "value": 1111644, "source_ids": ["official"],
+              "period_start": "2025-01-01", "period_end": "2025-01-31",
+              "queried_at": "2026-10-18T09:00:00+08:00", **change}
+    with pytest.raises(DependencyUnavailable):
+        answer_message("人数", context={"metric_query": {}, "metric_tool": lambda q: result})
+
+
+@pytest.mark.parametrize("value", [0, 0.5, "1111644"])
+def test_numeric_string_and_zero_are_preserved_with_valid_provenance(value):
+    result = {"metric": "airport_throughput", "value": value, "source_ids": ["official"],
+              "period_start": "2025-01-01", "period_end": "2025-01-31",
+              "queried_at": "2026-10-18T09:00:00+08:00"}
+    answer = answer_message("人数", context={"metric_query": {}, "metric_tool": lambda q: result})
+    assert answer["metric_result"] == result
+    assert len(answer["citations"]) == 1

@@ -47,6 +47,8 @@ def main():
     from data_foundation.seed import seed_catalog
     from fastapi.testclient import TestClient
 
+    from intelligent_analysis import health
+
     store = create_store(os.environ["DATABASE_URL"], data_root=run / "assets", allow_sqlite_for_tests=True)
     Base.metadata.create_all(store.engine)
     seed_catalog(store)
@@ -59,7 +61,7 @@ def main():
     manifest = json.loads((source / "manifest.json").read_text(encoding="utf-8"))
     import_real_dataset(store, source / "manifest.json")
     document = next(d for d in manifest["documents"] if d["id"] == "0c8e2020-2e0a-5842-bce9-d9193cf81095")
-    report = {"scope": "real_D_HTTP_worker_E_C_on_disposable_SQLite", "D_source_modified": False,
+    report = {"e_version": health()["version"], "scope": "real_D_HTTP_worker_E_C_on_disposable_SQLite", "D_source_modified": False,
         "MySQL_verified": False, "real_video_verified": False, "human_semantics_verified": False,
         "D_commit": subprocess.check_output(["git", "rev-parse", "HEAD"],
             cwd=ROOT.parent / "api_platform", text=True).strip(), "checks": {}, "responses": {},
@@ -159,6 +161,13 @@ def main():
                 report["responses"]["D_resolver_samples"] = resolver_samples
                 report["D_resolver_success_verified"] = True
                 report["checks"]["D_resolver_dates_UTC_and_partial_period"] = True
+                valid_metric = resolver_samples["date_closed"]["metric_result"]
+                for mutation in ({"value": float("nan")}, {"value": True},
+                                 {"source_ids": "invalid-string"}, {"period_start": None}):
+                    with patch("app.services.metrics_query.metric_tool", return_value={**valid_metric, **mutation}):
+                        malformed = client.post("/api/v1/assistant/chat", headers=headers, json=metric_query)
+                    assert malformed.status_code == 503, malformed.text
+                report["checks"]["malformed_metric_success_HTTP_503_not_500"] = True
                 injection = {**question, "context": {"metric_tool": "client-cannot-inject"}}
                 assert client.post("/api/v1/assistant/chat", headers=headers, json=injection).status_code == 400
                 assert client.post("/api/v1/assistant/chat", json=question).status_code == 403

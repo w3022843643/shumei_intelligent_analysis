@@ -1,4 +1,5 @@
 """Synthetic E forecast -> C021 persistence, with explicit horizon/quality gates."""
+import argparse
 import json
 import os
 import sys
@@ -11,6 +12,9 @@ sys.path[:0] = [str(ROOT / "artifacts/c-0.2.1a2/runtime"), str(ROOT)]
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args()
     import numpy as np
     from data_foundation import JobCreate, JobLease
 
@@ -104,7 +108,7 @@ def main():
             next(generator)
         except StopIteration:
             pass
-    (ROOT / "docs/acceptance/E061-C021a2-forecast-storage.json").write_text(
+    (args.output or ROOT / "docs/acceptance/E061-C021a2-forecast-storage.json").write_text(
         json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps({"status": report["status"], "checks": report["checks"],
                       "horizons": {k: v["status"] for k, v in report["horizons"].items()}}))

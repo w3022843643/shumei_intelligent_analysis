@@ -2,6 +2,7 @@
 
 Uses Node's TypeScript stripping, no frontend dependencies, DOM or mocked HTTP.
 """
+import argparse
 import json
 import subprocess
 import sys
@@ -12,6 +13,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args()
     sys.dont_write_bytecode = True
     sys.path[:0] = [str(ROOT.parent / "api_platform"), str(ROOT)]
     from app.schemas.videos import AnalysisConfig, CountsResponse, ShortForecastResponse
@@ -72,7 +76,7 @@ console.log(JSON.stringify({checks:{fractional_median:true,missing_not_zero:true
         D_commit=subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT.parent / "api_platform", text=True).strip(),
         browser_verified=False, real_video_verified=False, HTTP_verified=False,
         run_relative_to_e=run.relative_to(ROOT).as_posix())
-    (ROOT / "docs/acceptance/E061-B-D-contract.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
+    (args.output or ROOT / "docs/acceptance/E061-B-D-contract.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
     print(json.dumps(result))
 
 

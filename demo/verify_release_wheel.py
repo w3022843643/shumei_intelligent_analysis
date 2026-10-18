@@ -17,7 +17,7 @@ def main():
     runtime = ROOT / "artifacts" / ("e-wheel-runtime-" + uuid4().hex[:8])
     subprocess.run([sys.executable, "-m", "pip", "install", "--no-deps", "--no-compile",
         "--target", str(runtime), str(wheel)], check=True)
-    c_version = os.environ.get("C_VERSION", "0.2.1a1")
+    c_version = os.environ.get("C_VERSION", "0.2.1a2")
     c_label = "C" + c_version.replace(".", "")
     receipt = json.loads((ROOT / f"docs/acceptance/E{version.replace('.', '')}-{c_label}-knowledge.json").read_text(encoding="utf-8"))
     run = (ROOT / receipt["acceptance_run_relative_to_e"]).resolve()
@@ -38,6 +38,16 @@ assert Path(intelligent_analysis.__file__).is_relative_to({str(runtime)!r})
 assert Path(data_foundation.__file__).is_relative_to({str(c_runtime)!r})
 assert version("shumei-intelligent-analysis") == {version!r}
 assert health()["version"] == {version!r}
+from intelligent_analysis.integration import DependencyUnavailable
+for invalid in (float("nan"), True, -1):
+    try:
+        answer_message("numeric guard", context={{"metric_query": {{}}, "metric_tool": lambda q, value=invalid: {{
+            "metric": "airport_throughput", "value": value, "source_ids": ["official"],
+            "period_start": "2025-01-01", "period_end": "2025-01-31", "queried_at": "2026-10-18"}}}})
+    except DependencyUnavailable:
+        pass
+    else:
+        raise AssertionError("Installed wheel accepted an invalid metric result")
 import cv2
 import torch
 from intelligent_analysis.contracts import VideoAnalysisConfig

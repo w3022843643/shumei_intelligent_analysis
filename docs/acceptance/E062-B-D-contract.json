@@ -1,0 +1,20 @@
+{
+  "checks": {
+    "fractional_median": true,
+    "missing_not_zero": true,
+    "manual_validation_null": true,
+    "wrong_identity_rejected": true,
+    "threshold_mismatch_rejected": true,
+    "forecast_mapping": true,
+    "insufficient_empty": true,
+    "B_request_accepted_by_D_and_E": true
+  },
+  "status": "synthetic_contract_passed",
+  "data_kind": "synthetic",
+  "B_commit": "5c27e5c7b0d100d35414bf90164001ed195e1c36",
+  "D_commit": "6d8bb23b9f0663d8238f6a95a59f41363af2979a",
+  "browser_verified": false,
+  "real_video_verified": false,
+  "HTTP_verified": false,
+  "run_relative_to_e": "artifacts/b-contract-674299a2"
+}

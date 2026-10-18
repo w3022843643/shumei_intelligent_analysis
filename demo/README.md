@@ -2,6 +2,13 @@
 
 从 E 仓库根目录运行。当前正式算法为 P2PNet；脚本有不同前置条件，不应把全部脚本依次执行。
 
+## 全流程自检与人工准备
+
+- [E完整任务链和自检](../docs/E全流程任务与自检-2026-10-18.md)：按接收、知识、计数、人工精度、预测、联合验收、发布排序。
+- `prepare_annotation_pack.py --report docs/acceptance/P2PNet-fixed-camera-2026-10-18.json`：为已接收视频抽样帧重新解码无标点PNG，生成空白人工表；不会输出假真值。
+- 当前包为0.6.2；`verify_release_wheel.py`验证实际安装版本、坏数值拒绝、真实CPU推理和C重启读取，`package_release.py`拒绝覆盖已有发布。
+- `check_b_contract.py`、`accept_forecast_storage.py`新增`--output`，新版本复验请另存，避免覆盖旧证据。
+
 ## 10月18日新增复验
 
 - `check_fixed_camera_videos.py --zip <本地ZIP> --output <新JSON>`：核验五段基准视频，每10秒P2PNet CPU抽帧并生成本地标点图；不登记正式录像、不编造时间/真值。

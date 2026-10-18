@@ -14,8 +14,13 @@ ROOT = Path(__file__).resolve().parents[1]
 def main():
     version = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
     release_date = datetime.now(timezone(timedelta(hours=8))).date().isoformat()
-    c_version = os.environ.get("C_VERSION", "0.2.1a1")
+    c_version = os.environ.get("C_VERSION", "0.2.1a2")
     c_label = "C" + c_version.replace(".", "")
+    release = ROOT / "artifacts/release"
+    archive = release / f"E-visible-people-{version}-{release_date}.zip"
+    receipt_path = archive.with_suffix(".receipt.json")
+    if archive.exists() or receipt_path.exists() or any((ROOT / "release").glob(f"*{version}*")):
+        raise FileExistsError("Release already exists; do not overwrite immutable published artifacts")
     suites = ET.parse(ROOT / "artifacts" / f"pytest-{version}.xml").getroot().iter("testsuite")
     test_counts = {key: 0 for key in ("tests", "failures", "errors", "skipped")}
     for suite in suites:
@@ -69,7 +74,7 @@ def main():
         "count_model": "p2pnet", "weights_version": p2p["model_provenance"]["weights_version"],
         "weights_sha256": p2p["model_provenance"]["weights_sha256"],
         "installed_P2PNet_inference_verified": True, "comparison_task": "stopped_by_user",
-        "D_B_video_integration": "pending_C021_adapter_and_real_video", "formal_DE_mysql_verified": False,
+        "D_B_video_integration": "pending_deployed_HTTP_real_video_and_MySQL", "formal_DE_mysql_verified": False,
         "real_video_accuracy_verified": False, "production_http_verified": False}
     output = release / f"E-visible-people-{version}-{release_date}.receipt.json"
     output.write_text(json.dumps(receipt, indent=2), encoding="utf-8")

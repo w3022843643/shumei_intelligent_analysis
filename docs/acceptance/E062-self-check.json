@@ -1,0 +1,84 @@
+{
+  "e_version": "0.6.2",
+  "date": "2026-10-18",
+  "status": "independent_checks_passed_external_acceptance_pending",
+  "full_tests": {
+    "tests": 140,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1,
+    "passed": 139
+  },
+  "runtime_fix": "reject_nonfinite_boolean_negative_values_invalid_source_lists_and_time_provenance",
+  "D_commit": "6d8bb23b9f0663d8238f6a95a59f41363af2979a",
+  "evidence": {
+    "E062-C021a2-knowledge": {
+      "file": "docs/acceptance/E062-C021a2-knowledge.json",
+      "status": "passed",
+      "sha256": "4aa8cbc1437028a3c036692f9bb8013d4947d4d8882f23d5882fb206fa000e9e"
+    },
+    "E062-D-C021a2-HTTP": {
+      "file": "docs/acceptance/E062-D-C021a2-HTTP.json",
+      "status": "passed_scoped_checks",
+      "sha256": "bda1c45c3db9efb045496d0b2cecfc7badf7320d3786399c5572983de773b708"
+    },
+    "E062-D-visible-storage": {
+      "file": "docs/acceptance/E062-D-visible-storage.json",
+      "status": "passed",
+      "sha256": "b11ded349d1b43dbe9002897d91c12a39856c4683ba6a2525a0d1124f906e82f"
+    },
+    "E062-C021a2-forecast-storage": {
+      "file": "docs/acceptance/E062-C021a2-forecast-storage.json",
+      "status": "synthetic_acceptance_passed",
+      "sha256": "b819039cb0542e7ddfd4c1ebb59f0468518812805a4b828d03ce369bd3044907"
+    },
+    "E062-B-D-contract": {
+      "file": "docs/acceptance/E062-B-D-contract.json",
+      "status": "synthetic_contract_passed",
+      "sha256": "4cc5d9f7ea016f619185465fbee6a81803eb66002564a7acecc872829a4bec59"
+    },
+    "E062-RAG-question-suite": {
+      "file": "docs/acceptance/E062-RAG-question-suite.json",
+      "status": "automated_passed",
+      "sha256": "42e4c6c236c6833f97b004ff89da529b986ddabecda6401d0d44768705095967"
+    },
+    "E062-D-regression-empty-snapshot": {
+      "file": "docs/acceptance/E062-D-regression-empty-snapshot.json",
+      "status": "passed",
+      "sha256": "3135f1befa0108aa72ed6afcaa75d7a771a095326e736f2a2ecf447c1d2bad7a"
+    },
+    "E062-wheel-installed": {
+      "file": "docs/acceptance/E062-wheel-installed.json",
+      "status": "passed",
+      "sha256": "3865d9ef0fdaedbaacd7ad546caac76f83f6b677ff1c55388d0eab82b1da3676"
+    },
+    "P2PNet-CPU-062": {
+      "file": "docs/acceptance/P2PNet-CPU-062.json",
+      "status": "formal_counter_inference_smoke_passed",
+      "sha256": "78053e7a158b19d60768bea1185fc08be65d709bed327e7007fe821a8c69475a"
+    }
+  },
+  "human_annotation_pack": {
+    "directory_relative_to_e": "artifacts/human-annotation-52ce29c2",
+    "zip_relative_to_e": "artifacts/human-annotation-52ce29c2.zip",
+    "zip_sha256": "563f697577771ce9589528536fb91981ee66fef2553fd8f3ef8525b5daa075a1",
+    "unmarked_frames": 35,
+    "verified_frame_hashes": true,
+    "manual_counts_provided": false,
+    "mae": null
+  },
+  "external_acceptance_pending": [
+    "C_registered_CSV_PDF_configuration_supplement",
+    "D_062_install_and_raw_JSON_receipts",
+    "business_MySQL_and_deployed_video_HTTP",
+    "real_recording_authorization_identity_and_absolute_times",
+    "independent_human_counts_and_semantic_review",
+    "same_camera_continuous_real_forecast_backtests",
+    "B_A_browser_and_app_integration"
+  ],
+  "real_video_accuracy_verified": false,
+  "real_forecast_verified": false,
+  "GPU_OpenVINO_verified": false,
+  "runtime_source_changed": true,
+  "previous_releases_preserved": true
+}

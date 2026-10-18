@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime
+from decimal import Decimal
+from math import isfinite
 from typing import Any
 from uuid import UUID, uuid4
 
@@ -14,7 +16,7 @@ from .knowledge.index import InMemoryKnowledgeIndex
 from .knowledge.parse import read_document
 from .short_forecast.baseline import forecast_visible_history
 
-MODULE_VERSION = "0.6.1"
+MODULE_VERSION = "0.6.2"
 MODEL_VERSION = "visible-damped-holt-0.5.0"
 _global_index = InMemoryKnowledgeIndex()
 
@@ -40,6 +42,21 @@ def answer_message(message: str, conversation_id: UUID | None = None,
         required = {"metric", "value", "source_ids", "period_start", "period_end", "queried_at"}
         if not required.issubset(result) or result["value"] is None or not result["source_ids"]:
             raise DependencyUnavailable("Metric tool result must include time, metric and source provenance")
+        value, sources = result["value"], result["source_ids"]
+        if (isinstance(value, bool) or not isinstance(value, (int, float, str, Decimal))
+                or not isinstance(result["metric"], str) or not result["metric"].strip()
+                or not isinstance(sources, list)
+                or any(not isinstance(source, str) or not source.strip() for source in sources)):
+            raise DependencyUnavailable("Metric tool result has invalid value or source provenance")
+        try:
+            if not isfinite(float(value)) or float(value) < 0:
+                raise ValueError("Metric value must be finite and nonnegative")
+            for field in ("period_start", "period_end", "queried_at"):
+                if not isinstance(result[field], str) or not result[field].strip():
+                    raise ValueError("Metric time must be an ISO date or datetime")
+                datetime.fromisoformat(result[field])
+        except (ValueError, TypeError, OverflowError) as exc:
+            raise DependencyUnavailable("Metric tool result has invalid numeric or time provenance") from exc
         return {"conversation_id": str(conversation_id or uuid4()), "status": "answered",
                 "answer": f"{result['metric']}：{result['value']}（{result['period_start']}—{result['period_end']}）。",
                 "citations": [Citation(type="metric", id=str(s), title=result["metric"]).model_dump(mode="json")

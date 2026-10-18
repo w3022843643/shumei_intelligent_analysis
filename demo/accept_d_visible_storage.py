@@ -35,6 +35,7 @@ def main():
     )
     from data_foundation import JobCreate, JobLease
 
+    from intelligent_analysis import health
     from intelligent_analysis.worker.video_worker import FrameData
 
     generator = conftest.store.__wrapped__(run)
@@ -77,7 +78,7 @@ def main():
         saved = adapter.get_visible_forecast(forecast["forecast_id"])
         assert saved["result"]["status"] == "data_insufficient"
         checks["D_forecast_insufficient_saved_by_C_under_separate_job"] = True
-        report = {"status": "passed", "scope": "synthetic_D_adapter_E_processor_real_C_SQLite",
+        report = {"e_version": health()["version"], "status": "passed", "scope": "synthetic_D_adapter_E_processor_real_C_SQLite",
                   "D_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT.parent/"api_platform", text=True).strip(),
                   "checks": checks, "D_source_modified": False, "MySQL_verified": False,
                   "real_video_verified": False, "D_HTTP_verified": False,

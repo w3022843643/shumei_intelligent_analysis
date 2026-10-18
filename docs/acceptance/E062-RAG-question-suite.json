@@ -1,0 +1,293 @@
+{
+  "status": "automated_passed",
+  "case_count": 9,
+  "passed": 9,
+  "human_semantic_review": "pending",
+  "D_HTTP_and_intent_routing_verified": false,
+  "numeric_tool_is_synthetic": true,
+  "cases": [
+    {
+      "id": "H01",
+      "question": "2025年春节黄山1月30日至2月3日开放时间是什么？",
+      "category": "historical",
+      "automated_passed": true,
+      "checks": {
+        "expected_error": true,
+        "status": true,
+        "required_text": true,
+        "expected_document": true,
+        "citations_match_source_and_chunks": true
+      },
+      "answer_excerpt": "资料时效与适用范围提示：历史资料：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告，适用期已结束，不能作为当前运营事实。；历史资料，仅适用于注明周期；公告正文全文；不代表当前运营规定。；历史资料：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告，适用期已结束，不能作为当前运营事实。；历史资料，仅适用于注明周期；公告正文全文；不代表当前运营规定。；历史资料：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告，适用期已结束，不能作为当前运营事实。；历史资料，仅适用于注明周期；公告正文全文；不代表当前运营规定。\n根据带日期的来源资料，可参考以下信息：\n- 尊敬的游客朋友：\n非遗贺新春——就在黄山过大年！为提高旅游舒适度与体验感，方便您合理安排行程，现将黄山风景区春节黄金周期间（1月28日—2月4日）开放运营时间公告如下：\n一、黄山风景区开放时间\n1.1月28日、29日，2月4日：7:00—16:30；\n2.1月30日—2月3日：6:30—17:30。 春节期间，徒步登山入园处门票检票口关闭时间为15：00。15：00后，各登山步道门票检票口实行“只出不进”措施，不再安排徒步登山游客检票入园，敬请广大游客合理安排行程。 二、交通股份公司换乘车辆运营时间\n1.1月28日、29日，2月4日：6:40—16:00（上行），7:",
+      "citations": [
+        {
+          "type": "document",
+          "id": "0c8e2020-2e0a-5842-bce9-d9193cf81095",
+          "title": "关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告",
+          "url": "https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html",
+          "date": "2025-01-24T10:21:00+08:00",
+          "chunk_id": "0c8e2020-2e0a-5842-bce9-d9193cf81095-1"
+        },
+        {
+          "type": "document",
+          "id": "0c8e2020-2e0a-5842-bce9-d9193cf81095",
+          "title": "关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告",
+          "url": "https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html",
+          "date": "2025-01-24T10:21:00+08:00",
+          "chunk_id": "0c8e2020-2e0a-5842-bce9-d9193cf81095-0"
+        },
+        {
+          "type": "document",
+          "id": "0c8e2020-2e0a-5842-bce9-d9193cf81095",
+          "title": "关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告",
+          "url": "https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html",
+          "date": "2025-01-24T10:21:00+08:00",
+          "chunk_id": "0c8e2020-2e0a-5842-bce9-d9193cf81095-2"
+        }
+      ],
+      "human_review_status": "pending",
+      "human_review": "确认回答明确限定2025年春节，不把该时间用于今天。"
+    },
+    {
+      "id": "H02",
+      "question": "2025年春节黄山换乘车辆1月28日上行运营时间是什么？",
+      "category": "historical",
+      "automated_passed": true,
+      "checks": {
+        "expected_error": true,
+        "status": true,
+        "required_text": true,
+        "expected_document": true,
+        "citations_match_source_and_chunks": true
+      },
+      "answer_excerpt": "资料时效与适用范围提示：历史资料：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告，适用期已结束，不能作为当前运营事实。；历史资料，仅适用于注明周期；公告正文全文；不代表当前运营规定。；历史资料：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告，适用期已结束，不能作为当前运营事实。；历史资料，仅适用于注明周期；公告正文全文；不代表当前运营规定。；历史资料：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告，适用期已结束，不能作为当前运营事实。；历史资料，仅适用于注明周期；公告正文全文；不代表当前运营规定。\n根据带日期的来源资料，可参考以下信息：\n- 尊敬的游客朋友：\n非遗贺新春——就在黄山过大年！为提高旅游舒适度与体验感，方便您合理安排行程，现将黄山风景区春节黄金周期间（1月28日—2月4日）开放运营时间公告如下：\n一、黄山风景区开放时间\n1.1月28日、29日，2月4日：7:00—16:30；\n2.1月30日—2月3日：6:30—17:30。 春节期间，徒步登山入园处门票检票口关闭时间为15：00。15：00后，各登山步道门票检票口实行“只出不进”措施，不再安排徒步登山游客检票入园，敬请广大游客合理安排行程。 二、交通股份公司换乘车辆运营时间\n1.1月28日、29日，2月4日：6:40—16:00（上行），7:",
+      "citations": [
+        {
+          "type": "document",
+          "id": "0c8e2020-2e0a-5842-bce9-d9193cf81095",
+          "title": "关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告",
+          "url": "https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html",
+          "date": "2025-01-24T10:21:00+08:00",
+          "chunk_id": "0c8e2020-2e0a-5842-bce9-d9193cf81095-1"
+        },
+        {
+          "type": "document",
+          "id": "0c8e2020-2e0a-5842-bce9-d9193cf81095",
+          "title": "关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告",
+          "url": "https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html",
+          "date": "2025-01-24T10:21:00+08:00",
+          "chunk_id": "0c8e2020-2e0a-5842-bce9-d9193cf81095-0"
+        },
+        {
+          "type": "document",
+          "id": "0c8e2020-2e0a-5842-bce9-d9193cf81095",
+          "title": "关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告",
+          "url": "https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html",
+          "date": "2025-01-24T10:21:00+08:00",
+          "chunk_id": "0c8e2020-2e0a-5842-bce9-d9193cf81095-2"
+        }
+      ],
+      "human_review_status": "pending",
+      "human_review": "区分换乘车辆上行、下行与索道时间。"
+    },
+    {
+      "id": "H03",
+      "question": "2025年春节黄山徒步登山检票口15点后还能入园吗？",
+      "category": "historical",
+      "automated_passed": true,
+      "checks": {
+        "expected_error": true,
+        "status": true,
+        "required_text": true,
+        "expected_document": true,
+        "citations_match_source_and_chunks": true
+      },
+      "answer_excerpt": "资料时效与适用范围提示：历史资料：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告，适用期已结束，不能作为当前运营事实。；历史资料，仅适用于注明周期；公告正文全文；不代表当前运营规定。；历史资料：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告，适用期已结束，不能作为当前运营事实。；历史资料，仅适用于注明周期；公告正文全文；不代表当前运营规定。；历史资料：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告，适用期已结束，不能作为当前运营事实。；历史资料，仅适用于注明周期；公告正文全文；不代表当前运营规定。\n根据带日期的来源资料，可参考以下信息：\n- 尊敬的游客朋友：\n非遗贺新春——就在黄山过大年！为提高旅游舒适度与体验感，方便您合理安排行程，现将黄山风景区春节黄金周期间（1月28日—2月4日）开放运营时间公告如下：\n一、黄山风景区开放时间\n1.1月28日、29日，2月4日：7:00—16:30；\n2.1月30日—2月3日：6:30—17:30。 春节期间，徒步登山入园处门票检票口关闭时间为15：00。15：00后，各登山步道门票检票口实行“只出不进”措施，不再安排徒步登山游客检票入园，敬请广大游客合理安排行程。 二、交通股份公司换乘车辆运营时间\n1.1月28日、29日，2月4日：6:40—16:00（上行），7:",
+      "citations": [
+        {
+          "type": "document",
+          "id": "0c8e2020-2e0a-5842-bce9-d9193cf81095",
+          "title": "关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告",
+          "url": "https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html",
+          "date": "2025-01-24T10:21:00+08:00",
+          "chunk_id": "0c8e2020-2e0a-5842-bce9-d9193cf81095-1"
+        },
+        {
+          "type": "document",
+          "id": "0c8e2020-2e0a-5842-bce9-d9193cf81095",
+          "title": "关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告",
+          "url": "https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html",
+          "date": "2025-01-24T10:21:00+08:00",
+          "chunk_id": "0c8e2020-2e0a-5842-bce9-d9193cf81095-2"
+        },
+        {
+          "type": "document",
+          "id": "0c8e2020-2e0a-5842-bce9-d9193cf81095",
+          "title": "关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告",
+          "url": "https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html",
+          "date": "2025-01-24T10:21:00+08:00",
+          "chunk_id": "0c8e2020-2e0a-5842-bce9-d9193cf81095-0"
+        }
+      ],
+      "human_review_status": "pending",
+      "human_review": "明确是历史公告，不能据此断言当前检票安排。"
+    },
+    {
+      "id": "C01",
+      "question": "黄山风景区今天的开放时间可以沿用2025年春节公告吗？",
+      "category": "current",
+      "automated_passed": true,
+      "checks": {
+        "expected_error": true,
+        "status": true,
+        "required_text": true,
+        "expected_document": true,
+        "citations_match_source_and_chunks": true
+      },
+      "answer_excerpt": "资料时效与适用范围提示：历史资料：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告，适用期已结束，不能作为当前运营事实。；历史资料，仅适用于注明周期；公告正文全文；不代表当前运营规定。；历史资料：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告，适用期已结束，不能作为当前运营事实。；历史资料，仅适用于注明周期；公告正文全文；不代表当前运营规定。；历史资料：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告，适用期已结束，不能作为当前运营事实。；历史资料，仅适用于注明周期；公告正文全文；不代表当前运营规定。\n根据带日期的来源资料，可参考以下信息：\n- 标题：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告\n来源：黄山风景区管理委员会\n网址：https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html\n发布时间：2025-01-24T10:21:00+08:00\n采录范围：公告正文全文\n- 尊敬的游客朋友：\n非遗贺新春——就在黄山过大年！为提高旅游舒适度与体验感，方便您合理安排行程，现将黄山风景区春节黄金周期间（1月28日—2月4日）开放运营时间公告如下：\n一、黄山风景区开放时间\n1.1月28日、29日，2月4日：7:00—16:30；\n2.1月30日",
+      "citations": [
+        {
+          "type": "document",
+          "id": "0c8e2020-2e0a-5842-bce9-d9193cf81095",
+          "title": "关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告",
+          "url": "https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html",
+          "date": "2025-01-24T10:21:00+08:00",
+          "chunk_id": "0c8e2020-2e0a-5842-bce9-d9193cf81095-0"
+        },
+        {
+          "type": "document",
+          "id": "0c8e2020-2e0a-5842-bce9-d9193cf81095",
+          "title": "关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告",
+          "url": "https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html",
+          "date": "2025-01-24T10:21:00+08:00",
+          "chunk_id": "0c8e2020-2e0a-5842-bce9-d9193cf81095-1"
+        },
+        {
+          "type": "document",
+          "id": "0c8e2020-2e0a-5842-bce9-d9193cf81095",
+          "title": "关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告",
+          "url": "https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html",
+          "date": "2025-01-24T10:21:00+08:00",
+          "chunk_id": "0c8e2020-2e0a-5842-bce9-d9193cf81095-2"
+        }
+      ],
+      "human_review_status": "pending",
+      "human_review": "必须明确无法用旧公告证明今天安排；仅附时效提示不等于语义已合格。"
+    },
+    {
+      "id": "F01",
+      "question": "2025年春节黄山开放时间公告",
+      "category": "not_yet_effective",
+      "automated_passed": true,
+      "checks": {
+        "expected_error": true,
+        "status": true,
+        "required_text": true,
+        "expected_document": true,
+        "citations_match_source_and_chunks": true
+      },
+      "answer_excerpt": "资料时效与适用范围提示：尚未生效：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告。；历史资料，仅适用于注明周期；公告正文全文；不代表当前运营规定。；尚未生效：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告。；历史资料，仅适用于注明周期；公告正文全文；不代表当前运营规定。；尚未生效：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告。；历史资料，仅适用于注明周期；公告正文全文；不代表当前运营规定。\n根据带日期的来源资料，可参考以下信息：\n- 标题：关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告\n来源：黄山风景区管理委员会\n网址：https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html\n发布时间：2025-01-24T10:21:00+08:00\n采录范围：公告正文全文\n- 尊敬的游客朋友：\n非遗贺新春——就在黄山过大年！为提高旅游舒适度与体验感，方便您合理安排行程，现将黄山风景区春节黄金周期间（1月28日—2月4日）开放运营时间公告如下：\n一、黄山风景区开放时间\n1.1月28日、29日，2月4日：7:00—16:30；\n2.1月30日—2月3日：6:30—17:30。 春节期间，徒步登山入园处门票检票口关闭时间为15：00。15：00后，各",
+      "citations": [
+        {
+          "type": "document",
+          "id": "0c8e2020-2e0a-5842-bce9-d9193cf81095",
+          "title": "关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告",
+          "url": "https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html",
+          "date": "2025-01-24T10:21:00+08:00",
+          "chunk_id": "0c8e2020-2e0a-5842-bce9-d9193cf81095-0"
+        },
+        {
+          "type": "document",
+          "id": "0c8e2020-2e0a-5842-bce9-d9193cf81095",
+          "title": "关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告",
+          "url": "https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html",
+          "date": "2025-01-24T10:21:00+08:00",
+          "chunk_id": "0c8e2020-2e0a-5842-bce9-d9193cf81095-1"
+        },
+        {
+          "type": "document",
+          "id": "0c8e2020-2e0a-5842-bce9-d9193cf81095",
+          "title": "关于黄山风景区2025年春节黄金周开放时间、交通换乘和索道运营时间的公告",
+          "url": "https://www.huangshan.gov.cn/zxzx/tzgg/8409577.html",
+          "date": "2025-01-24T10:21:00+08:00",
+          "chunk_id": "0c8e2020-2e0a-5842-bce9-d9193cf81095-2"
+        }
+      ],
+      "human_review_status": "pending",
+      "human_review": "不能将尚未发布、生效的内容表述为当时已知事实。"
+    },
+    {
+      "id": "N01",
+      "question": "黄山春节开放时间",
+      "category": "no_evidence",
+      "automated_passed": true,
+      "checks": {
+        "expected_error": true,
+        "status": true,
+        "required_text": true,
+        "citations_match_source_and_chunks": true,
+        "no_fabricated_citations": true
+      },
+      "answer_excerpt": "抱歉，当前知识库中没有检索到足以回答该问题的资料。",
+      "citations": [],
+      "human_review_status": "pending",
+      "human_review": "知识库为空时不编造开放时间，不给虚假引用。"
+    },
+    {
+      "id": "M01",
+      "question": "黄山今天实时可见人数是多少？",
+      "category": "metric_missing",
+      "automated_passed": true,
+      "checks": {
+        "expected_error": true,
+        "status": true,
+        "required_text": true
+      },
+      "answer_excerpt": "指标查询服务尚未接入，无法核实数值。",
+      "citations": [],
+      "human_review_status": "pending",
+      "human_review": "D须识别数值意图并注入受约束查询；本用例显式传入query，未证明自然语言自动路由。"
+    },
+    {
+      "id": "M02",
+      "question": "这个时段机场旅客人数是多少？",
+      "category": "metric_missing_provenance",
+      "automated_passed": true,
+      "checks": {
+        "expected_error": true
+      },
+      "answer_excerpt": null,
+      "citations": [],
+      "human_review_status": "pending",
+      "human_review": "工具返回数值但缺来源时必须拒绝。测试工具为合成输入。"
+    },
+    {
+      "id": "M03",
+      "question": "测试指标查询返回多少人？",
+      "category": "metric_fixture",
+      "automated_passed": true,
+      "checks": {
+        "expected_error": true,
+        "status": true,
+        "required_text": true,
+        "metric_provenance": true
+      },
+      "answer_excerpt": "fixture_people：123.5（2026-10-15T08:00:00+08:00—2026-10-15T08:05:00+08:00）。",
+      "citations": [
+        {
+          "type": "metric",
+          "id": "synthetic-tool-source",
+          "title": "fixture_people",
+          "url": null,
+          "date": null,
+          "chunk_id": null
+        }
+      ],
+      "human_review_status": "pending",
+      "human_review": "合成工具契约检查，123.5不是任何真实客流数据。正式验收须换D真实工具。"
+    }
+  ],
+  "corpus": "shipped_real_historical_notice",
+  "artifact_sha256": "d33e04e176a39ed186c7cfe13b331bd00de95ddb3bec748413e744da0ff61a9d",
+  "c_verified_store_receiving": "separate_C020a2_report"
+}

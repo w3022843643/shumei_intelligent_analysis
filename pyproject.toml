@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "shumei-intelligent-analysis"
-version = "0.6.1"
+version = "0.6.2"
 description = "Sourced RAG, fixed-ROI visible people counting, and damped Holt forecasts"
 readme = "README.md"
 requires-python = ">=3.13"

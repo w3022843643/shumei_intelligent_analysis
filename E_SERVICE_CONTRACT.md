@@ -1,4 +1,6 @@
-# E 服务契约 0.6.1（2026-10-17）
+# E 服务契约 0.6.2（2026-10-18）
+
+0.6.2 自检修复：数值成功结果拒绝非有限数、负值、布尔值、非数值内容、非列表/空白来源以及无效 ISO 时间。合法零值、小数、数值字符串保持原样；违约抛 DependencyUnavailable。P2PNet、知识产物格式及 D/C 调用签名不变。端到端任务和自检见 [完整工作流](docs/E全流程任务与自检-2026-10-18.md)。
 
 补充接收：C 0.2.1a2 / 0007 已通过 E 隔离验收，调用边界不变；见 [a2接收回执](docs/致C-021a2接收回执-2026-10-17.md)。E0.6.1运行包未重新生成。
 
@@ -36,7 +38,7 @@ configure_services(ServiceBindings(
 | `knowledge_index_path` | D 提交成功后发布的完整活动索引 JSON。问答每次读取完整文件，原子替换确保不同 API 进程读到同一已发布快照。 |
 | `knowledge_snapshot_loader` | 0.5.1 可选绑定 `() -> dict`，由 D 列举有权访问的活动文档 ID，再调用 `load_verified_knowledge_snapshot(store, ids, data_root)`；每次问答复验并加载。与 knowledge_index_path 互斥，任何产物损坏都返回不可用，不沿用旧内存。 |
 
-异常映射：`DependencyUnavailable` → 503；`UnsupportedAnalysis` → 422 unsupported；配置校验异常由 D 映射其现有 400/422 约定。E 返回的 `analysis_not_ready` → 409；`data_insufficient`、`quality_insufficient`、`insufficient_evidence` → 200；`metric_tool_unavailable` → 503。日志错误摘要由 D 脱敏。
+异常映射：`DependencyUnavailable` → 503；`UnsupportedAnalysis` → 422 unsupported；配置校验异常由 D 映射其现有 400/422 约定。E 返回的 `analysis_not_ready` → 409；`data_insufficient`、`quality_insufficient`、`insufficient_evidence` → 200；正常 `metric_tool_unavailable` 在当前 D/19 HTTP 为 200 业务不足状态，空引用；上游结果违约抛 `DependencyUnavailable` 才映射 503。日志错误摘要由 D 脱敏。
 
 ## 2. 视频三函数
 

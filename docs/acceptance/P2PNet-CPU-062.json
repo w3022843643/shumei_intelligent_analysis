@@ -1,0 +1,81 @@
+{
+  "status": "formal_counter_inference_smoke_passed",
+  "e_version": "0.6.2",
+  "video_sha256": "a0e8a2b4bd0a0b5e7b56c1cffe552415d0ace6e2550238d81b30ace1f4ecbf3a",
+  "analysis": {
+    "weights_version": "leader-SHTechA-50604773",
+    "roi": {
+      "points": [
+        {
+          "x": 0.0,
+          "y": 0.0
+        },
+        {
+          "x": 1.0,
+          "y": 0.0
+        },
+        {
+          "x": 1.0,
+          "y": 1.0
+        },
+        {
+          "x": 0.0,
+          "y": 1.0
+        }
+      ]
+    },
+    "sample_interval_seconds": 10,
+    "aggregation_minutes": 5,
+    "inference_engine": "pytorch",
+    "device": "CPU",
+    "count_model": "p2pnet",
+    "confidence_threshold": 0.5
+  },
+  "model_provenance": {
+    "count_model": "p2pnet",
+    "weights_version": "leader-SHTechA-50604773",
+    "weights_sha256": "506047732b128ff09efef18e94bfacbe35fcfef300e5e9eeeece259b0488c63f",
+    "model_source_revision": "team-zip-2981dc75",
+    "confidence_threshold": 0.5,
+    "inference_engine": "pytorch",
+    "device": "CPU"
+  },
+  "runtime": {
+    "torch": "2.14.1+cpu",
+    "python": "3.13.13",
+    "device": "CPU",
+    "threads": 4
+  },
+  "GPU_verified": false,
+  "upstream_commit_verified": false,
+  "manual_validation": null,
+  "real_video_accuracy_verified": false,
+  "formal_D_HTTP_verified": false,
+  "forecast_verified": false,
+  "recorded_at": null,
+  "frames": [
+    {
+      "frame_index": 0,
+      "nominal_offset_seconds": 0.0,
+      "value": 31.0,
+      "elapsed_seconds": 1.7348010999999133,
+      "metric": "camera_visible_people"
+    },
+    {
+      "frame_index": 281,
+      "nominal_offset_seconds": 9.366666666666667,
+      "value": 41.0,
+      "elapsed_seconds": 1.7722601000000395,
+      "metric": "camera_visible_people"
+    },
+    {
+      "frame_index": 561,
+      "nominal_offset_seconds": 18.7,
+      "value": 31.0,
+      "elapsed_seconds": 1.8228833999999097,
+      "metric": "camera_visible_people"
+    }
+  ],
+  "nominal_duration_seconds": 18.733333333333334,
+  "complete_5min_windows": 0
+}

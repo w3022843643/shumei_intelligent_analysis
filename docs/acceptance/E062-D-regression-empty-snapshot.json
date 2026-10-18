@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "D_commit": "6d8bb23b9f0663d8238f6a95a59f41363af2979a",
+  "counts": {
+    "tests": 405,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 405
+  },
+  "failures_or_skips": [],
+  "scope": "D_shipped_tests_copied_source",
+  "D_source_modified": false,
+  "MySQL_verified": false,
+  "real_video_verified": false,
+  "initialized_empty_published_snapshot": true,
+  "run_relative_to_e": "artifacts/d-regression-4f5e0b6b"
+}
