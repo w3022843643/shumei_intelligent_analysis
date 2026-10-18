@@ -1,0 +1,23 @@
+{
+  "status": "clean_git_clone_CPU_inference_passed",
+  "e_version": "0.6.2",
+  "source_commit": "ea6b3793aad4a091214851a6d24c09c2731bfdb0",
+  "clone_relative_to_e": "artifacts/p2pnet-clean-clone-20261018",
+  "included_model_source_weights_and_sample": true,
+  "all_cloned_member_hashes_verified": true,
+  "original_artifacts_model_used": false,
+  "reused_existing_Python_dependencies": true,
+  "fresh_network_dependency_installation_tested": false,
+  "setup_script_skip_install_passed": true,
+  "frame_values": [
+    31.0,
+    41.0,
+    31.0
+  ],
+  "accuracy_verified": false,
+  "D_HTTP_verified": false,
+  "reports_relative_to_clone": [
+    "artifacts/clone-model.json",
+    "artifacts/clone-video.json"
+  ]
+}
