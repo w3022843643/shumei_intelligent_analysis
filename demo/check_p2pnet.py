@@ -21,7 +21,7 @@ def main():
     from intelligent_analysis.vision.p2p_counter import TEAM_WEIGHTS_VERSION, P2PNetCounter
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--bundle", type=Path, default=ROOT / "artifacts/leader-p2pnet-original")
+    parser.add_argument("--bundle", type=Path, default=ROOT / "model_bundle/p2pnet")
     label = health()["version"].replace(".", "")
     parser.add_argument("--output", type=Path, default=ROOT / f"docs/acceptance/P2PNet-CPU-{label}.json")
     args = parser.parse_args()

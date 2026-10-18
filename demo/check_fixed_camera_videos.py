@@ -25,7 +25,7 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--zip", type=Path, required=True)
-    parser.add_argument("--bundle", type=Path, default=ROOT / "artifacts/leader-p2pnet-original")
+    parser.add_argument("--bundle", type=Path, default=ROOT / "model_bundle/p2pnet")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     run = ROOT / "artifacts" / ("fixed-camera-" + uuid4().hex[:8])

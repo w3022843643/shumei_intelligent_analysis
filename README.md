@@ -1,5 +1,18 @@
 # E 智能分析包 0.6.2
 
+## 拉取后直接运行 P2PNet
+
+仓库已包含 `model_bundle/p2pnet/` 的模型源码、`SHTechA.pth`、试跑短片与摘要，以及配置JSON和安装脚本。无需再接收模型ZIP。Windows安装Python3.13后，在仓库根目录执行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\setup-p2pnet.ps1
+```
+
+脚本创建虚拟环境、安装CPU推理依赖、核验模型并运行自带短片；结果写入`artifacts/clone-and-run/`。首次安装需要联网下载Python依赖。已有依赖时可加`-SkipInstall`。这是E模块和模型试跑，D的完整Web后端仍按D接线启动。
+
+详见 [安装与具体配置](docs/P2PNet安装与具体配置-2026-10-18.md)。
+
+
 P2PNet具体配置与新机器接入：[配置JSON、安装命令、模型目录和核验工具](docs/P2PNet安装与具体配置-2026-10-18.md)。
 
 > 当前任务全貌与本轮自检见 [E 全流程任务与自检](docs/E全流程任务与自检-2026-10-18.md)。0.6.2 修复数值成功结果校验，既有发布原件保留。
@@ -67,4 +80,4 @@ python -X utf8 demo/check_p2pnet.py
 | `release/` | 已发布包及摘要回执，保持原件 |
 | `artifacts/` | 本地原件、模型、运行记录和隔离数据库，被 Git 忽略 |
 
-原视频、权重、虚拟环境、凭据和缓存不提交 Git。历史源码/测试仍用于追溯，不进入正式 P2PNet 流程。新的真实验收结果到位前，保留上述待办状态。
+当前明确交付的模型、权重和试跑短片位于model_bundle/p2pnet；虚拟环境、凭据、业务库及本地运行缓存不提交Git。历史源码/测试仍用于追溯，不进入正式 P2PNet 流程。新的真实验收结果到位前，保留上述待办状态。

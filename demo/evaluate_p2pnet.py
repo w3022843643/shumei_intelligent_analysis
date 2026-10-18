@@ -40,7 +40,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", type=Path,
         default=ROOT / "docs/fixtures/video-evaluation/manifest.template.json")
-    parser.add_argument("--bundle", type=Path, default=ROOT / "artifacts/leader-p2pnet-original")
+    parser.add_argument("--bundle", type=Path, default=ROOT / "model_bundle/p2pnet")
     parser.add_argument("--output", type=Path, default=ROOT / "artifacts/p2p-evaluation/report.json")
     args = parser.parse_args()
     manifest, samples = load_samples(args.manifest.resolve())

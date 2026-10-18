@@ -28,3 +28,8 @@ data/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+
+# Explicitly included model and smoke clip for clone-and-run delivery.
+!/model_bundle/p2pnet/models/
+!/model_bundle/p2pnet/models/*.py
+!/model_bundle/p2pnet/mytest.mp4

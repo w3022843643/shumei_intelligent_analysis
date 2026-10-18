@@ -1,4 +1,4 @@
-"""Verify the separately delivered P2PNet sources, weights and CPU configuration."""
+"""Verify the repository-provided P2PNet sources, weights and CPU configuration."""
 import argparse
 import json
 import platform
@@ -11,7 +11,7 @@ sys.path.insert(0, str(ROOT))
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--bundle", type=Path, required=True)
+    parser.add_argument("--bundle", type=Path, default=ROOT / "model_bundle/p2pnet")
     parser.add_argument("--config", type=Path, default=ROOT / "config/p2pnet-cpu.example.json")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()

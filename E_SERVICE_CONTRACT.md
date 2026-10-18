@@ -53,7 +53,7 @@ forecast_short_term(video_id: UUID, analysis_id: UUID, cutoff_at: str,
 
 分析config：count_model="p2pnet"、weights_version、confidence_threshold=0.5（可省略，序列化包含默认值）、roi={points:[{x,y},...]}、sample_interval_seconds（默认10，整数1—600）、aggregation_minutes=5、inference_engine、device。当前仅pytorch/CPU通过运行验证，其他运行时由计数器拒绝。PyTorch必须省略openvino_version，多余字段拒绝；ROI为不自交、非零面积、顶点不重复的归一化多边形。
 
-首个配置weights_version=leader-SHTechA-50604773、PyTorch CPU；权重SHA256 `506047732b128ff09efef18e94bfacbe35fcfef300e5e9eeeece259b0488c63f`。D使用`P2PNetCounter.from_team_bundle(trusted_bundle_dir)`，或显式提供WeightSpec、受信任model_factory和source_revision。前者校验收到源码文件摘要并严格加载权重；未改动源码在CUDA可用主机选CUDA锚点，所以该CPU构建器明确拒绝这种未验证环境。不得自动回退DM或把P2P标成DM。模型源码/权重单独接收，不随E wheel分发。
+首个配置weights_version=leader-SHTechA-50604773、PyTorch CPU；权重SHA256 `506047732b128ff09efef18e94bfacbe35fcfef300e5e9eeeece259b0488c63f`。D使用`P2PNetCounter.from_team_bundle(trusted_bundle_dir)`，或显式提供WeightSpec、受信任model_factory和source_revision。前者校验收到源码文件摘要并严格加载权重；未改动源码在CUDA可用主机选CUDA锚点，所以该CPU构建器明确拒绝这种未验证环境。不得自动回退DM或把P2P标成DM。模型源码/权重现随Git仓库model_bundle/p2pnet交付，wheel保持轻量不内含模型。
 
 分析返回 `{job_id,analysis_id,status:"queued",video_id,count_metric:"camera_visible_people",inference_engine}`。
 
