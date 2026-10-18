@@ -2,6 +2,15 @@
 
 从 E 仓库根目录运行。当前正式算法为 P2PNet；脚本有不同前置条件，不应把全部脚本依次执行。
 
+## 10月18日新增复验
+
+- `check_fixed_camera_videos.py --zip <本地ZIP> --output <新JSON>`：核验五段基准视频，每10秒P2PNet CPU抽帧并生成本地标点图；不登记正式录像、不编造时间/真值。
+- `accept_d_visible_storage.py --output <新JSON>`：D实际适配器→E处理器→C SQLite的合成闭环，含不足预测独立作业；需C a2隔离环境。
+- `accept_d_c021_http.py --output <新JSON>`：现在同时核对D resolver成功、UTC/部分周期边界与ingestion筛选；历史接收结果使用独立文件保留。
+- `verify_d_regression.py --output <新JSON>`，可另加`--initialize-empty-snapshot`：两次不同前置条件分别记证据；固定每次隔离临时目录。
+
+结果与待办见 [本轮进展](../docs/CD接收与视频试跑进展-2026-10-18.md)。
+
 ## 当前常用
 
 新增独立验收：`accept_d_c021_http.py`（真实D知识ASGI/Worker+C隔离库）、`accept_forecast_storage.py`（合成预测保存）、`check_b_contract.py`（Node执行B纯TS契约）、`verify_d_regression.py`（D原套件，失败结果保留）、`evaluate_p2pnet.py`（正式P2P单模型人工评测，空模板等待不推理）。范围及复现命令见 [当前说明](../docs/E当前完成情况与剩余依赖-2026-10-17.md)。

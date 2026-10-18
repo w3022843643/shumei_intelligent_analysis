@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, help="Save a new receiving record without replacing prior evidence")
     parser.add_argument("--initialize-empty-snapshot", action="store_true",
                         help="Explicitly seed an empty published knowledge fixture for D tests")
     args = parser.parse_args()
@@ -46,7 +47,8 @@ def main():
         snapshot.parent.mkdir(parents=True, exist_ok=True)
         snapshot.write_text('{"documents":{}}', encoding="utf-8")
     junit = target / "pytest.xml"
-    completed = subprocess.run([sys.executable, "-X", "utf8", "-m", "pytest", "tests", "-q", "--tb=short",
+    completed = subprocess.run([sys.executable, "-X", "utf8", "-m", "pytest", "tests", "-q", "--tb=short", "-p", "no:cacheprovider",
+        "--basetemp=" + str(target / "pytest-tmp"),
         "--junitxml=" + str(junit)], cwd=target, env=env, capture_output=True, text=True, check=False)
     (target / "pytest.txt").write_text(completed.stdout + completed.stderr, encoding="utf-8")
     tree = ET.parse(junit).getroot()
@@ -63,7 +65,8 @@ def main():
         "initialized_empty_published_snapshot": args.initialize_empty_snapshot,
         "run_relative_to_e": target.relative_to(ROOT).as_posix()}
     suffix = "-empty-snapshot" if args.initialize_empty_snapshot else ""
-    (ROOT / f"docs/acceptance/E061-D-regression{suffix}.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    output = args.output or ROOT / f"docs/acceptance/E061-D-regression{suffix}.json"
+    output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps(report, ensure_ascii=True))
     raise SystemExit(completed.returncode)
 

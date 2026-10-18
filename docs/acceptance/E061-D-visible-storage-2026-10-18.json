@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "scope": "synthetic_D_adapter_E_processor_real_C_SQLite",
+  "D_commit": "6d8bb23b9f0663d8238f6a95a59f41363af2979a",
+  "checks": {
+    "D_adapter_E_processor_C_atomic_completion": true,
+    "same_points_array_grain_and_unvalidated_median": true,
+    "crossing_window_not_returned": true,
+    "D_forecast_insufficient_saved_by_C_under_separate_job": true
+  },
+  "D_source_modified": false,
+  "MySQL_verified": false,
+  "real_video_verified": false,
+  "D_HTTP_verified": false,
+  "synthetic_frames_counter_permission_and_times": true,
+  "run_relative_to_e": "artifacts/d-visible-889eb9b8"
+}

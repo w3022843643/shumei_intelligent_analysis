@@ -1,0 +1,39 @@
+{
+  "status": "needs_D_review",
+  "D_commit": "6d8bb23b9f0663d8238f6a95a59f41363af2979a",
+  "counts": {
+    "tests": 405,
+    "failures": 5,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 400
+  },
+  "failures_or_skips": [
+    {
+      "case": "test_chat_returns_structured_answer",
+      "detail": "assert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+    },
+    {
+      "case": "test_chat_with_conversation_id_roundtrip",
+      "detail": "assert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+    },
+    {
+      "case": "test_chat_returns_429_when_exceeded",
+      "detail": "assert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+    },
+    {
+      "case": "test_without_metric_keeps_knowledge_path",
+      "detail": "assert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+    },
+    {
+      "case": "test_context_with_range_but_no_metric_is_not_hijacked",
+      "detail": "assert 503 == 200\n +  where 503 = <Response [503 Service Unavailable]>.status_code"
+    }
+  ],
+  "scope": "D_shipped_tests_copied_source",
+  "D_source_modified": false,
+  "MySQL_verified": false,
+  "real_video_verified": false,
+  "initialized_empty_published_snapshot": false,
+  "run_relative_to_e": "artifacts/d-regression-ee1e13f2"
+}

@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "e_version": "0.6.1",
+  "counts": {
+    "tests": 124,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1,
+    "passed": 123
+  },
+  "RUN_C_ACCEPTANCE": true,
+  "RUN_C020_ACCEPTANCE": true,
+  "runtime_package_unchanged": true,
+  "ruff": "passed",
+  "junit_relative_to_e": "artifacts/E061-tests-with-C-2026-10-18.xml"
+}

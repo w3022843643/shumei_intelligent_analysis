@@ -1,8 +1,9 @@
 """Actual D HTTP/worker + E/C on fresh SQLite, never the business MySQL.
 
 Infrastructure/auth providers are injected. A separately labelled metric phase
-binds C's reference adapter, never claiming D has shipped its resolver.
+binds C's reference adapter. A distinct phase verifies D's received resolver.
 """
+import argparse
 import copy
 import hashlib
 import io
@@ -21,6 +22,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args()
     run = ROOT / "artifacts" / ("d-c021-http-" + uuid4().hex[:8])
     run.mkdir()
     os.environ.update(DATA_DIR=str(run / "assets"), JOB_STORE_PATH=str(run / "unused-bridge.db"),
@@ -112,7 +116,7 @@ def main():
                 report["responses"]["D_metric_unavailable_HTTP"] = unavailable
                 report["checks"]["D_real_metric_unavailable_does_not_use_documents"] = True
                 # Separate contract probe: actual C observations + reference tool,
-                # actual D route/E result serialization; D resolver still absent.
+                # actual D route/E serialization; the real D resolver is tested separately.
                 from importlib.util import module_from_spec, spec_from_file_location
 
                 from sqlalchemy import text
@@ -133,7 +137,28 @@ def main():
                 assert reference_answer["citations"] and reference_answer["used_metric_queries"]
                 report["responses"]["C_reference_tool_via_D_HTTP_not_D_resolver"] = reference_answer
                 report["checks"]["C_reference_metric_D_E_HTTP_shape"] = True
-                report["D_resolver_success_verified"] = False
+                # Probe the received D resolver without replacing its implementation.
+                resolver_samples = {}
+                for label, start, end in (
+                    ("date_closed", "2025-01-01", "2025-01-31"),
+                    ("date_half_open", "2025-01-01", "2025-02-01"),
+                    ("UTC_equivalent", "2024-12-31T16:00:00Z", "2025-01-31T16:00:00Z"),
+                    ("partial_month", "2025-01-02", "2025-01-30"),
+                ):
+                    query = {**metric_query, "context": {**metric_query["context"],
+                        "period_start": start, "period_end": end}}
+                    received = client.post("/api/v1/assistant/chat", headers=headers, json=query)
+                    assert received.status_code == 200, received.text
+                    data = received.json()["data"]
+                    resolver_samples[label] = data
+                    if label == "partial_month":
+                        assert data["status"] == "metric_tool_unavailable" and not data["citations"]
+                    else:
+                        assert data["status"] == "answered" and data["metric_result"]["value"] == 1111644
+                        assert data["metric_result"]["source_ids"] and data["used_metric_queries"]
+                report["responses"]["D_resolver_samples"] = resolver_samples
+                report["D_resolver_success_verified"] = True
+                report["checks"]["D_resolver_dates_UTC_and_partial_period"] = True
                 injection = {**question, "context": {"metric_tool": "client-cannot-inject"}}
                 assert client.post("/api/v1/assistant/chat", headers=headers, json=injection).status_code == 400
                 assert client.post("/api/v1/assistant/chat", json=question).status_code == 403
@@ -202,14 +227,18 @@ def main():
                     index = uow.session.get(KnowledgeIndex, reference["index_id"])
                     index.artifact_path, index.artifact_sha256 = reference["relative_path"], hashlib.sha256(original).hexdigest()
                 assert client.post("/api/v1/assistant/chat", headers=headers, json=question).status_code == 200
-                # Demonstrate the mixed-queue blocker; never submit to any shared queue.
+                # Check mixed-queue ownership; never submit to any shared queue.
                 with store.write() as uow:
                     ingestion = uow.jobs.enqueue_or_get(JobCreate("ingestion", uuid4().hex,
                         {"source_ids": [row["source_id"]], "dry_run": True}, "SYNTHETIC ISOLATED QUEUE PROBE"), datetime.now(UTC))
                 unsupported = DWorker(adapter).run_once()
-                if unsupported["status"] == "failed":
+                if unsupported is not None and unsupported["status"] == "failed":
                     report["D_blockers"].append({"code": "D_claims_C_ingestion",
                         "job_status": adapter.get_job(ingestion["id"])["status"], "worker_result": unsupported})
+                else:
+                    assert unsupported is None
+                    assert adapter.get_job(ingestion["id"])["status"] == "queued"
+                    report["checks"]["D_does_not_claim_C_ingestion"] = True
                 report["checks"]["unauthenticated_chat_401"] = True
                 encoded = json.dumps(report["responses"], ensure_ascii=False)
                 assert not any(value in encoded for value in (password, str(run), "artifact_bytes", "lease_token"))
@@ -217,10 +246,10 @@ def main():
                 assert client.post("/api/v1/auth/logout", headers=headers).status_code == 200
                 assert client.post("/api/v1/assistant/chat", headers=headers, json=question).status_code == 401
                 report["checks"]["logout_revokes_session"] = True
-        report["status"] = "passed_scoped_checks_with_D_blockers"
+        report["status"] = "passed_scoped_checks_with_D_blockers" if report["D_blockers"] else "passed_scoped_checks"
     finally:
         store.dispose()
-    (ROOT / "docs/acceptance/E061-D-C021a2-HTTP.json").write_text(
+    (args.output or ROOT / "docs/acceptance/E061-D-C021a2-HTTP.json").write_text(
         json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps({"status": report["status"], "checks": report["checks"], "D_blockers": report["D_blockers"]}))
 

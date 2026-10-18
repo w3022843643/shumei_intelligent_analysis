@@ -1,0 +1,15 @@
+{
+  "received_on": "2026-10-18",
+  "attachments": [
+    {
+      "file": "致E-021a2接线回执与证据清单-2026-10-17.md",
+      "sha256": "58d75f6fd15d714d25134e1ae6869ff8318fc18e3c1b37f4d895b5f7b773bdd0"
+    },
+    {
+      "file": "致D和E-021a2接收核对与补充答复-2026-10-17.md",
+      "sha256": "422562f552a90c9ff9df9d432af8fb46357f1e279cbe9ab4b0f6b5ce488e9b7e"
+    }
+  ],
+  "originals_relative_to_e": "artifacts/incoming-2026-10-18",
+  "external_claims_not_independent_acceptance": true
+}
