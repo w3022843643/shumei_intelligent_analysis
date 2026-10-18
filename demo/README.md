@@ -1,55 +1,54 @@
 # 脚本导航
 
-从 E 仓库根目录运行。当前正式算法为 P2PNet；脚本有不同前置条件，不应把全部脚本依次执行。
+从E仓库根目录运行。当前模型P2PNet / PyTorch CPU，默认使用随仓库交付的model_bundle/p2pnet。各组前置条件不同，无需依次运行所有脚本。
 
-## 模型接入核验
+## 拉取后使用
 
-`verify_p2pnet_bundle.py --bundle <可信模型目录> --output <结果JSON>`：读取config/p2pnet-cpu.example.json，复核源码/权重并在合成帧上运行CPU推理。不需要原测试录像，不提升准确率/HTTP验收状态。见 [安装与具体配置](../docs/P2PNet安装与具体配置-2026-10-18.md)。
-
-## 全流程自检与人工准备
-
-- [E完整任务链和自检](../docs/E全流程任务与自检-2026-10-18.md)：按接收、知识、计数、人工精度、预测、联合验收、发布排序。
-- `prepare_annotation_pack.py --report docs/acceptance/P2PNet-fixed-camera-2026-10-18.json`：为已接收视频抽样帧重新解码无标点PNG，生成空白人工表；不会输出假真值。
-- 当前包为0.6.2；`verify_release_wheel.py`验证实际安装版本、坏数值拒绝、真实CPU推理和C重启读取，`package_release.py`拒绝覆盖已有发布。
-- `check_b_contract.py`、`accept_forecast_storage.py`新增`--output`，新版本复验请另存，避免覆盖旧证据。
-
-## 10月18日新增复验
-
-- `check_fixed_camera_videos.py --zip <本地ZIP> --output <新JSON>`：核验五段基准视频，每10秒P2PNet CPU抽帧并生成本地标点图；不登记正式录像、不编造时间/真值。
-- `accept_d_visible_storage.py --output <新JSON>`：D实际适配器→E处理器→C SQLite的合成闭环，含不足预测独立作业；需C a2隔离环境。
-- `accept_d_c021_http.py --output <新JSON>`：现在同时核对D resolver成功、UTC/部分周期边界与ingestion筛选；历史接收结果使用独立文件保留。
-- `verify_d_regression.py --output <新JSON>`，可另加`--initialize-empty-snapshot`：两次不同前置条件分别记证据；固定每次隔离临时目录。
-
-结果与待办见 [本轮进展](../docs/CD接收与视频试跑进展-2026-10-18.md)。
-
-## 当前常用
-
-新增独立验收：`accept_d_c021_http.py`（真实D知识ASGI/Worker+C隔离库）、`accept_forecast_storage.py`（合成预测保存）、`check_b_contract.py`（Node执行B纯TS契约）、`verify_d_regression.py`（D原套件，失败结果保留）、`evaluate_p2pnet.py`（正式P2P单模型人工评测，空模板等待不推理）。范围及复现命令见 [当前说明](../docs/E当前完成情况与剩余依赖-2026-10-17.md)。
-
-| 脚本 | 用途 |
+| 入口 | 用途/前置条件 |
 |---|---|
-| `check_p2pnet.py` | 已接收队长包后的正式 CPU 推理验证 |
-| `end_to_end_demo.py` | 明确标记 synthetic 的计算/预测流程 |
-| `receive_c020.py` | C 官方 a2 接收，网络/包前置条件见脚本 |
-| `receive_c021_zip.py` | 用户提供 C0.2.1a2 ZIP 的逐文件 manifest/CRC 校验及隔离解压，已有目标不覆盖 |
-| `check_c020_windows.py` / `verify_c020_regression.py` | C 官方包兼容性及回归 |
-| `accept_c_knowledge.py` / `accept_c020_failures.py` | 真资料、C 隔离库和语义/事务/租约检查，先设置 a2 路径 |
-| `accept_c021_integration.py` | 官方 C021 wheel 接收后，新存储合成闭环、真实历史数值及 D 当前不足分支复验；需 C/D 本地仓库 |
-| `check_rag_questions.py` | 问答题集检查，人工语义和正式 HTTP 另验 |
-| `verify_release_wheel.py` / `package_release.py` | 当前包安装验收及发布打包；需要对应版本证据，不用于重写既有发布 |
+| [setup-p2pnet.ps1](../setup-p2pnet.ps1) | 安装CPU依赖、模型核验、自带短片试跑 |
+| [verify_p2pnet_bundle.py](verify_p2pnet_bundle.py) | 不需要录像；默认核验随仓库模型，可用--bundle指定D可信目录；必须指定--output |
+| [check_p2pnet.py](check_p2pnet.py) | 自带短片三帧CPU推理；重复运行请用--output写artifacts，不覆盖封存证据 |
+| [end_to_end_demo.py](end_to_end_demo.py) | 明确标为synthetic的计算/预测演示 |
 
-故障复现的完整环境命令见 [D 答复](../docs/致D-整合回执答复与故障复现-2026-10-15.md)。运行输出放被 Git 忽略的 `artifacts/`。
+参数和运行命令见 [安装与配置](../docs/P2PNet安装与具体配置-2026-10-18.md)。
 
-## 历史与专用复现
+## 当前评测和联合验收
 
-保留这些脚本是为了回溯既有证据和支持旧版本回归。它们不进入当前正式工作顺序：
+| 脚本 | 范围/前置条件 |
+|---|---|
+| [check_fixed_camera_videos.py](check_fixed_camera_videos.py) | --zip指定五段输入包，--output指定新报告；不登记业务录像 |
+| [prepare_annotation_pack.py](prepare_annotation_pack.py) | --report指定已有视频报告；生成无标点原图和空白人工表，不生成真值 |
+| [evaluate_p2pnet.py](evaluate_p2pnet.py) | 人工审核manifest、授权和帧摘要齐备后做P2PNet单模型MAE；空模板保持blocked |
+| [check_rag_questions.py](check_rag_questions.py) | 随仓库真实历史公告题集9项自动检查，人工语义复核另验 |
+| [accept_d_c021_http.py](accept_d_c021_http.py) | D源码、已接收C a2及相关依赖；真实路由/Worker和隔离SQLite，不是部署MySQL |
+| [accept_d_visible_storage.py](accept_d_visible_storage.py) | D适配→E处理器→真实C仓储，帧/计数器/授权为合成夹具 |
+| [accept_forecast_storage.py](accept_forecast_storage.py) | C a2隔离环境；合成连续窗、指纹、独立作业及读回 |
+| [check_b_contract.py](check_b_contract.py) | B正确P2PNet分支、D源码、Node24；纯TS契约，无浏览器 |
+| [verify_d_regression.py](verify_d_regression.py) | D源码与C a2；复制后运行，--initialize-empty-snapshot显式标记测试前置条件 |
 
-- `receive_c.py`：旧 C 0.1.9 接收。
-- `prepare_c020_candidate.py`：历史 a1 候选修补；正式 a2 不使用该补丁。
-- `accept_d_bridge.py`：D 旧 SQLite 桥验证，需要 D 源码与依赖，不能关闭正式 MySQL 验收。
-- `verify_e051_wheel.py`：已发布 E 0.5.1 实装复现。
-- `prepare_dm_count.py` / `check_dm_count.py`：历史 DM-Count。
-- `benchmark_frames.py`、`prepare_leader_comparison.py`、`score_leader_comparison.py`：历史比较工具，比较任务已停止。
-- `check_leader_p2pnet.py` / `leader_p2p_factory.py`：首次队长包试跑，当前正式绑定使用 `check_p2pnet.py` / `P2PNetCounter`。
+有--output的脚本请给新路径；建议放artifacts。当前结果见 [证据导航](../docs/acceptance/README.md)，不是把脚本退出0解释为最终项目验收。
 
-历史工具的存在不表示需要再次下载 DM 权重、启动比较或开放未验证设备。其依赖仍被部分历史测试/证据使用，未在文档整理中删除。
+## C接收与发布工具
+
+- [receive_c021_zip.py](receive_c021_zip.py)：当前C0.2.1a2 ZIP逐文件manifest/CRC接收，已有目录不覆盖。
+- [accept_c_knowledge.py](accept_c_knowledge.py)、[accept_c020_failures.py](accept_c020_failures.py)：指定C_HANDOFF_DIR、C_RUNTIME_DIR、E_ACCEPTANCE_REPORT后验真实资料/严格保护；默认历史环境需先核对，不能直接连业务库。
+- [verify_release_wheel.py](verify_release_wheel.py)：当前构建wheel独立安装、CPU推理、坏数值拒绝和C重启读取；需要对应接收证据。
+- [package_release.py](package_release.py)：需要通过的JUnit、wheel及实装/接收记录；拒绝覆盖已有发布。
+
+## 历史和专用工具
+
+这些文件保留原路径，支持已封存证据、旧发布或其他工具的内部导入，不进入当前模型选择流程：
+
+| 文件 | 原用途 |
+|---|---|
+| receive_c.py | C0.1.9接收 |
+| receive_c020.py / check_c020_windows.py / verify_c020_regression.py | C0.2.0阶段接收与回归 |
+| prepare_c020_candidate.py | 早期候选修补，正式a2不使用 |
+| accept_c021_integration.py | C021早期集成，含旧D不足分支断言；当前使用新的D HTTP/visible验收 |
+| accept_d_bridge.py / verify_e051_wheel.py | 旧桥和0.5.1发布实装 |
+| prepare_dm_count.py / check_dm_count.py | 历史DM-Count |
+| benchmark_frames.py / prepare_leader_comparison.py / score_leader_comparison.py | 已停止的模型比较；部分纯标注校验仍被导入 |
+| check_leader_p2pnet.py / leader_p2p_factory.py | 首次队长包试跑 |
+
+历史工具的存在不表示要重启比较、下载DM权重或开放GPU/OpenVINO。

@@ -1,83 +1,57 @@
-# E 智能分析包 0.6.2
+# E 智能分析 · 0.6.2
 
-## 拉取后直接运行 P2PNet
+提供知识问答、固定ROI画面人数计数与短时预测。正式计数模型为 **P2PNet / PyTorch CPU**，指标为 `camera_visible_people`，不代表进出人次或全景区在园人数。
 
-仓库已包含 `model_bundle/p2pnet/` 的模型源码、`SHTechA.pth`、试跑短片与摘要，以及配置JSON和安装脚本。无需再接收模型ZIP。Windows安装Python3.13后，在仓库根目录执行：
+## 拉取后运行
+
+仓库已包含模型源码、SHTechA权重、试跑短片、配置及安装脚本，无需另收模型ZIP。Windows安装Python3.13和Git后：
 
 ```powershell
+git clone https://github.com/w3022843643/shumei_intelligent_analysis.git
+cd shumei_intelligent_analysis
 powershell -ExecutionPolicy Bypass -File .\setup-p2pnet.ps1
 ```
 
-脚本创建虚拟环境、安装CPU推理依赖、核验模型并运行自带短片；结果写入`artifacts/clone-and-run/`。首次安装需要联网下载Python依赖。已有依赖时可加`-SkipInstall`。这是E模块和模型试跑，D的完整Web后端仍按D接线启动。
+已有副本先 `git pull --ff-only`。首次会联网安装CPU依赖；已有依赖可加 `-SkipInstall`。结果在 `artifacts/clone-and-run/`。干净Git副本已验证模型摘要和短片CPU推理；本机验证复用了现有依赖。
 
-详见 [安装与具体配置](docs/P2PNet安装与具体配置-2026-10-18.md)。
+[安装与具体配置](docs/P2PNet安装与具体配置-2026-10-18.md) 说明模型目录、参数、单独核验和D的环境变量。这是E模块试跑；完整Web后端由D启动。
 
+## 按目的找文件
 
-P2PNet具体配置与新机器接入：[配置JSON、安装命令、模型目录和核验工具](docs/P2PNet安装与具体配置-2026-10-18.md)。
-
-> 当前任务全貌与本轮自检见 [E 全流程任务与自检](docs/E全流程任务与自检-2026-10-18.md)。0.6.2 修复数值成功结果校验，既有发布原件保留。
-
-> 2026-10-18 更新：[10月18日最新接收与视频试跑](docs/CD接收与视频试跑进展-2026-10-18.md)。以下10月17日及更早记录保留当时范围。
-
-正式算法为 **P2PNet**，指标为固定机位、固定 ROI 的估计可见人数 `camera_visible_people`。当前已验证队长提供的 SHTechA 权重、PyTorch CPU；DM-Count 对照已停止，GPU/OpenVINO 尚未开放。
-
-E 提供知识问答、视频计算和短时预测处理器；D 统一领取/分发任务、维护租约、写库及提供 HTTP，C 提供资料与存储，B/A 负责展示。录像人数不能解释为进出人次或全景区在园人数。
-
-## 从这里开始
-
-- [当前完成情况与剩余依赖](docs/E当前完成情况与剩余依赖-2026-10-17.md)：最新D知识HTTP、预测存储、B分支接收、P2PNet单模型评测工具及队友待修问题。
-
-- [C 0.2.1a2 接收回执](docs/致C-021a2接收回执-2026-10-17.md)、[D 升级接线清单](docs/致D-升级C021a2接线清单-2026-10-17.md)：最新 C 包已完成 E 隔离接收，E 运行包保持0.6.1，原发布文件不覆盖。
-
-- [2026-10-17 接收 C021 与答复 D](docs/E061-接收C021与答复D-2026-10-17.md)：本轮版本修正、视频入口与 C 统一存储边界、证据及剩余事项。
-
-- 当前对接文件：[给 C 的工作要求](docs/致C-当前接收结论与下一步协作-2026-10-17.md)、[给 D 的接线清单](docs/致D-升级C021a2接线清单-2026-10-17.md)、[给 B 的接收与验收回执](docs/致B-P2PNet分支接收与联合验收-2026-10-17.md)。
-- [成员需求与 E 待办导航](docs/团队需求-2026-10-15/README.md)：当前文件与历史需求分开列出。
-- [0.6.0 正式交付与 D/B 执行单](docs/E060-P2PNet正式交付与DB执行单.md)、[服务契约](E_SERVICE_CONTRACT.md)。
-- [对 D 最新整合回执的答复与故障复现](docs/致D-整合回执答复与故障复现-2026-10-15.md)。
-- [发布包](release/README.md)：wheel、ZIP、完整性回执；历史发布原件保留。
-- [全部文档导航](docs/README.md)、[脚本导航](demo/README.md)、[最新整理记录](docs/文件整理记录-2026-10-17.md)。
+| 目的 | 入口 |
+|---|---|
+| 查看每一步任务与完成标准 | [E全流程任务与自检](docs/E全流程任务与自检-2026-10-18.md) |
+| D接入计算、任务和结果 | [服务契约](E_SERVICE_CONTRACT.md)、[D当前安装与回传要求](docs/致D-E062自检修复与安装回执要求-2026-10-18.md) |
+| C准备下一批输入 | [C当前输入需求](docs/致C-自检后剩余输入需求-2026-10-18.md) |
+| A/B/C/D各自下一步 | [团队对接导航](docs/团队需求-2026-10-15/README.md) |
+| 查看已测结果与局限 | [验收证据导航](docs/acceptance/README.md) |
+| 安装wheel或核对发布摘要 | [发布目录](release/README.md) |
+| 找脚本、历史回执 | [脚本导航](demo/README.md)、[全部文档](docs/README.md) |
 
 ## 当前状态
 
-| 能力 | 已验证范围 | 待完成 |
+| 能力 | 已验证 | 仍待完成 |
 |---|---|---|
-| 知识问答 | C 官方 0.2.1a2、迁移 0007；16 份真实资料索引、校验加载、重启恢复与故障注入 | D/MySQL/HTTP 原始证据接收及数值 resolver 成功分支联调 |
-| P2PNet | CPU 推理、权重/源码摘要和运行配置检查、安装包实装 | 授权视频完整持久化/HTTP 闭环、人工 MAE、D/B 正式联调 |
-| 5 分钟聚合 | E/C021 合成计算、统一存储、去重、原子完成与读回 | D C021 适配及真实连续录像验证 |
-| 短时预测 | 阻尼趋势、最近值基线与时间顺序回测流程 | 真实 15/30 分钟分跨度回测；60 分钟未开放 |
+| 知识与数值问答 | 16份真实资料、严格加载/重启/故障保护；D真实resolver的隔离HTTP成功与不足分支 | 人工语义复核、部署/MySQL原始证据 |
+| P2PNet | 随仓库模型可加载；自带短片及五段公开视频CPU试跑 | 授权录像正式HTTP闭环、独立人工MAE |
+| 计数存储 | D适配→E计算→C SQLite合成写回、原子完成及读回 | 真实连续录像完整5分钟窗 |
+| 短时预测 | 阻尼Holt/最近值基线、时间前缀回测、合成15/30分钟存储 | 真实分跨度误差；60分钟未开放 |
 
-当前源码回归为 139 通过、1 项历史对照跳过，详见 [证据导航](docs/acceptance/README.md)。已发布 0.6.1 包保留发布时快照与 120 通过记录；当前修复包为 0.6.2。E 已独立验证隔离 SQLite / ASGI 知识 HTTP；部署 HTTP、正式 MySQL 与真实视频仍待验收。CPU 三帧推理不是准确率证明，约 19 秒短片不足一个完整 5 分钟窗。
+E回归 **139通过、1项历史对照跳过**，隔离知识HTTP **18项检查通过**，B纯契约 **8项通过**。D原套件在明确初始化空知识快照的前提下 **405通过**；原空环境400通过/5失败的记录保留。GPU/OpenVINO、业务MySQL、部署视频HTTP与浏览器联验仍待验证。完整边界见自检和证据导航。
 
-## 安装与验证
+## 目录
 
-Python 3.13，在仓库根目录执行：
-
-```powershell
-python -m pip install -e ".[dev]"
-python -m pytest -q
-python -m ruff check intelligent_analysis tests demo
-```
-
-真实推理另需 `python -m pip install -e ".[vision]"` 及已接收的队长模型包。模型/权重不可用时明确失败，不自动换模型或生成假结果。核心知识和合成流程不要求 PyTorch/OpenCV。
-
-```powershell
-python -X utf8 demo/end_to_end_demo.py
-python -X utf8 demo/check_p2pnet.py
-```
-
-第二条需本地模型包，详见 [正式交付](docs/E060-P2PNet正式交付与DB执行单.md)。C 官方 a2 接收与隔离故障复现命令见 [D 答复](docs/致D-整合回执答复与故障复现-2026-10-15.md)；不再把旧 C 0.1.9 默认接收命令作为当前入口。
-
-## 文件布局
-
-| 目录/文件 | 用途 |
+| 位置 | 用途 |
 |---|---|
-| `intelligent_analysis/` | E 服务、知识、计数、预测与纯计算处理器源码 |
-| `tests/` | 当前功能和必要历史回归 |
-| `demo/` | 接收、验收和发布工具，当前/历史用途见脚本导航 |
-| `docs/` | 当前交付、团队需求、验收证据、样例 |
-| `docs/archive/` | 旧契约与过渡方案，不作为当前执行入口 |
-| `release/` | 已发布包及摘要回执，保持原件 |
-| `artifacts/` | 本地原件、模型、运行记录和隔离数据库，被 Git 忽略 |
+| `setup-p2pnet.ps1` | Windows安装及CPU试跑入口 |
+| `config/` | 可校验的配置样例 |
+| `model_bundle/p2pnet/` | 原始模型源码、权重、短片和摘要 |
+| `intelligent_analysis/` | 服务、知识、视觉、预测和纯计算处理器 |
+| `tests/`、`demo/` | 回归测试、接收/验收/发布工具 |
+| `docs/` | 当前说明、团队回执、证据和样例 |
+| `release/` | 各版本发布快照及SHA回执 |
+| `artifacts/` | 本地计算结果、人工工作包、原件和隔离数据库；Git忽略 |
 
-当前明确交付的模型、权重和试跑短片位于model_bundle/p2pnet；虚拟环境、凭据、业务库及本地运行缓存不提交Git。历史源码/测试仍用于追溯，不进入正式 P2PNet 流程。新的真实验收结果到位前，保留上述待办状态。
+D唯一Worker负责领取、续租、重试、恢复及通过C写库；E只计算，B/A负责展示。固定ROI逐帧人数不能累加成人次，人工未复核保持null，缺测不补零。
+
+开发时安装 `python -m pip install -e ".[dev]"`，运行 `python -m pytest -q` 与 `python -m ruff check intelligent_analysis tests demo`。真实C接收测试有额外环境前置条件，见脚本导航。本轮整理不改变0.6.2业务源码或覆盖已发布包。
