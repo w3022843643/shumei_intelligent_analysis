@@ -1,0 +1,53 @@
+{
+  "status": "cpu_model_inference_smoke_passed",
+  "e_version": "0.6.2",
+  "config": {
+    "weights_version": "leader-SHTechA-50604773",
+    "roi": {
+      "points": [
+        {
+          "x": 0.0,
+          "y": 0.0
+        },
+        {
+          "x": 1.0,
+          "y": 0.0
+        },
+        {
+          "x": 1.0,
+          "y": 1.0
+        },
+        {
+          "x": 0.0,
+          "y": 1.0
+        }
+      ]
+    },
+    "sample_interval_seconds": 10,
+    "aggregation_minutes": 5,
+    "inference_engine": "pytorch",
+    "device": "CPU",
+    "count_model": "p2pnet",
+    "confidence_threshold": 0.5
+  },
+  "model": {
+    "count_model": "p2pnet",
+    "weights_version": "leader-SHTechA-50604773",
+    "weights_sha256": "506047732b128ff09efef18e94bfacbe35fcfef300e5e9eeeece259b0488c63f",
+    "model_source_revision": "team-zip-2981dc75",
+    "confidence_threshold": 0.5,
+    "inference_engine": "pytorch",
+    "device": "CPU"
+  },
+  "runtime": {
+    "python": "3.13.13",
+    "torch": "2.14.1+cpu",
+    "device": "CPU",
+    "threads": 4
+  },
+  "source_and_weights_sha256_verified": true,
+  "synthetic_frame_only": true,
+  "actual_video_verified": false,
+  "accuracy_verified": false,
+  "D_HTTP_verified": false
+}
